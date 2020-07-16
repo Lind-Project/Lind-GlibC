@@ -463,8 +463,8 @@ int lind_fork(int newcageid)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_fork, 1, in_args, 0, NULL);
 }
 
-int lind_exit(int status, int cageid)
+int lind_exit(int status)
 {
-    LindArg in_args[2] = {{AT_INT, status, 0}, {AT_INT, cageid, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_exit, 2, in_args, 0, NULL);
+    LindArg in_args[1] = {{AT_INT, status, 0}};
+    return NACL_SYSCALL(lind_api)(LIND_sys_exit, 1, in_args, 0, NULL);
 }
