@@ -154,7 +154,7 @@ int lind_epoll_wait(int epfd, struct epoll_event *events,
 ssize_t lind_sendmsg(int sockfd, const struct msghdr *msg, int flags);
 ssize_t lind_recvmsg(int socket, struct msghdr *message, int flags);
 int lind_fork(int newcageid);
-int lind_exit(int status);
+void lind_exit(int status);
 
 #endif /* _LIND_SYSCALLS_H_ */
 
