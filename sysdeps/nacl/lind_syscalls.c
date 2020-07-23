@@ -468,5 +468,5 @@ void lind_exit(int status)
     puts("Got to the glibc interface\n");
     LindArg in_args[1] = {{AT_INT, status, 0}};
     NACL_SYSCALL(lind_api)(LIND_sys_exit, 1, in_args, 0, NULL);
-    puts("Finished in the glibc interface\n")
+    puts("Finished in the glibc interface\n");
 }
