@@ -116,13 +116,14 @@
 #define NACL_sys_wait4                  122
 #define NACL_sys_sigprocmask            123
 #define NACL_sys_lstat                  124
-
+#define NACL_sys_gethostname            125
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
 
 #define NACL_sys_chdir                  130
 #define NACL_sys_mkdir                  131
 #define NACL_sys_rmdir                  132
+#define NACL_sys_socket                 136
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -238,7 +239,11 @@ typedef int (*TYPE_nacl_wait) (int *stat_loc);
 typedef int (*TYPE_nacl_wait4) (pid_t pid, int *wstatus, int options, struct rusage *rusage);
 typedef int (*TYPE_nacl_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 
+typedef int (*TYPE_nacl_gethostname) (char *name, size_t len);
+
 typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset);
 typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t offset);
+
+typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
 
 #endif

@@ -176,7 +176,6 @@ ld {
     lind_getdents;
     lind_fcntl_get;
     lind_fcntl_set;
-    lind_socket;
     lind_bind;
     lind_send;
     lind_recv;
@@ -184,7 +183,6 @@ ld {
     lind_listen;
     lind_sendto;
     lind_accept;
-    lind_gethostname;
     lind_getpeername;
     lind_setsockopt;
     lind_getsockopt;
