@@ -19,9 +19,6 @@
 #define LIND_debug_trace                3
 #define LIND_safe_fs_unlink             4
 #define LIND_safe_fs_link               5
-#define LIND_safe_fs_chdir              6
-#define LIND_safe_fs_mkdir              7
-#define LIND_safe_fs_rmdir              8
 #define LIND_safe_fs_xstat              9
 #define LIND_safe_fs_open               10
 #define LIND_safe_fs_close              11
@@ -103,9 +100,6 @@ struct select_results {
 int lind_access (int version, const char *file);
 int lind_unlink (const char *name);
 int lind_link (const char *from, const char *to);
-int lind_chdir (const char *name);
-int lind_mkdir (int mode, const char *path);
-int lind_rmdir (const char *path);
 int lind_xstat (int version, const char *path, struct stat *buf);
 int lind_open (int flags, int mode, const char *path);
 int lind_close (int fd);

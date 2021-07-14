@@ -156,12 +156,9 @@ ld {
     __nacl_irt_sigprocmask;
     __nacl_irt_pread;
     __nacl_irt_pwrite;
-    lind_access;
     lind_unlink;
     lind_link;
-    lind_chdir;
-    lind_mkdir;
-    lind_rmdir;
+    lind_access;
     lind_xstat;
     lind_open;
     lind_close;

@@ -437,19 +437,28 @@ int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 #include <lind_syscalls.h>
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
-static int nacl_irt_mkdir_lind (const char *pathname, mode_t mode)
+static int nacl_irt_mkdir (const char *pathname, mode_t mode)
 {
-    return -lind_mkdir(mode, pathname);
+    int rv = NACL_SYSCALL (mkdir) (pathname, mode);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
-static int nacl_irt_rmdir_lind (const char *pathname)
+static int nacl_irt_rmdir (const char *pathname)
 {
-    return -lind_rmdir(pathname);
+    int rv = NACL_SYSCALL (rmdir) (pathname);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
-static int nacl_irt_chdir_lind (const char *pathname)
+static int nacl_irt_chdir (const char *pathname)
 {
-    return -lind_chdir(pathname);
+    int rv = NACL_SYSCALL (chdir) (pathname);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
 static int nacl_irt_select_lind (int nfds, fd_set *readfds,
@@ -971,9 +980,9 @@ init_irt_table (void)
   if (!__nacl_irt_query)
     __nacl_irt_query = no_interface;
 
-  __nacl_irt_mkdir = nacl_irt_mkdir_lind;
-  __nacl_irt_chdir = nacl_irt_chdir_lind;
-  __nacl_irt_rmdir = nacl_irt_rmdir_lind;
+  __nacl_irt_mkdir = nacl_irt_mkdir;
+  __nacl_irt_chdir = nacl_irt_chdir;
+  __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getcwd = not_implemented;
 
   __nacl_irt_epoll_create = nacl_irt_epoll_create_lind;

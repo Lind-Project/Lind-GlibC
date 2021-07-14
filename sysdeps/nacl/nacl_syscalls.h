@@ -120,6 +120,10 @@
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
 
+#define NACL_sys_chdir                  130
+#define NACL_sys_mkdir                  131
+#define NACL_sys_rmdir                  132
+
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -146,6 +150,10 @@ typedef int (*TYPE_nacl_open) (char const *pathname, int flags, mode_t mode);
 typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
 typedef int (*TYPE_nacl_stat) (const char *file, struct nacl_abi_stat *st);
 typedef int (*TYPE_nacl_lstat) (const char *file, struct nacl_abi_stat *st);
+
+typedef int (*TYPE_nacl_chdir) (const char* pathname);
+typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
+typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
 typedef int (*TYPE_nacl_imc_recvmsg) (int desc,
                                       struct NaClImcMsgHdr *nmhp,
