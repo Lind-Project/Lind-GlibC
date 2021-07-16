@@ -437,19 +437,28 @@ int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 #include <lind_syscalls.h>
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
-static int nacl_irt_mkdir_lind (const char *pathname, mode_t mode)
+static int nacl_irt_mkdir (const char *pathname, mode_t mode)
 {
-    return -lind_mkdir(mode, pathname);
+    int rv = NACL_SYSCALL (mkdir) (pathname, mode);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
-static int nacl_irt_rmdir_lind (const char *pathname)
+static int nacl_irt_rmdir (const char *pathname)
 {
-    return -lind_rmdir(pathname);
+    int rv = NACL_SYSCALL (rmdir) (pathname);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
-static int nacl_irt_chdir_lind (const char *pathname)
+static int nacl_irt_chdir (const char *pathname)
 {
-    return -lind_chdir(pathname);
+    int rv = NACL_SYSCALL (chdir) (pathname);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
 static int nacl_irt_select_lind (int nfds, fd_set *readfds,
@@ -516,10 +525,10 @@ static int nacl_irt_connect_lind (int sockfd, const struct sockaddr *addr,
     return 0;
 }
 
-static int nacl_irt_send_lind (int sockfd, const void *buf, size_t len, int flags,
+static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags,
                         int *count)
 {
-    int rv = lind_send(sockfd, len, flags, buf);
+    int rv = NACL_SYSCALL (send) (sockfd, len, flags, buf);
     if (rv < 0)
         return -rv;
     if(count)
@@ -527,9 +536,9 @@ static int nacl_irt_send_lind (int sockfd, const void *buf, size_t len, int flag
     return 0;
 }
 
-static int nacl_irt_recv_lind (int sockfd, void *buf, size_t len, int flags, int *count)
+static int nacl_irt_recv(int sockfd, void *buf, size_t len, int flags, int *count)
 {
-    int rv = lind_recv(sockfd, len, flags, buf);
+    int rv = NACL_SYSCALL (recv) (sockfd, len, flags, buf);
     if (rv < 0)
         return -rv;
     if(count)
@@ -537,11 +546,11 @@ static int nacl_irt_recv_lind (int sockfd, void *buf, size_t len, int flags, int
     return 0;
 }
 
-static int nacl_irt_sendto_lind(int sockfd, const void *buf, size_t len, int flags,
+static int nacl_irt_sendto(int sockfd, const void *buf, size_t len, int flags,
                           const struct sockaddr *dest_addr, socklen_t addrlen,
                           int *count)
 {
-    int rv = lind_sendto(sockfd, buf, len, flags, dest_addr, addrlen);
+    int rv = NACL_SYSCALL (sendto) (sockfd, buf, len, flags, dest_addr, addrlen);
     if (rv < 0)
         return -rv;
     if(count)
@@ -549,13 +558,13 @@ static int nacl_irt_sendto_lind(int sockfd, const void *buf, size_t len, int fla
     return 0;
 }
 
-static int nacl_irt_recvfrom_lind (int sockfd, void *buf, size_t len, int flags,
+static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count)
 {
     socklen_t in_len = addrlen ? *addrlen : sizeof(struct sockaddr);
     socklen_t out_len;
     struct sockaddr outaddr;
-    int rv = lind_recvfrom(sockfd, len, flags, in_len, &out_len, buf, &outaddr);
+    int rv = NACL_SYSCALL (recvfrom) (sockfd, len, flags, in_len, &out_len, buf, &outaddr);
     if (rv < 0)
         return -rv;
     if(dest_addr)
@@ -971,9 +980,9 @@ init_irt_table (void)
   if (!__nacl_irt_query)
     __nacl_irt_query = no_interface;
 
-  __nacl_irt_mkdir = nacl_irt_mkdir_lind;
-  __nacl_irt_chdir = nacl_irt_chdir_lind;
-  __nacl_irt_rmdir = nacl_irt_rmdir_lind;
+  __nacl_irt_mkdir = nacl_irt_mkdir;
+  __nacl_irt_chdir = nacl_irt_chdir;
+  __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getcwd = not_implemented;
 
   __nacl_irt_epoll_create = nacl_irt_epoll_create_lind;
@@ -988,12 +997,12 @@ init_irt_table (void)
   __nacl_irt_bind = nacl_irt_bind_lind;
   __nacl_irt_listen = nacl_irt_listen_lind;
   __nacl_irt_connect = nacl_irt_connect_lind;
-  __nacl_irt_send = nacl_irt_send_lind;
+  __nacl_irt_send = nacl_irt_send;
   __nacl_irt_sendmsg = nacl_irt_sendmsg_lind;
-  __nacl_irt_sendto = nacl_irt_sendto_lind;
-  __nacl_irt_recv = nacl_irt_recv_lind;
+  __nacl_irt_sendto = nacl_irt_sendto;
+  __nacl_irt_recv = nacl_irt_recv;
   __nacl_irt_recvmsg = nacl_irt_recvmsg_lind;
-  __nacl_irt_recvfrom = nacl_irt_recvfrom_lind;
+  __nacl_irt_recvfrom = nacl_irt_recvfrom;
   __nacl_irt_select = nacl_irt_select_lind;
   __nacl_irt_pselect = not_implemented;
   __nacl_irt_getpeername = nacl_irt_getpeername_lind;

@@ -156,12 +156,9 @@ ld {
     __nacl_irt_sigprocmask;
     __nacl_irt_pread;
     __nacl_irt_pwrite;
-    lind_access;
     lind_unlink;
     lind_link;
-    lind_chdir;
-    lind_mkdir;
-    lind_rmdir;
+    lind_access;
     lind_xstat;
     lind_open;
     lind_close;
@@ -180,11 +177,8 @@ ld {
     lind_fcntl_get;
     lind_fcntl_set;
     lind_bind;
-    lind_send;
-    lind_recv;
     lind_connect;
     lind_listen;
-    lind_sendto;
     lind_accept;
     lind_getpeername;
     lind_setsockopt;
@@ -192,7 +186,6 @@ ld {
     lind_shutdown;
     lind_select;
     lind_getifaddrs;
-    lind_recvfrom;
     lind_poll;
     lind_socketpair;
     lind_getuid;

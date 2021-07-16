@@ -19,9 +19,6 @@
 #define LIND_debug_trace                3
 #define LIND_safe_fs_unlink             4
 #define LIND_safe_fs_link               5
-#define LIND_safe_fs_chdir              6
-#define LIND_safe_fs_mkdir              7
-#define LIND_safe_fs_rmdir              8
 #define LIND_safe_fs_xstat              9
 #define LIND_safe_fs_open               10
 #define LIND_safe_fs_close              11
@@ -42,10 +39,6 @@
 #define LIND_sys_exit                   30
 #define LIND_sys_getpid                 31
 #define LIND_safe_net_bind              33
-#define LIND_safe_net_send              34
-#define LIND_safe_net_sendto            35
-#define LIND_safe_net_recv              36
-#define LIND_safe_net_recvfrom          37
 #define LIND_safe_net_connect           38
 #define LIND_safe_net_listen            39
 #define LIND_safe_net_accept            40
@@ -100,9 +93,6 @@ struct select_results {
 int lind_access (int version, const char *file);
 int lind_unlink (const char *name);
 int lind_link (const char *from, const char *to);
-int lind_chdir (const char *name);
-int lind_mkdir (int mode, const char *path);
-int lind_rmdir (const char *path);
 int lind_xstat (int version, const char *path, struct stat *buf);
 int lind_open (int flags, int mode, const char *path);
 int lind_close (int fd);
@@ -123,11 +113,8 @@ int lind_getdents (int fd, size_t nbytes, char *buf);
 int lind_fcntl_get (int fd, int cmd);
 int lind_fcntl_set (int fd, int cmd, long set_op);
 int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
-int lind_send (int sockfd, size_t len, int flags, const void *buf);
-int lind_recv (int sockfd, size_t len, int flags, void *buf);
 int lind_connect (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr);
 int lind_listen (int sockfd, int backlog);
-int lind_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen);
 int lind_accept (int sockfd, int flags, struct sockaddr *addr, socklen_t *addrlen);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
@@ -136,7 +123,6 @@ int lind_getsockopt (int sockfd, int level, int optname, socklen_t optlen, void 
 int lind_shutdown (int sockfd, int how);
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result);
 int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
-int lind_recvfrom (int sockfd, size_t len, int flags, socklen_t addrlen, socklen_t * addrlen_out, void *buf, struct sockaddr *src_addr);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
 int lind_getuid (uid_t * buf);
