@@ -31,18 +31,6 @@ int lind_access (int version, const char *file)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_access, 2, in_args, 0, NULL);
 }
 
-int lind_unlink (const char *name)
-{
-    LindArg in_args[1] = {{AT_STRING,(uintptr_t) name, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_unlink, 1, in_args, 0, NULL);
-}
-
-int lind_link (const char *from, const char *to)
-{
-    LindArg in_args[2] = {{AT_STRING, (uintptr_t)from, 0}, {AT_STRING, (uintptr_t)to, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_link, 2, in_args, 0, NULL);
-}
-
 int lind_xstat (int version, const char *path, struct stat *buf)
 {
     LindArg in_args[2] = {{AT_INT, version, 0}, {AT_STRING, (uintptr_t)path, 0}};

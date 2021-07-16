@@ -22,6 +22,13 @@ static void nacl_irt_exit (int status) {
   }
 }
 
+static int nacl_irt_link (const char *from, const char *to) {
+  return -NACL_SYSCALL (link) (from, to);
+}
+static int nacl_irt_unlink (const char *name) {
+  return -NACL_SYSCALL (unlink) (name);
+}
+
 static int nacl_irt_gettod (struct timeval *tv) {
   return -NACL_SYSCALL (gettimeofday) (tv, NULL);
 }
@@ -304,6 +311,8 @@ static int not_implemented() {
 size_t (*__nacl_irt_query) (const char *interface_ident,
                             void *table, size_t tablesize);
 
+int (*__nacl_irt_link) (const char *from, const char *to);
+int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
@@ -980,6 +989,8 @@ init_irt_table (void)
   if (!__nacl_irt_query)
     __nacl_irt_query = no_interface;
 
+  __nacl_irt_link = nacl_irt_link;
+  __nacl_irt_unlink = nacl_irt_unlink;
   __nacl_irt_mkdir = nacl_irt_mkdir;
   __nacl_irt_chdir = nacl_irt_chdir;
   __nacl_irt_rmdir = nacl_irt_rmdir;

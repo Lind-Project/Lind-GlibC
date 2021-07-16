@@ -31,6 +31,8 @@
 #define NACL_sys_null                    1
 #define NACL_sys_nameservice             2
 
+#define NACL_sys_unlink                  4
+#define NACL_sys_link                    5
 /*
  * TODO: why is there a gap here? -jp
  */
@@ -146,6 +148,8 @@ struct timespec;
 #define socklen_t unsigned int
 
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
+typedef int (*TYPE_nacl_link)(char *from, char *to);
+typedef int (*TYPE_nacl_unlink)(char *name);
 typedef int (*TYPE_nacl_dup)(int oldfd);
 typedef int (*TYPE_nacl_dup2)(int oldfd, int newfd);
 typedef int (*TYPE_nacl_dup3)(int oldfd, int newfd, int flags);
