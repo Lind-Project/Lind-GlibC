@@ -169,19 +169,6 @@ int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr)
     return NACL_SYSCALL(lind_api)(LIND_safe_net_bind, 3, in_args, 0, NULL);
 }
 
-int lind_send (int sockfd, size_t len, int flags, const void *buf)
-{
-    LindArg in_args[4] = {{AT_INT, sockfd, 0}, {AT_INT, len, 0}, {AT_INT, flags, 0}, {AT_DATA, (uintptr_t)buf, len}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_send, 4, in_args, 0, NULL);
-}
-
-int lind_recv (int sockfd, size_t len, int flags, void *buf)
-{
-    LindArg in_args[3] = {{AT_INT, sockfd, 0}, {AT_INT, len, 0}, {AT_INT, flags, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, len}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_recv, 3, in_args, 1, out_args);
-}
-
 int lind_connect (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr)
 {
     LindArg in_args[3] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen, 0}, {AT_DATA, (uintptr_t)src_addr, addrlen}};
@@ -253,19 +240,6 @@ int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs)
     LindArg in_args[1] = {{AT_INT, ifaddrs_buf_siz, 0}};
     LindArg out_args[1] = {{AT_DATA, (uintptr_t)ifaddrs, ifaddrs_buf_siz}};
     return NACL_SYSCALL(lind_api)(LIND_safe_net_getifaddrs, 1, in_args, 1, out_args);
-}
-
-int lind_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen)
-{
-    LindArg in_args[4] = {{AT_INT, sockfd, 0}, {AT_DATA, (uintptr_t)buf, len}, {AT_INT, flags, 0}, {AT_DATA, (uintptr_t)dest_addr, addrlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_sendto, 4, in_args, 0, NULL);
-}
-
-int lind_recvfrom (int sockfd, size_t len, int flags, socklen_t addrlen, socklen_t * addrlen_out, void *buf, struct sockaddr *src_addr)
-{
-    LindArg in_args[4] = {{AT_INT, sockfd, 0}, {AT_INT, len, 0}, {AT_INT, flags, 0}, {AT_INT, addrlen, 0}};
-    LindArg out_args[3] = {{AT_DATA, (uintptr_t)addrlen_out, sizeof(socklen_t)}, {AT_DATA, (uintptr_t)buf, len}, {AT_DATA, (uintptr_t)src_addr, addrlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_recvfrom, 4, in_args, 3, out_args);
 }
 
 #define MAX_IOVLEN 512

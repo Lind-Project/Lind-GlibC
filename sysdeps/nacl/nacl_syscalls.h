@@ -59,6 +59,10 @@
 #define NACL_sys_getpid                 31
 #define NACL_sys_sched_yield            32
 #define NACL_sys_sysconf                33
+#define NACL_sys_send                   34
+#define NACL_sys_sendto                 35
+#define NACL_sys_recv                   36
+#define NACL_sys_recvfrom               37
 #define NACL_sys_gettimeofday           40
 #define NACL_sys_clock                  41
 #define NACL_sys_nanosleep              42
@@ -125,6 +129,7 @@
 #define NACL_sys_rmdir                  132
 #define NACL_sys_socket                 136
 
+
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -138,6 +143,7 @@ struct NaClImcMsgHdr;
 struct nacl_abi_stat;
 struct timeval;
 struct timespec;
+#define socklen_t unsigned int
 
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_dup)(int oldfd);
@@ -156,6 +162,12 @@ typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
+typedef int (*TYPE_nacl_send) (int sockfd, size_t len, int flags, const void *buf);
+typedef int (*TYPE_nacl_sendto) (int sockfd, const void *buf, size_t len, int flags,
+                                     const struct sockaddr *dest_addr, socklen_t addrlen);
+typedef int (*TYPE_nacl_recv) (int sockfd, size_t len, int flags, void *buf);
+typedef int (*TYPE_nacl_recvfrom) (int sockfd, size_t len, int flags, socklen_t addrlen, 
+                                       socklen_t * addrlen_out, void *buf, struct sockaddr *src_addr);
 typedef int (*TYPE_nacl_imc_recvmsg) (int desc,
                                       struct NaClImcMsgHdr *nmhp,
                                       int flags);
