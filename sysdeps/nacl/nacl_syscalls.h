@@ -70,6 +70,7 @@
 #define NACL_sys_nanosleep              42
 #define NACL_sys_clock_getres           43
 #define NACL_sys_clock_gettime          44
+#define NACL_sys_shutdown               45
 
 /* 50-58 previously used for multimedia syscalls */
 
@@ -228,6 +229,8 @@ typedef int (*TYPE_nacl_clock_getres) (clockid_t clk_id,
                                        struct timespec *res);
 typedef int (*TYPE_nacl_clock_gettime) (clockid_t clk_id,
                                         struct timespec *tp);
+typedef int (*TYPE_nacl_shutdown) (int sockfd, int how);
+
 /* Don't use __attribute__((noreturn)) on this because we want the
    wrapper to handle it if the syscall does happen to return. */
 typedef void (*TYPE_nacl_exit) (int status);

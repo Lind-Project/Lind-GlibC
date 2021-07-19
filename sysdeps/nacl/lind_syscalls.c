@@ -208,11 +208,7 @@ int lind_getsockopt (int sockfd, int level, int optname, socklen_t optlen, void 
     return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockopt, 4, in_args, 1, out_args);
 }
 
-int lind_shutdown (int sockfd, int how)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, how, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_shutdown, 2, in_args, 0, NULL);
-}
+
 
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result)
 {

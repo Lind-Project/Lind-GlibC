@@ -183,7 +183,6 @@ ld {
     lind_getpeername;
     lind_setsockopt;
     lind_getsockopt;
-    lind_shutdown;
     lind_select;
     lind_getifaddrs;
     lind_poll;

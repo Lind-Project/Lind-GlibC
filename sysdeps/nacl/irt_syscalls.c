@@ -585,9 +585,9 @@ static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
     return 0;
 }
 
-static int nacl_irt_shutdown_lind (int sockfd, int how)
+static int nacl_irt_shutdown (int sockfd, int how)
 {
-    int rv = lind_shutdown(sockfd, how);
+    int rv = NACL_SYSCALL (shutdown) (sockfd,how);
     if (rv < 0)
         return -rv;
     return 0;
