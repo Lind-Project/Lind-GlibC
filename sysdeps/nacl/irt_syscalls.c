@@ -1021,7 +1021,7 @@ init_irt_table (void)
   __nacl_irt_getsockopt = nacl_irt_getsockopt_lind;
   __nacl_irt_setsockopt = nacl_irt_setsockopt_lind;
   __nacl_irt_socketpair = nacl_irt_socketpair_lind;
-  __nacl_irt_shutdown = nacl_irt_shutdown_lind;
+  __nacl_irt_shutdown = nacl_irt_shutdown;
   __nacl_irt_gethostname = nacl_irt_gethostname;
   __nacl_irt_getpid = nacl_irt_getpid;
   __nacl_irt_getppid = nacl_irt_getppid;
