@@ -764,7 +764,7 @@ static int nacl_irt_recvmsg_lind (int sockfd, struct msghdr *msg,
 
 static int nacl_irt_flock (int fd, int operation)
 {
-  return -NACL_SYSCALL (flock) (fd, operation);
+  return NACL_SYSCALL (flock) (fd, operation);
 }
 
 void
