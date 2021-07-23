@@ -18,9 +18,7 @@
 
 #include <errno.h>
 #include <sys/file.h>
-#include "lind_strace.h"
-#include "lind_util.h"
-#include "lind_syscalls.h"
+#include <irt_syscalls.h>
 
 /* Apply or remove an advisory lock, according to OPERATION,
    on the file FD refers to.  */
@@ -30,7 +28,7 @@ __flock (fd, operation)
      int operation;
 {
 #warning compiling flock
-    SET_ERR_AND_RETURN(lind_flock(fd, operation));
+    SET_ERR_AND_RETURN(__nacl_irt_flock(fd, operation));
 }
 
 weak_alias (__flock, flock)

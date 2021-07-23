@@ -72,6 +72,7 @@
 #define NACL_sys_clock_gettime          44
 #define NACL_sys_shutdown               45
 
+#define NACL_sys_flock                  54
 /* 50-58 previously used for multimedia syscalls */
 
 #define NACL_sys_imc_makeboundsock      60
@@ -126,6 +127,7 @@
 #define NACL_sys_gethostname            125
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
+
 
 #define NACL_sys_chdir                  130
 #define NACL_sys_mkdir                  131
@@ -264,5 +266,7 @@ typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset)
 typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t offset);
 
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
+
+typedef int (*TYPE_nacl_flock (int fd, int operation));
 
 #endif

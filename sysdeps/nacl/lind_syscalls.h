@@ -52,7 +52,6 @@
 #define LIND_safe_sys_geteuid           51
 #define LIND_safe_sys_getgid            52
 #define LIND_safe_sys_getegid           53
-#define LIND_safe_fs_flock              54
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
 #define LIND_safe_net_epoll_ctl         57
@@ -123,7 +122,6 @@ int lind_getuid (uid_t * buf);
 int lind_geteuid (uid_t * buf);
 int lind_getgid (gid_t * buf);
 int lind_getegid (gid_t * buf);
-int lind_flock (int fd, int operation);
 int lind_strace (const char* str);
 int lind_epoll_create (int size);
 int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event);

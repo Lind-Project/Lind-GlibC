@@ -353,12 +353,6 @@ int lind_getegid (gid_t * buf)
     return NACL_SYSCALL(lind_api)(LIND_safe_sys_getegid, 0, NULL, 1, out_args);
 }
 
-int lind_flock (int fd, int operation)
-{
-    LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, operation, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_flock, 2, in_args, 0, NULL);
-}
-
 int lind_strace (const char* str)
 {
 #if 1
