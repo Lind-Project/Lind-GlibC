@@ -267,6 +267,6 @@ typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t 
 
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
 
-typedef int (*TYPE_nacl_flock (int fd, int operation));
+typedef int (*TYPE_nacl_flock) (int fd, int operation);
 
 #endif
