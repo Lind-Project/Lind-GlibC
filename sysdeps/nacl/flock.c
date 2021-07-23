@@ -27,15 +27,14 @@ __flock (fd, operation)
      int fd;
      int operation;
 {
-#warning compiling flock
-    int result = __nacl_irt_flock(fd, operation);
-    if (result < 0) {
-        __set_errno (-result);
-        return -1;
-    }
-    else{
-    return result;
-    }
+ int result = __nacl_irt_flock(fd, operation);
+ if (result < 0) {
+    __set_errno (-result);
+    return -1;
+ }
+ else{
+ return result;
+ }
 }
 
 weak_alias (__flock, flock)
