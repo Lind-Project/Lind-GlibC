@@ -38,31 +38,6 @@ int lind_xstat (int version, const char *path, struct stat *buf)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_xstat, 2, in_args, 1, out_args);
 }
 
-int lind_open (int flags, int mode, const char *path)
-{
-    LindArg in_args[3] = {{AT_INT, flags, 0}, {AT_INT, mode, 0}, {AT_STRING, (uintptr_t)path, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_open, 3, in_args, 0, NULL);
-}
-
-int lind_close (int fd)
-{
-    LindArg in_args[1] = {{AT_INT, fd, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_close, 1, in_args, 0, NULL);
-}
-
-int lind_read (int fd, int size, void *buf)
-{
-    LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, size, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, size}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_read, 2, in_args, 1, out_args);
-}
-
-int lind_write (int fd, size_t count, const void *buf)
-{
-    LindArg in_args[3] = {{AT_INT, fd, 0}, {AT_INT, count, 0}, {AT_DATA, (uintptr_t)buf, count}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_write, 3, in_args, 0, NULL);
-}
-
 int lind_lseek (off_t offset, int fd, int whence, off_t * ret)
 {
     LindArg in_args[3] = {{AT_INT, offset, 0}, {AT_INT, fd, 0}, {AT_INT, whence, 0}};
@@ -94,16 +69,6 @@ int lind_statfs (const char *path, struct statfs *buf)
 int lind_noop (void)
 {
     return NACL_SYSCALL(lind_api)(LIND_debug_noop, 0, NULL, 0, NULL);
-}
-
-int lind_getpid ()
-{
-    return NACL_SYSCALL(lind_api)(LIND_sys_getpid, 0, NULL, 0, NULL);
-}
-
-int lind_getppid ()
-{
-    return NACL_SYSCALL(lind_api)(LIND_sys_getppid, 0, NULL, 0, NULL);
 }
 
 int lind_pipe (int *pipedes)
@@ -329,30 +294,6 @@ int lind_socketpair (int domain, int type, int protocol, int *fds)
     return NACL_SYSCALL(lind_api)(LIND_safe_net_socketpair, 3, in_args, 1, out_args);
 }
 
-int lind_getuid (uid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(uid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getuid, 0, NULL, 1, out_args);
-}
-
-int lind_geteuid (uid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(uid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_geteuid, 0, NULL, 1, out_args);
-}
-
-int lind_getgid (gid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(gid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getgid, 0, NULL, 1, out_args);
-}
-
-int lind_getegid (gid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(gid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getegid, 0, NULL, 1, out_args);
-}
-
 int lind_strace (const char* str)
 {
 #if 1
@@ -385,19 +326,3 @@ int lind_epoll_wait(int epfd, struct epoll_event *events,
     return NACL_SYSCALL(lind_api)(LIND_safe_net_epoll_wait, 3, in_args, 1, out_args);
 }
 
-/*
- * lind_fork is only  the part of the fork call that handles
- *  file table duplication in python. Most of fork is implemented in C in NaCl.
- */
-
-int lind_fork(int newcageid)
-{
-    LindArg in_args[1] = {{AT_INT, newcageid, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_fork, 1, in_args, 0, NULL);
-}
-
-void lind_exit(int status)
-{
-    LindArg in_args[1] = {{AT_INT, status, 0}};
-    NACL_SYSCALL(lind_api)(LIND_sys_exit, 1, in_args, 0, NULL);
-}

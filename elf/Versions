@@ -158,19 +158,18 @@ ld {
     __nacl_irt_pwrite;
     __nacl_irt_unlink;
     __nacl_irt_link;
+    __nacl_irt_getuid;
+    __nacl_irt_geteuid;
+    __nacl_irt_getgid;
+    __nacl_irt_getegid;
     __nacl_irt_flock;
     lind_access;
     lind_xstat;
-    lind_open;
-    lind_close;
-    lind_read;
-    lind_write;
     lind_lseek;
     lind_fxstat;
     lind_fstatfs;
     lind_statfs;
     lind_noop;
-    lind_getpid;
     lind_dup;
     lind_dup2;
     lind_pipe;
@@ -188,10 +187,6 @@ ld {
     lind_getifaddrs;
     lind_poll;
     lind_socketpair;
-    lind_getuid;
-    lind_geteuid;
-    lind_getgid;
-    lind_getegid;
     lind_strace;
     lind_pipe;
     # Those are in the dynamic linker, but used by libc.so.

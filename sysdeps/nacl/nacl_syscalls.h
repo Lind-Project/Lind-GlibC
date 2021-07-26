@@ -72,8 +72,11 @@
 #define NACL_sys_clock_gettime          44
 #define NACL_sys_shutdown               45
 
+#define NACL_sys_getuid                 50
+#define NACL_sys_geteuid                51
+#define NACL_sys_getgid                 52
+#define NACL_sys_getegid                53
 #define NACL_sys_flock                  54
-/* 50-58 previously used for multimedia syscalls */
 
 #define NACL_sys_imc_makeboundsock      60
 #define NACL_sys_imc_accept             61
@@ -165,6 +168,10 @@ typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
 typedef int (*TYPE_nacl_stat) (const char *file, struct nacl_abi_stat *st);
 typedef int (*TYPE_nacl_lstat) (const char *file, struct nacl_abi_stat *st);
 
+typedef int (*TYPE_nacl_getuid) (void);
+typedef int (*TYPE_nacl_geteuid) (void);
+typedef int (*TYPE_nacl_getgid) (void);
+typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);

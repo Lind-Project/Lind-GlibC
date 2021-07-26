@@ -18,10 +18,6 @@
 #define LIND_safe_fs_access             2
 #define LIND_debug_trace                3
 #define LIND_safe_fs_xstat              9
-#define LIND_safe_fs_open               10
-#define LIND_safe_fs_close              11
-#define LIND_safe_fs_read               12
-#define LIND_safe_fs_write              13
 #define LIND_safe_fs_lseek              14
 #define LIND_fs_ioctl                   15
 #define LIND_safe_fs_fxstat             17
@@ -33,9 +29,6 @@
 #define LIND_safe_fs_dup2               25
 #define LIND_safe_fs_statfs             26
 #define LIND_safe_fs_fcntl              28
-#define LIND_sys_getppid                29
-#define LIND_sys_exit                   30
-#define LIND_sys_getpid                 31
 #define LIND_safe_net_bind              33
 #define LIND_safe_net_connect           38
 #define LIND_safe_net_listen            39
@@ -48,10 +41,6 @@
 #define LIND_safe_net_getifaddrs        47
 #define LIND_safe_net_poll              48
 #define LIND_safe_net_socketpair        49
-#define LIND_safe_sys_getuid            50
-#define LIND_safe_sys_geteuid           51
-#define LIND_safe_sys_getgid            52
-#define LIND_safe_sys_getegid           53
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
 #define LIND_safe_net_epoll_ctl         57
@@ -62,7 +51,6 @@
 
 #define LIND_safe_fs_pipe              66
 #define LIND_safe_sys_pipe2             67
-#define LIND_safe_fs_fork              68
 
 #define LIND_comp_cia                   105
 #define LIND_comp_call                  106
@@ -88,17 +76,11 @@ struct select_results {
 
 int lind_access (int version, const char *file);
 int lind_xstat (int version, const char *path, struct stat *buf);
-int lind_open (int flags, int mode, const char *path);
-int lind_close (int fd);
-int lind_read (int fd, int size, void *buf);
-int lind_write (int fd, size_t count, const void *buf);
 int lind_lseek (off_t offset, int fd, int whence, off_t * ret);
 int lind_fxstat (int fd, int version, struct stat *buf);
 int lind_fstatfs (int fd, struct statfs *buf);
 int lind_statfs (const char *path, struct statfs *buf);
 int lind_noop (void);
-int lind_getpid (void);
-int lind_getppid (void);
 int lind_pipe (int* pipedes);
 int lind_pipe2 (int* pipedes, int flags);
 int lind_dup (int oldfd);
@@ -118,10 +100,6 @@ int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptf
 int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
-int lind_getuid (uid_t * buf);
-int lind_geteuid (uid_t * buf);
-int lind_getgid (gid_t * buf);
-int lind_getegid (gid_t * buf);
 int lind_strace (const char* str);
 int lind_epoll_create (int size);
 int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event);
@@ -129,8 +107,6 @@ int lind_epoll_wait(int epfd, struct epoll_event *events,
                       int maxevents, int timeout);
 ssize_t lind_sendmsg(int sockfd, const struct msghdr *msg, int flags);
 ssize_t lind_recvmsg(int socket, struct msghdr *message, int flags);
-int lind_fork(int newcageid);
-void lind_exit(int status);
 
 #endif /* _LIND_SYSCALLS_H_ */
 
