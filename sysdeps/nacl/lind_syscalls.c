@@ -38,31 +38,6 @@ int lind_xstat (int version, const char *path, struct stat *buf)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_xstat, 2, in_args, 1, out_args);
 }
 
-int lind_open (int flags, int mode, const char *path)
-{
-    LindArg in_args[3] = {{AT_INT, flags, 0}, {AT_INT, mode, 0}, {AT_STRING, (uintptr_t)path, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_open, 3, in_args, 0, NULL);
-}
-
-int lind_close (int fd)
-{
-    LindArg in_args[1] = {{AT_INT, fd, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_close, 1, in_args, 0, NULL);
-}
-
-int lind_read (int fd, int size, void *buf)
-{
-    LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, size, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, size}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_read, 2, in_args, 1, out_args);
-}
-
-int lind_write (int fd, size_t count, const void *buf)
-{
-    LindArg in_args[3] = {{AT_INT, fd, 0}, {AT_INT, count, 0}, {AT_DATA, (uintptr_t)buf, count}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_write, 3, in_args, 0, NULL);
-}
-
 int lind_lseek (off_t offset, int fd, int whence, off_t * ret)
 {
     LindArg in_args[3] = {{AT_INT, offset, 0}, {AT_INT, fd, 0}, {AT_INT, whence, 0}};
@@ -94,16 +69,6 @@ int lind_statfs (const char *path, struct statfs *buf)
 int lind_noop (void)
 {
     return NACL_SYSCALL(lind_api)(LIND_debug_noop, 0, NULL, 0, NULL);
-}
-
-int lind_getpid ()
-{
-    return NACL_SYSCALL(lind_api)(LIND_sys_getpid, 0, NULL, 0, NULL);
-}
-
-int lind_getppid ()
-{
-    return NACL_SYSCALL(lind_api)(LIND_sys_getppid, 0, NULL, 0, NULL);
 }
 
 int lind_pipe (int *pipedes)
