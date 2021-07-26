@@ -48,10 +48,6 @@
 #define LIND_safe_net_getifaddrs        47
 #define LIND_safe_net_poll              48
 #define LIND_safe_net_socketpair        49
-#define LIND_safe_sys_getuid            50
-#define LIND_safe_sys_geteuid           51
-#define LIND_safe_sys_getgid            52
-#define LIND_safe_sys_getegid           53
 #define LIND_safe_fs_flock              54
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
@@ -119,10 +115,6 @@ int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptf
 int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
-int lind_getuid (uid_t * buf);
-int lind_geteuid (uid_t * buf);
-int lind_getgid (gid_t * buf);
-int lind_getegid (gid_t * buf);
 int lind_flock (int fd, int operation);
 int lind_strace (const char* str);
 int lind_epoll_create (int size);

@@ -329,30 +329,6 @@ int lind_socketpair (int domain, int type, int protocol, int *fds)
     return NACL_SYSCALL(lind_api)(LIND_safe_net_socketpair, 3, in_args, 1, out_args);
 }
 
-int lind_getuid (uid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(uid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getuid, 0, NULL, 1, out_args);
-}
-
-int lind_geteuid (uid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(uid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_geteuid, 0, NULL, 1, out_args);
-}
-
-int lind_getgid (gid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(gid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getgid, 0, NULL, 1, out_args);
-}
-
-int lind_getegid (gid_t * buf)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(gid_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_getegid, 0, NULL, 1, out_args);
-}
-
 int lind_flock (int fd, int operation)
 {
     LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, operation, 0}};

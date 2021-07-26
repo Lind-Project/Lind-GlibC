@@ -316,6 +316,10 @@ int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
+int (*__nacl_irt_getuid) (void);
+int (*__nacl_irt_geteuid) (void);
+int (*__nacl_irt_getgid) (void);
+int (*__nacl_irt_getegid) (void);
 int (*__nacl_irt_getcwd) (char* buf, size_t size, int *len);
 
 void (*__nacl_irt_exit) (int status);
@@ -468,6 +472,22 @@ static int nacl_irt_chdir (const char *pathname)
     if (rv < 0)
         return -rv;
     return 0;
+}
+
+static int nacl_irt_getuid(void) {
+    return NACL_SYSCALL (getuid) ();
+}
+
+static int nacl_irt_geteuid(void) {
+    return NACL_SYSCALL (geteuid) ();
+}
+
+static int nacl_irt_getgid(void) {
+    return NACL_SYSCALL (getgid) ();
+}
+
+static int nacl_irt_getegid(void) {
+    return NACL_SYSCALL (getegid) ();
 }
 
 static int nacl_irt_select_lind (int nfds, fd_set *readfds,
@@ -994,6 +1014,10 @@ init_irt_table (void)
   __nacl_irt_mkdir = nacl_irt_mkdir;
   __nacl_irt_chdir = nacl_irt_chdir;
   __nacl_irt_rmdir = nacl_irt_rmdir;
+  __nacl_irt_getuid = nacl_irt_getuid;
+  __nacl_irt_geteuid = nacl_irt_geteuid;
+  __nacl_irt_getgid = nacl_irt_getgid;
+  __nacl_irt_getegid = nacl_irt_getegid;
   __nacl_irt_getcwd = not_implemented;
 
   __nacl_irt_epoll_create = nacl_irt_epoll_create_lind;

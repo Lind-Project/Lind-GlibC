@@ -19,30 +19,14 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include "lind_syscalls.h"
-#include "lind_util.h"
 
+#include <stdio.h>
 /* Get the real user ID of the calling process.  */
 uid_t
 __getuid ()
 {
-    static int firstrun = 1;
-    if (firstrun) {
-        firstrun = 0;
-        __set_errno(ENOSYS);
-        return -1;
-    }
-     
-    uid_t buf = 0; 
-
-    int rc = lind_getuid(&buf);
-
-    if (sizeof(uid_t) != rc) {
-        __set_errno(ENOSYS);
-        return -1;
-    }
-
-    return buf;
+    puts("GOTUID");
+    return (uid_t) __nacl_irt_getuid();
 }
 
 weak_alias (__getuid, getuid)
