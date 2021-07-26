@@ -20,12 +20,15 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include <stdio.h>
 /* Get the effective user ID of the calling process.  */
 uid_t
 __geteuid ()
 {
-    puts("GOTEUID");
+    static char firstcall = 1;
+    if(firstcall) {
+        firstcall = 0;
+        return -1;
+    }
     return (uid_t) __nacl_irt_geteuid();
 }
 

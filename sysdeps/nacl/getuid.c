@@ -20,12 +20,15 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include <stdio.h>
 /* Get the real user ID of the calling process.  */
 uid_t
 __getuid ()
 {
-    puts("GOTUID");
+    static char firstcall = 1;
+    if(firstcall) {
+        firstcall = 0;
+        return -1;
+    }
     return (uid_t) __nacl_irt_getuid();
 }
 
