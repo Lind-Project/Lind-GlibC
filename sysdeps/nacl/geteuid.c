@@ -27,6 +27,7 @@ __geteuid ()
     static char firstcall = 1;
     if(firstcall) {
         firstcall = 0;
+        __set_errno(EAGAIN);
         return -1;
     }
     return (uid_t) __nacl_irt_geteuid();

@@ -326,19 +326,3 @@ int lind_epoll_wait(int epfd, struct epoll_event *events,
     return NACL_SYSCALL(lind_api)(LIND_safe_net_epoll_wait, 3, in_args, 1, out_args);
 }
 
-/*
- * lind_fork is only  the part of the fork call that handles
- *  file table duplication in python. Most of fork is implemented in C in NaCl.
- */
-
-int lind_fork(int newcageid)
-{
-    LindArg in_args[1] = {{AT_INT, newcageid, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_fork, 1, in_args, 0, NULL);
-}
-
-void lind_exit(int status)
-{
-    LindArg in_args[1] = {{AT_INT, status, 0}};
-    NACL_SYSCALL(lind_api)(LIND_sys_exit, 1, in_args, 0, NULL);
-}

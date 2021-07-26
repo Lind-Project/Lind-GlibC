@@ -29,7 +29,6 @@
 #define LIND_safe_fs_dup2               25
 #define LIND_safe_fs_statfs             26
 #define LIND_safe_fs_fcntl              28
-#define LIND_sys_exit                   30
 #define LIND_safe_net_bind              33
 #define LIND_safe_net_connect           38
 #define LIND_safe_net_listen            39
@@ -52,7 +51,6 @@
 
 #define LIND_safe_fs_pipe              66
 #define LIND_safe_sys_pipe2             67
-#define LIND_safe_fs_fork              68
 
 #define LIND_comp_cia                   105
 #define LIND_comp_call                  106
@@ -78,10 +76,6 @@ struct select_results {
 
 int lind_access (int version, const char *file);
 int lind_xstat (int version, const char *path, struct stat *buf);
-int lind_open (int flags, int mode, const char *path);
-int lind_close (int fd);
-int lind_read (int fd, int size, void *buf);
-int lind_write (int fd, size_t count, const void *buf);
 int lind_lseek (off_t offset, int fd, int whence, off_t * ret);
 int lind_fxstat (int fd, int version, struct stat *buf);
 int lind_fstatfs (int fd, struct statfs *buf);
@@ -113,8 +107,6 @@ int lind_epoll_wait(int epfd, struct epoll_event *events,
                       int maxevents, int timeout);
 ssize_t lind_sendmsg(int sockfd, const struct msghdr *msg, int flags);
 ssize_t lind_recvmsg(int socket, struct msghdr *message, int flags);
-int lind_fork(int newcageid);
-void lind_exit(int status);
 
 #endif /* _LIND_SYSCALLS_H_ */
 
