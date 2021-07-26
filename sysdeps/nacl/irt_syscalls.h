@@ -167,6 +167,7 @@ extern int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 extern int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 extern int (*__nacl_irt_execv) (char const *path, char *const *argv);
 extern int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
+extern int (*__nacl_irt_flock) (int fd, int operation);
 
 #undef socklen_t
 

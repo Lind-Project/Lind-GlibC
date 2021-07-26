@@ -442,6 +442,7 @@ int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 int (*__nacl_irt_execv) (char const *path, char *const *argv);
 int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
+int (*__nacl_irt_flock) (int fd, int operation);
 
 #include <lind_syscalls.h>
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
@@ -761,6 +762,11 @@ static int nacl_irt_recvmsg_lind (int sockfd, struct msghdr *msg,
     return 0;
 }
 
+static int nacl_irt_flock (int fd, int operation)
+{
+  return NACL_SYSCALL (flock) (fd, operation);
+}
+
 void
 init_irt_table (void)
 {
@@ -1042,6 +1048,7 @@ init_irt_table (void)
   __nacl_irt_execve = nacl_irt_execve;
   __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lstat = nacl_irt_lstat;
+  __nacl_irt_flock = nacl_irt_flock;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
