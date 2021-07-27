@@ -447,6 +447,10 @@ int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp
 int (*__nacl_irt_execv) (char const *path, char *const *argv);
 int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
+int (*__nacl_irt_fxstat) (int vers, int fd, struct stat *buf);
+int (*__nacl_irt_xstat) (int version, const char *path, struct stat *buf);
+int (*__nacl_irt_statfs) (const    *file, struct statfs *buf);
+int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
 
 #include <lind_syscalls.h>
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
@@ -787,6 +791,27 @@ static int nacl_irt_flock (int fd, int operation)
   return NACL_SYSCALL (flock) (fd, operation);
 }
 
+static int nacl_irt_fxstat (int vers, int fd, struct stat *buf)
+{
+  return NACL_SYSCALL (fxstat) (vers, fd, buf);
+}
+
+static int nacl_irt_xstat (int version, const char *path, struct stat *buf)
+{
+  return NACL_SYSCALL (xstat) (version, path, buf);
+}
+
+static int nacl_irt_statfs (const *file, struct statfs *buf)
+{
+  return NACL_SYSCALL (statfs) (file, buf);
+}
+
+static int nacl_irt_fstatfs (int fd, struct statfs *buf)
+{
+  return NACL_SYSCALL (fstatfs) (fd, buf);
+}
+
+
 void
 init_irt_table (void)
 {
@@ -1073,6 +1098,10 @@ init_irt_table (void)
   __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lstat = nacl_irt_lstat;
   __nacl_irt_flock = nacl_irt_flock;
+  __nacl_irt_fxstat = nacl_irt_fxstat;
+  __nacl_irt_xstat = nacl_irt_xstat;
+  __nacl_irt_statfs = nacl_irt_statfs;
+  __nacl_irt_fstatfs = nacl_irt_fstatfs;
 }
 
 size_t nacl_interface_query(const char *interface_ident,

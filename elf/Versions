@@ -163,12 +163,12 @@ ld {
     __nacl_irt_getgid;
     __nacl_irt_getegid;
     __nacl_irt_flock;
+    __nacl_irt_xstat;
+    __nacl_irt_fxstat;
+    __nacl_irt_fstatfs;
+    __nacl_irt_statfs;
     lind_access;
-    lind_xstat;
     lind_lseek;
-    lind_fxstat;
-    lind_fstatfs;
-    lind_statfs;
     lind_noop;
     lind_dup;
     lind_dup2;

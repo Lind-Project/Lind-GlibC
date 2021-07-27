@@ -172,6 +172,10 @@ extern int (*__nacl_irt_execve) (char const *path, char *const *argv, char *cons
 extern int (*__nacl_irt_execv) (char const *path, char *const *argv);
 extern int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 extern int (*__nacl_irt_flock) (int fd, int operation);
+extern int (*__nacl_irt_fxstat) (int vers, int fd, struct stat *buf);
+extern int (*__nacl_irt_xstat) (int version, const char *path, struct stat *buf);
+extern int (*__nacl_irt_statfs) (const *file, struct statfs *buf);
+extern int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
 
 #undef socklen_t
 

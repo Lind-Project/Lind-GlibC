@@ -137,6 +137,10 @@
 #define NACL_sys_rmdir                  132
 #define NACL_sys_socket                 136
 
+#define NACL_sys_fstatfs                140
+#define NACL_sys_fxstat                 141
+#define NACL_sys_statfs                 142
+#define NACL_sys_xstat                  143
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -275,5 +279,9 @@ typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t 
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
 
 typedef int (*TYPE_nacl_flock) (int fd, int operation);
+typedef int (*TYPE_nacl_fstatfs) (int fd, struct statfs *buf);
+typedef int (*TYPE_nacl_fxstat) (int fd, int version, struct stat *buf);
+typedef int (*TYPE_nacl_statfs) (const char *path, struct statfs *buf);
+typedef int (*TYPE_nacl_xstat) (int version, const char *path, struct stat *buf);
 
 #endif
