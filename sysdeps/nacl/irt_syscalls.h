@@ -19,6 +19,8 @@ struct timespec;
 struct sockaddr;
 struct msghdr;
 struct rusage;
+struct stat;
+struct statfs;
 
 #define socklen_t unsigned int
 

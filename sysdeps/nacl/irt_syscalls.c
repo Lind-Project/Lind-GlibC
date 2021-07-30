@@ -1,5 +1,6 @@
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/statfs.h>
 #include <time.h>
 #include <errno.h>
 #include <nacl_stat.h>
