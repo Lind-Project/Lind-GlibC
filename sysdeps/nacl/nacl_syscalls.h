@@ -136,6 +136,8 @@
 #define NACL_sys_mkdir                  131
 #define NACL_sys_rmdir                  132
 #define NACL_sys_socket                 136
+#define NACL_sys_getsockopt             137
+#define NACL_sys_setsockopt             138
 
 
 #define NACL_MAX_SYSCALLS               256
@@ -275,5 +277,9 @@ typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t 
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
 
 typedef int (*TYPE_nacl_flock) (int fd, int operation);
+typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
+                                     void *optval, socklen_t *optlen);
+typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
+                                     const void *optval, socklen_t optlen);
 
 #endif

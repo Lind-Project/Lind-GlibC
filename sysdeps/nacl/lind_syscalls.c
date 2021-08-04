@@ -160,19 +160,6 @@ int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, 
     return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockname, 2, in_args, 1, out_args);
 }
 
-int lind_setsockopt (int sockfd, int level, int optname, socklen_t optlen, const void *optval)
-{
-    LindArg in_args[5] = {{AT_INT, sockfd, 0}, {AT_INT, level, 0}, {AT_INT, optname, 0}, {AT_INT, optlen, 0}, {AT_DATA, (uintptr_t)optval, optlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_setsockopt, 5, in_args, 0, NULL);
-}
-
-int lind_getsockopt (int sockfd, int level, int optname, socklen_t optlen, void *optval)
-{
-    LindArg in_args[4] = {{AT_INT, sockfd, 0}, {AT_INT, level, 0}, {AT_INT, optname, 0}, {AT_INT, optlen, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)optval, optlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockopt, 4, in_args, 1, out_args);
-}
-
 
 
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result)
