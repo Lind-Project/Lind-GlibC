@@ -146,7 +146,6 @@ ld {
     __nacl_irt_getpid;
     __nacl_irt_getppid;
     __nacl_irt_pipe;
-    __nacl_irt_pipe2;
     __nacl_irt_fork;
     __nacl_irt_execv;
     __nacl_irt_execve;
@@ -185,6 +184,7 @@ ld {
     lind_poll;
     lind_socketpair;
     lind_strace;
+    lind_pipe2;
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;
