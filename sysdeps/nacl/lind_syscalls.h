@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <nacl_stat.h>
 #include <sys/stat.h>
+#include <sys/statfs.h>
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <sys/poll.h>
