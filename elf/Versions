@@ -146,6 +146,7 @@ ld {
     __nacl_irt_getpid;
     __nacl_irt_getppid;
     __nacl_irt_pipe;
+    __nacl_irt_pipe2;
     __nacl_irt_fork;
     __nacl_irt_execv;
     __nacl_irt_execve;
@@ -169,6 +170,9 @@ ld {
     lind_access;
     lind_lseek;
     lind_noop;
+    lind_dup;
+    lind_dup2;
+    lind_pipe;
     lind_getdents;
     lind_fcntl_get;
     lind_fcntl_set;
