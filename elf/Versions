@@ -181,8 +181,6 @@ ld {
     lind_listen;
     lind_accept;
     lind_getpeername;
-    lind_setsockopt;
-    lind_getsockopt;
     lind_select;
     lind_getifaddrs;
     lind_poll;

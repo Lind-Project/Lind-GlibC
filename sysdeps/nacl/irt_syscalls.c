@@ -617,11 +617,13 @@ static int nacl_irt_shutdown (int sockfd, int how)
 static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
                void *optval, socklen_t *optlen)
 {
-    socklen_t inlen = optlen ? *optlen : sizeof(int);
-    if (inlen > 0 && !optval)
-        return EFAULT;
-    int buf=0; //dummy, in case optval is no provided
-    int rv = lind_getsockopt(sockfd, level, optname, inlen, optval?optval:&buf);
+    int buf = 0; //dummy, in case optval is not provided
+    socklen_t bufsize = 4; //dummy, in case optlen is not provided
+    if(optlen == NULL)
+        optlen = &bufsize;
+    if(optval == NULL)
+        optval = &buf;
+    int rv = NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
     if (rv < 0)
         return -rv;
     return 0;
@@ -633,7 +635,7 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
     if (optlen > 0 && !optval)
         return EFAULT;
     int buf=0; //dummy, in case optval is no provided
-    int rv = lind_setsockopt(sockfd, level, optname, optlen, optval?optval:&buf);
+    int rv = NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
     if (rv < 0)
         return -rv;
     return 0;
