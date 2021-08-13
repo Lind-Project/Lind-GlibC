@@ -31,39 +31,11 @@ int lind_access (int version, const char *file)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_access, 2, in_args, 0, NULL);
 }
 
-int lind_xstat (int version, const char *path, struct stat *buf)
-{
-    LindArg in_args[2] = {{AT_INT, version, 0}, {AT_STRING, (uintptr_t)path, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(struct stat)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_xstat, 2, in_args, 1, out_args);
-}
-
 int lind_lseek (off_t offset, int fd, int whence, off_t * ret)
 {
     LindArg in_args[3] = {{AT_INT, offset, 0}, {AT_INT, fd, 0}, {AT_INT, whence, 0}};
     LindArg out_args[1] = {{AT_DATA, (uintptr_t)ret, sizeof(off_t)}};
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_lseek, 3, in_args, 1, out_args);
-}
-
-int lind_fxstat (int fd, int version, struct stat *buf)
-{
-    LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, version, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(struct stat)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_fxstat, 2, in_args, 1, out_args);
-}
-
-int lind_fstatfs (int fd, struct statfs *buf)
-{
-    LindArg in_args[1] = {{AT_INT, fd, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(struct statfs)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_fstatfs, 1, in_args, 1, out_args);
-}
-
-int lind_statfs (const char *path, struct statfs *buf)
-{
-    LindArg in_args[1] = {{AT_STRING, (uintptr_t)path, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, sizeof(struct statfs)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_statfs, 1, in_args, 1, out_args);
 }
 
 int lind_noop (void)

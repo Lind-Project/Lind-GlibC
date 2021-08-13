@@ -121,6 +121,14 @@ static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
   return -NACL_SYSCALL (fstat) (fd, st);
 }
 
+static int nacl_irt_fstatfs (int fd, struct statfs *buf) {
+  return -NACL_SYSCALL (fstatfs) (fd, buf);
+}
+
+static int nacl_irt_statfs (const char* path, struct statfs *buf) {
+  return -NACL_SYSCALL (statfs) (path, buf);
+}
+
 static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
   return -NACL_SYSCALL (stat) (pathname, st);
 }
@@ -339,6 +347,8 @@ int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, size_t *nwrote,
 int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
 int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
+int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
+int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
 int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                             size_t *nread);
@@ -1075,6 +1085,8 @@ init_irt_table (void)
   __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lstat = nacl_irt_lstat;
   __nacl_irt_flock = nacl_irt_flock;
+  __nacl_irt_statfs = nacl_irt_statfs;
+  __nacl_irt_fstatfs = nacl_irt_fstatfs;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
