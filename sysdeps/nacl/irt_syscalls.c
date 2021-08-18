@@ -64,6 +64,14 @@ static int nacl_irt_close (int fd) {
   return -NACL_SYSCALL (close) (fd);
 }
 
+
+static int nacl_irt_fcntl_get (int fd, int cmd) {
+  return NACL_SYSCALL (fcntl_get) (fd, cmd);
+}
+static int nacl_irt_fcntl_set (int fd, int cmd, long set_op) {
+  return NACL_SYSCALL (fcntl_set) (fd, cmd, set_op);
+}
+
 static int nacl_irt_read (int fd, void *buf, size_t count, size_t *nread) {
   int rv = NACL_SYSCALL (read) (fd, buf, count);
   if (rv < 0)
@@ -336,6 +344,9 @@ int (*__nacl_irt_clock) (clock_t *ticks);
 int (*__nacl_irt_nanosleep) (const struct timespec *req, struct timespec *rem);
 int (*__nacl_irt_sched_yield) (void);
 int (*__nacl_irt_sysconf) (int name, int *value);
+
+int (*__nacl_irt_fcntl_get) (int fd, int cmd);
+int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
 int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
                         int *newfd);
@@ -1087,6 +1098,8 @@ init_irt_table (void)
   __nacl_irt_flock = nacl_irt_flock;
   __nacl_irt_statfs = nacl_irt_statfs;
   __nacl_irt_fstatfs = nacl_irt_fstatfs;
+  __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
+  __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
 }
 
 size_t nacl_interface_query(const char *interface_ident,

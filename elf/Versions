@@ -165,15 +165,13 @@ ld {
     __nacl_irt_flock;
     __nacl_irt_fstatfs;
     __nacl_irt_statfs;
+    __nacl_irt_fcntl_get;
+    __nacl_irt_fcntl_set;
     lind_access;
     lind_lseek;
     lind_noop;
-    lind_dup;
-    lind_dup2;
     lind_pipe;
     lind_getdents;
-    lind_fcntl_get;
-    lind_fcntl_set;
     lind_bind;
     lind_connect;
     lind_listen;
