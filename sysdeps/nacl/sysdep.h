@@ -1791,9 +1791,12 @@ __extern_always_inline int
 INTERNAL_SYSCALL_accept_3 (int *err, int sockfd, struct sockaddr* addr,
                            socklen_t* addr_len)
 {
-  int sd;
-  *err = __nacl_irt_accept (sockfd, addr, addr_len, &sd);
-  return sd;
+  int rv = __nacl_irt_accept (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int

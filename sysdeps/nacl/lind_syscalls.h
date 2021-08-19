@@ -14,9 +14,7 @@
 #include <unistd.h>
 
 #define LIND_debug_noop                 1
-#define LIND_safe_fs_access             2
 #define LIND_debug_trace                3
-#define LIND_safe_fs_lseek              14
 #define LIND_fs_ioctl                   15
 #define LIND_safe_fs_mmap               21
 #define LIND_safe_fs_munmap             22
@@ -25,9 +23,7 @@
 #define LIND_safe_fs_dup2               25
 #define LIND_safe_fs_fcntl              28
 #define LIND_safe_net_bind              33
-#define LIND_safe_net_connect           38
 #define LIND_safe_net_listen            39
-#define LIND_safe_net_accept            40
 #define LIND_safe_net_getpeername       41
 #define LIND_safe_net_getsockname       42
 #define LIND_safe_net_select            46
@@ -40,15 +36,6 @@
 #define LIND_safe_net_epoll_wait        58
 #define LIND_safe_net_sendmsg           59
 #define LIND_safe_net_recvmsg           60
-// yiwen: added lind_pipe
-
-#define LIND_safe_fs_pipe              66
-#define LIND_safe_sys_pipe2             67
-
-#define LIND_comp_cia                   105
-#define LIND_comp_call                  106
-#define LIND_comp_accept                107
-#define LIND_comp_recv                  108
 
 struct select_results {
     struct timeval used_t;
@@ -67,20 +54,14 @@ struct select_results {
         return result; \
     } while (0)
 
-int lind_access (int version, const char *file);
-int lind_lseek (off_t offset, int fd, int whence, off_t * ret);
 int lind_noop (void);
-int lind_pipe (int* pipedes);
-int lind_pipe2 (int* pipedes, int flags);
 int lind_dup (int oldfd);
 int lind_dup2 (int oldfd, int newfd);
 int lind_getdents (int fd, size_t nbytes, char *buf);
 int lind_fcntl_get (int fd, int cmd);
 int lind_fcntl_set (int fd, int cmd, long set_op);
 int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
-int lind_connect (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr);
 int lind_listen (int sockfd, int backlog);
-int lind_accept (int sockfd, int flags, struct sockaddr *addr, socklen_t *addrlen);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result);

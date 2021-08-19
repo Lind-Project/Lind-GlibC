@@ -165,26 +165,21 @@ ld {
     __nacl_irt_flock;
     __nacl_irt_fstatfs;
     __nacl_irt_statfs;
-    lind_access;
-    lind_lseek;
+    __nacl_irt_access;
     lind_noop;
     lind_dup;
     lind_dup2;
-    lind_pipe;
     lind_getdents;
     lind_fcntl_get;
     lind_fcntl_set;
     lind_bind;
-    lind_connect;
     lind_listen;
-    lind_accept;
     lind_getpeername;
     lind_select;
     lind_getifaddrs;
     lind_poll;
     lind_socketpair;
     lind_strace;
-    lind_pipe;
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;
