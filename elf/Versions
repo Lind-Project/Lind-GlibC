@@ -166,13 +166,13 @@ ld {
     __nacl_irt_fstatfs;
     __nacl_irt_statfs;
     __nacl_irt_access;
+    __nacl_irt_bind;
     lind_noop;
     lind_dup;
     lind_dup2;
     lind_getdents;
     lind_fcntl_get;
     lind_fcntl_set;
-    lind_bind;
     lind_listen;
     lind_getpeername;
     lind_select;

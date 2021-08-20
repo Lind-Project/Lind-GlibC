@@ -61,11 +61,7 @@ int lind_fcntl_set (int fd, int cmd, long set_op)
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_fcntl, 3, in_args, 0, NULL);
 }
 
-int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr)
-{
-    LindArg in_args[3] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen, 0}, {AT_DATA, (uintptr_t)addr, addrlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_bind, 3, in_args, 0, NULL);
-}
+
 
 
 int lind_listen (int sockfd, int backlog)
