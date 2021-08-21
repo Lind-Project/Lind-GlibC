@@ -547,9 +547,9 @@ static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t add
     return 0;
 }
 
-static int nacl_irt_listen_lind (int sockfd, int backlog)
+static int nacl_irt_listen (int sockfd, int backlog)
 {
-    int rv = lind_listen(sockfd, backlog);
+    int rv = NACL_SYSCALL (listen) (sockfd, backlog);
     if (rv < 0)
         return -rv;
     return 0;
@@ -1046,7 +1046,7 @@ init_irt_table (void)
   __nacl_irt_socket = nacl_irt_socket_lind;
   __nacl_irt_accept = nacl_irt_accept;
   __nacl_irt_bind = nacl_irt_bind;
-  __nacl_irt_listen = nacl_irt_listen_lind;
+  __nacl_irt_listen = nacl_irt_listen;
   __nacl_irt_connect = nacl_irt_connect;
   __nacl_irt_send = nacl_irt_send;
   __nacl_irt_sendmsg = nacl_irt_sendmsg_lind;
