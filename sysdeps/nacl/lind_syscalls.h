@@ -22,7 +22,6 @@
 #define LIND_safe_fs_dup                24
 #define LIND_safe_fs_dup2               25
 #define LIND_safe_fs_fcntl              28
-#define LIND_safe_net_getpeername       41
 #define LIND_safe_net_getsockname       42
 #define LIND_safe_net_select            46
 #define LIND_safe_net_getifaddrs        47
@@ -59,7 +58,6 @@ int lind_getdents (int fd, size_t nbytes, char *buf);
 int lind_fcntl_get (int fd, int cmd);
 int lind_fcntl_set (int fd, int cmd, long set_op);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
-int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result);
 int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
