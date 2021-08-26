@@ -143,7 +143,11 @@
 #define NACL_sys_socket                 136
 #define NACL_sys_getsockopt             137
 #define NACL_sys_setsockopt             138
-
+#define NACL_sys_access                 139
+#define NACL_sys_accept                 140
+#define NACL_sys_connect                141
+#define NACL_sys_bind                   142
+#define NACL_sys_listen                 143
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -171,6 +175,7 @@ typedef int (*TYPE_nacl_close) (int desc);
 typedef int (*TYPE_nacl_fstat) (int fd, struct nacl_abi_stat *stbp);
 typedef int (*TYPE_nacl_fstatfs) (int fd, struct statfs *buf);
 typedef int (*TYPE_nacl_statfs) (const char *path, struct statfs *buf);
+typedef int (*TYPE_nacl_access) (const char *name, int mode);
 typedef int (*TYPE_nacl_write) (int desc, void const *buf, size_t count);
 typedef int (*TYPE_nacl_open) (char const *pathname, int flags, mode_t mode);
 typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
@@ -197,8 +202,8 @@ typedef int (*TYPE_nacl_imc_recvmsg) (int desc,
 typedef int (*TYPE_nacl_imc_sendmsg) (int desc,
                                       struct NaClImcMsgHdr const *nmhp,
                                       int flags);
-typedef int (*TYPE_nacl_imc_accept) (int d);
-typedef int (*TYPE_nacl_imc_connect) (int d);
+typedef int (*TYPE_nacl_accept) (int sockfd, struct sockaddr *addr, socklen_t addrlen);
+typedef int (*TYPE_nacl_connect) (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr);
 typedef int (*TYPE_nacl_imc_makeboundsock) (int *dp);
 typedef int (*TYPE_nacl_imc_socketpair) (int *d2);
 typedef int (*TYPE_nacl_imc_mem_obj_create) (size_t nbytes);
@@ -288,6 +293,8 @@ typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
                                      void *optval, socklen_t *optlen);
 typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
+typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
+typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);
 typedef int (*TYPE_nacl_fcntl_set) (int fd, int cmd, long set_op);
 

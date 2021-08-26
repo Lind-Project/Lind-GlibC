@@ -25,36 +25,9 @@ typedef struct _LindArg
     uint64_t len;
 } LindArg;
 
-int lind_access (int version, const char *file)
-{
-    LindArg in_args[2] = {{AT_INT, version, 0}, {AT_STRING, (uintptr_t)file, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_access, 2, in_args, 0, NULL);
-}
-
-int lind_lseek (off_t offset, int fd, int whence, off_t * ret)
-{
-    LindArg in_args[3] = {{AT_INT, offset, 0}, {AT_INT, fd, 0}, {AT_INT, whence, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)ret, sizeof(off_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_lseek, 3, in_args, 1, out_args);
-}
-
 int lind_noop (void)
 {
     return NACL_SYSCALL(lind_api)(LIND_debug_noop, 0, NULL, 0, NULL);
-}
-
-int lind_pipe (int *pipedes)
-{
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)pipedes, sizeof(uintptr_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_fs_pipe, 0, NULL, 1, out_args);
-}
-
-/* pipe2 currently unimplemented */
-int lind_pipe2 (int *pipedes, int flags)
-{
-    LindArg in_args[1] = {{AT_INT, flags, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)pipedes, sizeof(uintptr_t)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_sys_pipe2, 1, in_args, 1, out_args);
 }
 
 int lind_getdents (int fd, size_t nbytes, char *buf)
@@ -62,30 +35,6 @@ int lind_getdents (int fd, size_t nbytes, char *buf)
     LindArg in_args[2] = {{AT_INT, fd, 0}, {AT_INT, nbytes, 0}};
     LindArg out_args[1] = {{AT_DATA, (uintptr_t)buf, nbytes}};
     return NACL_SYSCALL(lind_api)(LIND_safe_fs_getdents, 2, in_args, 1, out_args);
-}
-
-int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr)
-{
-    LindArg in_args[3] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen, 0}, {AT_DATA, (uintptr_t)addr, addrlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_bind, 3, in_args, 0, NULL);
-}
-
-int lind_connect (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr)
-{
-    LindArg in_args[3] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen, 0}, {AT_DATA, (uintptr_t)src_addr, addrlen}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_connect, 3, in_args, 0, NULL);
-}
-
-int lind_listen (int sockfd, int backlog)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, backlog, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_listen, 2, in_args, 0, NULL);
-}
-
-int lind_accept (int sockfd, int flags, struct sockaddr *addr, socklen_t *addrlen)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, flags, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_accept, 2, in_args, 0, NULL);
 }
 
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out)
