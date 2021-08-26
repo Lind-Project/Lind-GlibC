@@ -132,6 +132,8 @@
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
 
+#define NACL_sys_fcntl_get              128
+#define NACL_sys_fcntl_set              129
 
 #define NACL_sys_chdir                  130
 #define NACL_sys_mkdir                  131
@@ -293,5 +295,7 @@ typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
 typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
+typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);
+typedef int (*TYPE_nacl_fcntl_set) (int fd, int cmd, long set_op);
 
 #endif

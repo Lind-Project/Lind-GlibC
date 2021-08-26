@@ -168,12 +168,10 @@ ld {
     __nacl_irt_access;
     __nacl_irt_bind;
     __nacl_irt_listen;
+    __nacl_irt_fcntl_get;
+    __nacl_irt_fcntl_set;
     lind_noop;
-    lind_dup;
-    lind_dup2;
     lind_getdents;
-    lind_fcntl_get;
-    lind_fcntl_set;
     lind_getpeername;
     lind_select;
     lind_getifaddrs;

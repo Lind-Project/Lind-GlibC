@@ -45,6 +45,9 @@ extern int (*__nacl_irt_getgid) (void);
 extern int (*__nacl_irt_getegid) (void);
 extern int (*__nacl_irt_getcwd) (char* buf, size_t size, int *len);
 
+extern int (*__nacl_irt_fcntl_get) (int fd, int cmd);
+extern int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
+
 extern int (*__nacl_irt_epoll_create) (int size, int *fd);
 extern int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 extern int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
