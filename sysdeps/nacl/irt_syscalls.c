@@ -361,13 +361,10 @@ int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                            socklen_t addrlen);
 int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags,
                         int *count);
-int (*__nacl_irt_sendmsg) (int sockfd, const struct msghdr *msg, int flags,
-                           int *count);
 int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len, int flags,
                           const struct sockaddr *dest_addr, socklen_t addrlen,
                           int *count);
 int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags, int *count);
-int (*__nacl_irt_recvmsg) (int sockfd, struct msghdr *msg, int flags, int *count);
 int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 
@@ -776,24 +773,6 @@ static int nacl_irt_sigprocmask (int how, const sigset_t *set, sigset_t *oset)
     return NACL_SYSCALL (sigprocmask) (how, set, oset);
 }
 
-static int nacl_irt_sendmsg_lind (int sockfd, const struct msghdr *msg,
-                                  int flags, int *count) {
-    int rv = lind_sendmsg(sockfd, msg, flags);
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
-}
-
-static int nacl_irt_recvmsg_lind (int sockfd, struct msghdr *msg,
-                                  int flags, int *count) {
-    int rv = lind_recvmsg(sockfd, msg, flags);
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
-}
-
 static int nacl_irt_flock (int fd, int operation)
 {
   return NACL_SYSCALL (flock) (fd, operation);
@@ -1051,10 +1030,8 @@ init_irt_table (void)
   __nacl_irt_listen = nacl_irt_listen_lind;
   __nacl_irt_connect = nacl_irt_connect_lind;
   __nacl_irt_send = nacl_irt_send;
-  __nacl_irt_sendmsg = nacl_irt_sendmsg_lind;
   __nacl_irt_sendto = nacl_irt_sendto;
   __nacl_irt_recv = nacl_irt_recv;
-  __nacl_irt_recvmsg = nacl_irt_recvmsg_lind;
   __nacl_irt_recvfrom = nacl_irt_recvfrom;
   __nacl_irt_select = nacl_irt_select_lind;
   __nacl_irt_pselect = not_implemented;

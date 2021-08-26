@@ -1904,17 +1904,17 @@ INTERNAL_SYSCALL_recvfrom_6 (int *err, int sockfd, void *buf, size_t len, int fl
 __extern_always_inline int
 INTERNAL_SYSCALL_sendmsg_3 (int *err, int sockfd, const struct msghdr *msg, int flags)
 {
-  int ret;
-  *err = __nacl_irt_sendmsg (sockfd, msg, flags, &ret);
-  return ret;
+  lind_strace("sendmsg unimplemented");
+  *err = (38 /* ENOSYS */);
+  return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_recvmsg_3 (int *err, int sockfd, struct msghdr *msg, int flags)
 {
-  int ret;
-  *err = __nacl_irt_recvmsg (sockfd, msg, flags, &ret);
-  return ret;
+  lind_strace("recvmsg unimplemented");
+  *err = (38 /* ENOSYS */);
+  return 0;
 }
 
 __extern_always_inline ssize_t
