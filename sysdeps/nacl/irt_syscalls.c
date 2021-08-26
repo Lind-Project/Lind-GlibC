@@ -64,6 +64,14 @@ static int nacl_irt_close (int fd) {
   return -NACL_SYSCALL (close) (fd);
 }
 
+
+static int nacl_irt_fcntl_get (int fd, int cmd) {
+  return NACL_SYSCALL (fcntl_get) (fd, cmd);
+}
+static int nacl_irt_fcntl_set (int fd, int cmd, long set_op) {
+  return NACL_SYSCALL (fcntl_set) (fd, cmd, set_op);
+}
+
 static int nacl_irt_read (int fd, void *buf, size_t count, size_t *nread) {
   int rv = NACL_SYSCALL (read) (fd, buf, count);
   if (rv < 0)
@@ -135,6 +143,10 @@ static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
 
 static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
   return -NACL_SYSCALL (lstat) (pathname, st);
+}
+
+static int nacl_irt_access (const char *file, int mode) {
+  return -NACL_SYSCALL (access) (file, mode);
 }
 
 static int nacl_irt_getdents (int fd, struct dirent *buf, size_t count,
@@ -337,6 +349,9 @@ int (*__nacl_irt_nanosleep) (const struct timespec *req, struct timespec *rem);
 int (*__nacl_irt_sched_yield) (void);
 int (*__nacl_irt_sysconf) (int name, int *value);
 
+int (*__nacl_irt_fcntl_get) (int fd, int cmd);
+int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
+
 int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
                         int *newfd);
 int (*__nacl_irt_close) (int fd);
@@ -352,9 +367,9 @@ int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
 int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                             size_t *nread);
+int (*__nacl_irt_access) (const char *file, int mode);
 int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
-int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr,
-                          socklen_t *addrlen, int *sd);
+int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int (*__nacl_irt_listen) (int sockfd, int backlog);
 int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
@@ -518,7 +533,7 @@ static int nacl_irt_select_lind (int nfds, fd_set *readfds,
     return 0;
 }
 
-static int nacl_irt_socket_lind(int domain, int type, int protocol, int *sd)
+static int nacl_irt_socket_lind (int domain, int type, int protocol, int *sd)
 {
     int rv = NACL_SYSCALL (socket) (domain, type, protocol);
     if (rv < 0)
@@ -527,36 +542,30 @@ static int nacl_irt_socket_lind(int domain, int type, int protocol, int *sd)
     return 0;
 }
 
-static int nacl_irt_accept_lind (int sockfd, struct sockaddr *addr,
-                          socklen_t *addrlen, int *sd)
+static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-    int rv = lind_accept(sockfd, 0, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    *sd=rv;
-    return 0;
+    return NACL_SYSCALL (accept) (sockfd, addr, addrlen);
 }
 
-static int nacl_irt_bind_lind (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = lind_bind(sockfd, addrlen, addr);
+    int rv = NACL_SYSCALL (bind) (sockfd, addrlen, addr);
     if (rv < 0)
         return -rv;
     return 0;
 }
 
-static int nacl_irt_listen_lind (int sockfd, int backlog)
+static int nacl_irt_listen (int sockfd, int backlog)
 {
-    int rv = lind_listen(sockfd, backlog);
+    int rv = NACL_SYSCALL (listen) (sockfd, backlog);
     if (rv < 0)
         return -rv;
     return 0;
 }
 
-static int nacl_irt_connect_lind (int sockfd, const struct sockaddr *addr,
-                           socklen_t addrlen)
+static int nacl_irt_connect (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = lind_connect(sockfd, addrlen, addr);
+    int rv = NACL_SYSCALL (connect) (sockfd, addr, addrlen);
     if (rv < 0)
         return -rv;
     return 0;
@@ -755,7 +764,7 @@ static int nacl_irt_pipe (int *pipedes)
 
 static int nacl_irt_pipe2 (int *pipedes,  int flags)
 {
-    return -lind_pipe2(pipedes, flags);
+    return NACL_SYSCALL (pipe2) (pipedes, flags);
 }
 
 static int nacl_irt_execve (char const *path, char *const *argv, char *const *envp)
@@ -1025,10 +1034,10 @@ init_irt_table (void)
   __nacl_irt_poll = nacl_irt_poll_lind;
   __nacl_irt_ppoll = not_implemented;
   __nacl_irt_socket = nacl_irt_socket_lind;
-  __nacl_irt_accept = nacl_irt_accept_lind;
-  __nacl_irt_bind = nacl_irt_bind_lind;
-  __nacl_irt_listen = nacl_irt_listen_lind;
-  __nacl_irt_connect = nacl_irt_connect_lind;
+  __nacl_irt_accept = nacl_irt_accept;
+  __nacl_irt_bind = nacl_irt_bind;
+  __nacl_irt_listen = nacl_irt_listen;
+  __nacl_irt_connect = nacl_irt_connect;
   __nacl_irt_send = nacl_irt_send;
   __nacl_irt_sendto = nacl_irt_sendto;
   __nacl_irt_recv = nacl_irt_recv;
@@ -1064,6 +1073,9 @@ init_irt_table (void)
   __nacl_irt_flock = nacl_irt_flock;
   __nacl_irt_statfs = nacl_irt_statfs;
   __nacl_irt_fstatfs = nacl_irt_fstatfs;
+  __nacl_irt_access = nacl_irt_access;
+  __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
+  __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
