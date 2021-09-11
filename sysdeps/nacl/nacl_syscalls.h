@@ -142,6 +142,8 @@
 #define NACL_sys_getsockopt             137
 #define NACL_sys_setsockopt             138
 
+#define NACL_sys_getsockname            140
+
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -286,5 +288,7 @@ typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
                                      void *optval, socklen_t *optlen);
 typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
+typedef int (*TYPE_nacl_getsockname (int sockfd, socklen_t addrlen_in,
+                                      struct sockaddr * addr, socklen_t * addrlen_out);                              
 
 #endif

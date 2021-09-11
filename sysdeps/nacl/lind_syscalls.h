@@ -29,7 +29,6 @@
 #define LIND_safe_net_listen            39
 #define LIND_safe_net_accept            40
 #define LIND_safe_net_getpeername       41
-#define LIND_safe_net_getsockname       42
 #define LIND_safe_net_select            46
 #define LIND_safe_net_getifaddrs        47
 #define LIND_safe_net_poll              48
@@ -81,7 +80,6 @@ int lind_bind (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
 int lind_connect (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr);
 int lind_listen (int sockfd, int backlog);
 int lind_accept (int sockfd, int flags, struct sockaddr *addr, socklen_t *addrlen);
-int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result);
 int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
