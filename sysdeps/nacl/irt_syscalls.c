@@ -517,16 +517,7 @@ static int nacl_irt_select_lind (int nfds, fd_set *readfds,
     fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout,
     int *count)
 {
-    struct select_results sr;
-    int rv = lind_select(nfds, readfds, writefds, exceptfds, timeout, &sr);
-    if(readfds)
-        *readfds = sr.r;
-    if(writefds)
-        *writefds = sr.w;
-    if(exceptfds)
-        *exceptfds = sr.e;
-    if(timeout)
-        *(struct timeval *)timeout = sr.used_t;
+    int rv = NACL_SYSCALL (select) (nfds, readfds, writefds, exceptfds, timeout);
     if (rv < 0)
         return -rv;
     *count = rv;

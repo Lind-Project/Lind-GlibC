@@ -8,7 +8,6 @@
 #include <nacl_stat.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
-#include <sys/select.h>
 #include <sys/poll.h>
 #include <sys/epoll.h>
 #include <unistd.h>
@@ -20,20 +19,12 @@
 #define LIND_safe_fs_munmap             22
 #define LIND_safe_net_getpeername       41
 #define LIND_safe_net_getsockname       42
-#define LIND_safe_net_select            46
 #define LIND_safe_net_poll              48
 #define LIND_safe_net_socketpair        49
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
 #define LIND_safe_net_epoll_ctl         57
 #define LIND_safe_net_epoll_wait        58
-
-struct select_results {
-    struct timeval used_t;
-    fd_set r;
-    fd_set w;
-    fd_set e;
-};
 
 #define SET_ERR_AND_RETURN(x) \
     do { \
@@ -48,7 +39,6 @@ struct select_results {
 int lind_noop (void);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
-int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
 int lind_strace (const char* str);
