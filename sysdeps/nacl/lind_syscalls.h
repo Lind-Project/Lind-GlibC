@@ -26,9 +26,6 @@
 #define LIND_safe_net_poll              48
 #define LIND_safe_net_socketpair        49
 #define LIND_safe_fs_rename             55
-#define LIND_safe_net_epoll_create      56
-#define LIND_safe_net_epoll_ctl         57
-#define LIND_safe_net_epoll_wait        58
 #define LIND_safe_net_sendmsg           59
 #define LIND_safe_net_recvmsg           60
 
@@ -58,10 +55,7 @@ int lind_getifaddrs (int ifaddrs_buf_siz, void *ifaddrs);
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
 int lind_strace (const char* str);
-int lind_epoll_create (int size);
-int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event);
-int lind_epoll_wait(int epfd, struct epoll_event *events,
-                      int maxevents, int timeout);
+
 ssize_t lind_sendmsg(int sockfd, const struct msghdr *msg, int flags);
 ssize_t lind_recvmsg(int socket, struct msghdr *message, int flags);
 
