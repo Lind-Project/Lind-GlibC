@@ -173,7 +173,6 @@ ld {
     lind_noop;
     lind_getdents;
     lind_getpeername;
-    lind_select;
     lind_getifaddrs;
     lind_poll;
     lind_socketpair;
