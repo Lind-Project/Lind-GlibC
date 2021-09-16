@@ -72,7 +72,7 @@
 #define NACL_sys_clock_getres           43
 #define NACL_sys_clock_gettime          44
 #define NACL_sys_shutdown               45
-
+#define NACL_sys_poll                   47
 #define NACL_sys_getuid                 50
 #define NACL_sys_geteuid                51
 #define NACL_sys_getgid                 52
@@ -293,5 +293,6 @@ typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct socka
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);
 typedef int (*TYPE_nacl_fcntl_set) (int fd, int cmd, long set_op);
+typedef int (*TYPE_nacl_poll) (struct pollfd *fds, nfds_t nfds, int timeout);
 
 #endif

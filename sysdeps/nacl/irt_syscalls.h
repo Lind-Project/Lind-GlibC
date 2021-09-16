@@ -58,7 +58,7 @@ extern int (*__nacl_irt_epoll_pwait) (int epfd, struct epoll_event *events,
 extern int (*__nacl_irt_epoll_wait) (int epfd, struct epoll_event *events,
                                  int maxevents, int timeout, int *count);
 extern int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
-                           int timeout, int *count);
+                           int timeout);
 extern int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
             const struct timespec *timeout, const sigset_t *sigmask,
             size_t sigset_size, int *count);
