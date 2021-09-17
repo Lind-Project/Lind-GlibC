@@ -27,8 +27,6 @@
 #define LIND_safe_net_epoll_create      56
 #define LIND_safe_net_epoll_ctl         57
 #define LIND_safe_net_epoll_wait        58
-#define LIND_safe_net_sendmsg           59
-#define LIND_safe_net_recvmsg           60
 
 struct select_results {
     struct timeval used_t;
