@@ -5,7 +5,7 @@
 int
 __poll(struct pollfd *fds, nfds_t nfds, int timeout)
 {
-  int result = nacl_irt_poll_lind (fds, nfds, timeout);
+  int result = nacl_irt_poll (fds, nfds, timeout);
   if (result < 0) {
      __set_errno (-result);
      return -1;
