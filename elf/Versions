@@ -175,7 +175,6 @@ ld {
     lind_getpeername;
     lind_getifaddrs;
     lind_poll;
-    lind_socketpair;
     lind_strace;
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;

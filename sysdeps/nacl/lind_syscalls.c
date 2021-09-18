@@ -68,13 +68,6 @@ int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_
     return NACL_SYSCALL(lind_api)(LIND_safe_net_poll, 3, in_args, 1, out_args);
 }
 
-int lind_socketpair (int domain, int type, int protocol, int *fds)
-{
-    LindArg in_args[3] = {{AT_INT, domain, 0}, {AT_INT, type, 0}, {AT_INT, protocol, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)fds, sizeof(int)*2}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_socketpair, 3, in_args, 1, out_args);
-}
-
 int lind_strace (const char* str)
 {
 #if 1

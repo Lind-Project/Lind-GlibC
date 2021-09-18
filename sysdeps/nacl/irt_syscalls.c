@@ -659,7 +659,7 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
 
 static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[static 2])
 {
-    int rv = lind_socketpair(domain, type, protocol, sv);
+    int rv = NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
     if ( rv < 0)
         return -rv;
     return 0;

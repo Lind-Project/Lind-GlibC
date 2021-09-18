@@ -73,6 +73,7 @@
 #define NACL_sys_clock_gettime          44
 #define NACL_sys_shutdown               45
 
+#define NACL_sys_socketpair             49
 #define NACL_sys_getuid                 50
 #define NACL_sys_geteuid                51
 #define NACL_sys_getgid                 52
@@ -202,6 +203,7 @@ typedef int (*TYPE_nacl_accept) (int sockfd, struct sockaddr *addr, socklen_t ad
 typedef int (*TYPE_nacl_connect) (int sockfd, socklen_t addrlen, const struct sockaddr *src_addr);
 typedef int (*TYPE_nacl_imc_makeboundsock) (int *dp);
 typedef int (*TYPE_nacl_imc_socketpair) (int *d2);
+typedef int (*TYPE_nacl_socketpair) (int domain, int type, int protocol, int *fds);
 typedef int (*TYPE_nacl_imc_mem_obj_create) (size_t nbytes);
 
 typedef void *(*TYPE_nacl_mmap) (void *start, size_t length,
