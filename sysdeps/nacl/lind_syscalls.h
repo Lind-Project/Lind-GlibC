@@ -45,6 +45,7 @@ int lind_epoll_create (int size);
 int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event);
 int lind_epoll_wait(int epfd, struct epoll_event *events,
                       int maxevents, int timeout);
-
+ssize_t lind_sendmsg(int sockfd, const struct msghdr *msg, int flags);
+ssize_t lind_recvmsg(int socket, struct msghdr *message, int flags);
 #endif /* _LIND_SYSCALLS_H_ */
 
