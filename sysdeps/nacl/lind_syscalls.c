@@ -52,15 +52,6 @@ int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, 
 
 
 
-int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result)
-{
-    LindArg in_args[5] = {{AT_INT, nfds, 0}, {AT_DATA_OPTIONAL, (uintptr_t)readfds, sizeof(fd_set)},
-            {AT_DATA_OPTIONAL, (uintptr_t)writefds, sizeof(fd_set)}, {AT_DATA_OPTIONAL, (uintptr_t)exceptfds, sizeof(fd_set)},
-            {AT_DATA_OPTIONAL, (uintptr_t)timeout, sizeof(struct timeval)}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)result, sizeof(struct select_results)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_select, 5, in_args, 1, out_args);
-}
-
 int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out)
 {
     LindArg in_args[3] = {{AT_INT, nfds, 0}, {AT_INT, timeout, 0}, {AT_DATA, (uintptr_t)fds_in, sizeof(struct pollfd)*nfds}};

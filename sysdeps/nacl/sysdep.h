@@ -1524,19 +1524,6 @@ INTERNAL_SYSCALL_sched_setscheduler_3 (int *err, pid_t pid, int policy,
   return 0;
 }
 
-#ifdef __i386__
-#define INTERNAL_SYSCALL_select_5 INTERNAL_SYSCALL__newselect_5
-#endif
-__extern_always_inline int
-INTERNAL_SYSCALL_select_5 (int *err, int nfds, fd_set *readfds,
-			   fd_set *writefds, fd_set *exceptfds,
-			   const struct timeval *timeout)
-{
-  int count;
-  *err = __nacl_irt_select (nfds, readfds, writefds, exceptfds, timeout, &count);
-  return count;
-}
-
 __extern_always_inline int
 INTERNAL_SYSCALL_semctl_4 (int *err, int semid, int semnum, int cmd,
 #ifdef _SEM_SEMUN_UNDEFINED
