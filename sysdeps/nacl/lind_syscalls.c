@@ -9,7 +9,6 @@
 #include <nacl_syscalls.h>
 
 #include <lind_syscalls.h>
-#include <lind_strace.h>
 #include <lind_util.h>
 #include <component.h>
 
@@ -24,11 +23,6 @@ typedef struct _LindArg
     uint64_t ptr;
     uint64_t len;
 } LindArg;
-
-int lind_noop (void)
-{
-    return NACL_SYSCALL(lind_api)(LIND_debug_noop, 0, NULL, 0, NULL);
-}
 
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out)
 {
@@ -56,14 +50,3 @@ int lind_socketpair (int domain, int type, int protocol, int *fds)
     LindArg out_args[1] = {{AT_DATA, (uintptr_t)fds, sizeof(int)*2}};
     return NACL_SYSCALL(lind_api)(LIND_safe_net_socketpair, 3, in_args, 1, out_args);
 }
-
-int lind_strace (const char* str)
-{
-#if 1
-    LindArg in_args[1] = {{AT_STRING, (uintptr_t)str, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_debug_trace, 1, in_args, 0, NULL);
-#else
-    return 0;
-#endif
-}
-

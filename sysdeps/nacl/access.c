@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <irt_syscalls.h>
-#include "lind_strace.h"
 #include "lind_util.h"
 
 /* Test for access to FILE.  */

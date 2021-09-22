@@ -38,7 +38,6 @@ int lind_noop (void);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
-int lind_strace (const char* str);
 int lind_epoll_create (int size);
 int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event);
 int lind_epoll_wait(int epfd, struct epoll_event *events,
