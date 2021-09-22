@@ -112,16 +112,6 @@ int lind_accept (int sockfd, int flags, struct sockaddr *addr, socklen_t *addrle
     return NACL_SYSCALL(lind_api)(LIND_safe_net_accept, 2, in_args, 0, NULL);
 }
 
-int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen_in, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)addr, addrlen_in}};
-    if(addrlen_out) {
-        *addrlen_out = addrlen_in;
-    }
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_getpeername, 2, in_args, 1, out_args);
-}
-
 int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result)
 {
     LindArg in_args[5] = {{AT_INT, nfds, 0}, {AT_DATA_OPTIONAL, (uintptr_t)readfds, sizeof(fd_set)},

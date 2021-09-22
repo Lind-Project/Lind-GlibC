@@ -659,10 +659,10 @@ static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[
     return 0;
 }
 
-static int nacl_irt_getpeername_lind (int sockfd, struct sockaddr *addr,
+static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = lind_getpeername(sockfd, *addrlen, addr, addrlen);
+    int rv = NACL_SYSCALL(getpeername) (sockfd, *addrlen, addr, addrlen);
     if (rv < 0)
         return -rv;
     return 0;
@@ -1058,7 +1058,7 @@ init_irt_table (void)
   __nacl_irt_recvfrom = nacl_irt_recvfrom;
   __nacl_irt_select = nacl_irt_select_lind;
   __nacl_irt_pselect = not_implemented;
-  __nacl_irt_getpeername = nacl_irt_getpeername_lind;
+  __nacl_irt_getpeername = nacl_irt_getpeername;
   __nacl_irt_getsockname = nacl_irt_getsockname;
   __nacl_irt_getsockopt = nacl_irt_getsockopt_lind;
   __nacl_irt_setsockopt = nacl_irt_setsockopt_lind;
