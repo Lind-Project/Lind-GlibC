@@ -398,8 +398,7 @@ int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
     const struct timespec *timeout, const sigset_t *sigmask,
         size_t sigset_size, int *count);
 int (*__nacl_irt_select) (int nfds, fd_set *readfds,
-    fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout,
-        int *count);
+    fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);
 int (*__nacl_irt_pselect) (int nfds, fd_set *readfds,
     fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout,
         void* sigmask, int *count);
@@ -514,23 +513,9 @@ static int nacl_irt_getegid(void) {
 }
 
 static int nacl_irt_select_lind (int nfds, fd_set *readfds,
-    fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout,
-    int *count)
+    fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout)
 {
-    struct select_results sr;
-    int rv = lind_select(nfds, readfds, writefds, exceptfds, timeout, &sr);
-    if(readfds)
-        *readfds = sr.r;
-    if(writefds)
-        *writefds = sr.w;
-    if(exceptfds)
-        *exceptfds = sr.e;
-    if(timeout)
-        *(struct timeval *)timeout = sr.used_t;
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
+    return NACL_SYSCALL (select) (nfds, readfds, writefds, exceptfds, timeout);
 }
 
 static int nacl_irt_socket_lind (int domain, int type, int protocol, int *sd)
@@ -693,7 +678,7 @@ static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 
 static int nacl_irt_epoll_create_lind (int size, int *fd)
 {
-    int rv = lind_epoll_create(size);
+    int rv = NACL_SYSCALL (epoll_create)(size);
     if (rv < 0)
         return -rv;
     *fd = rv;
@@ -702,13 +687,13 @@ static int nacl_irt_epoll_create_lind (int size, int *fd)
 
 static int nacl_irt_epoll_ctl_lind (int epfd, int op, int fd, struct epoll_event *event)
 {
-    return -lind_epoll_ctl(epfd, op, fd, event);
+    return -NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
 }
 
 static int nacl_irt_epoll_wait_lind (int epfd, struct epoll_event *events,
                                  int maxevents, int timeout, int *count)
 {
-    int rv = lind_epoll_wait(epfd, events, maxevents, timeout);
+    int rv = NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
     if (rv < 0)
         return -rv;
     *count = rv;

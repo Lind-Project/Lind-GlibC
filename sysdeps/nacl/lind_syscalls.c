@@ -50,17 +50,6 @@ int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, 
     return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockname, 2, in_args, 1, out_args);
 }
 
-
-
-int lind_select (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout, struct select_results *result)
-{
-    LindArg in_args[5] = {{AT_INT, nfds, 0}, {AT_DATA_OPTIONAL, (uintptr_t)readfds, sizeof(fd_set)},
-            {AT_DATA_OPTIONAL, (uintptr_t)writefds, sizeof(fd_set)}, {AT_DATA_OPTIONAL, (uintptr_t)exceptfds, sizeof(fd_set)},
-            {AT_DATA_OPTIONAL, (uintptr_t)timeout, sizeof(struct timeval)}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)result, sizeof(struct select_results)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_select, 5, in_args, 1, out_args);
-}
-
 int lind_socketpair (int domain, int type, int protocol, int *fds)
 {
     LindArg in_args[3] = {{AT_INT, domain, 0}, {AT_INT, type, 0}, {AT_INT, protocol, 0}};
@@ -76,27 +65,5 @@ int lind_strace (const char* str)
 #else
     return 0;
 #endif
-}
-
-int lind_epoll_create (int size)
-{
-    LindArg in_args[1] = {{AT_INT, (uintptr_t)size, 0}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_epoll_create, 1, in_args, 0, NULL);
-}
-
-int lind_epoll_ctl (int epfd, int op, int fd, struct epoll_event *event)
-{
-    LindArg in_args[4] = {{AT_INT, epfd, 0}, {AT_INT, op, 0},
-        {AT_INT, fd, 0}, {AT_DATA, (uintptr_t)event, sizeof(struct epoll_event)}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_epoll_ctl, 4, in_args, 0, NULL);
-}
-
-int lind_epoll_wait(int epfd, struct epoll_event *events,
-                      int maxevents, int timeout)
-{
-    LindArg in_args[3] = {{AT_INT, epfd, 0}, {AT_INT, maxevents, 0},
-        {AT_INT, timeout, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)events, sizeof(struct epoll_event)*maxevents}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_epoll_wait, 3, in_args, 1, out_args);
 }
 
