@@ -8,7 +8,6 @@
 #include <nacl_stat.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
-#include <sys/poll.h>
 #include <sys/epoll.h>
 #include <unistd.h>
 
@@ -19,7 +18,6 @@
 #define LIND_safe_fs_munmap             22
 #define LIND_safe_net_getpeername       41
 #define LIND_safe_net_getsockname       42
-#define LIND_safe_net_poll              48
 #define LIND_safe_net_socketpair        49
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
@@ -39,7 +37,6 @@
 int lind_noop (void);
 int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
 int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
-int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out);
 int lind_socketpair (int domain, int type, int protocol, int *fds);
 int lind_strace (const char* str);
 int lind_epoll_create (int size);

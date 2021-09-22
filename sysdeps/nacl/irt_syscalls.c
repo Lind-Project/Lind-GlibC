@@ -393,7 +393,7 @@ int (*__nacl_irt_epoll_pwait) (int epfd, struct epoll_event *events,
 int (*__nacl_irt_epoll_wait) (int epfd, struct epoll_event *events,
                                 int maxevents, int timeout, int *count);
 int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
-                          int timeout, int *count);
+                          int timeout);
 int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
     const struct timespec *timeout, const sigset_t *sigmask,
         size_t sigset_size, int *count);
@@ -668,10 +668,9 @@ static int nacl_irt_getsockname_lind (int sockfd, struct sockaddr *addr,
     return 0;
 }
 
-static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds,
-                          int timeout, int *count)
+static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 {
-    int rv = lind_poll(nfds, timeout, fds, fds);
+    int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
     if (rv < 0)
         return -rv;
     return 0;

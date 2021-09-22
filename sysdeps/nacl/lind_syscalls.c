@@ -50,15 +50,6 @@ int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, 
     return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockname, 2, in_args, 1, out_args);
 }
 
-
-
-int lind_poll (int nfds, int timeout, struct pollfd *fds_in, struct pollfd *fds_out)
-{
-    LindArg in_args[3] = {{AT_INT, nfds, 0}, {AT_INT, timeout, 0}, {AT_DATA, (uintptr_t)fds_in, sizeof(struct pollfd)*nfds}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)fds_out, sizeof(struct pollfd)*nfds}};
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_poll, 3, in_args, 1, out_args);
-}
-
 int lind_socketpair (int domain, int type, int protocol, int *fds)
 {
     LindArg in_args[3] = {{AT_INT, domain, 0}, {AT_INT, type, 0}, {AT_INT, protocol, 0}};

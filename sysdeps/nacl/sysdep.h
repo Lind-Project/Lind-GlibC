@@ -1235,14 +1235,6 @@ INTERNAL_SYSCALL_pivot_root_2 (int *err, const char *new_root,
 }
 
 __extern_always_inline int
-INTERNAL_SYSCALL_poll_3 (int *err, struct pollfd *fds, nfds_t nfds, int timeout)
-{
-  int count;
-  *err = __nacl_irt_poll (fds, nfds, timeout, &count);
-  return count;
-}
-
-__extern_always_inline int
 INTERNAL_SYSCALL_ppoll_5 (int *err, struct pollfd *fds, nfds_t nfds,
 			  const struct timespec *timeout,
 			  const sigset_t *sigmask, size_t sigset_size)
