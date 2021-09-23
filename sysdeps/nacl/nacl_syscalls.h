@@ -289,8 +289,8 @@ typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
                                      void *optval, socklen_t *optlen);
 typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
-typedef int (*TYPE_nacl_getsockname) (int sockfd, socklen_t *addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out);
-typedef int (*TYPE_nacl_getpeername) (int sockfd, socklen_t *addrlen, struct sockaddr * addr);
+typedef int (*TYPE_nacl_getsockname) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
+typedef int (*TYPE_nacl_getpeername) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
 
 
 #endif
