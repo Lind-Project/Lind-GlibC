@@ -21,12 +21,8 @@
 #include <sys/types.h>
 #include <time.h>
 #include <sys/statfs.h>
-<<<<<<< HEAD
 #include <sys/poll.h>
-=======
 #include <sys/select.h>
-
->>>>>>> unified_syscalls
 
 /* intentionally not using zero */
 
@@ -155,6 +151,9 @@
 #define NACL_sys_connect                141
 #define NACL_sys_bind                   142
 #define NACL_sys_listen                 143
+
+#define NACL_sys_getsockname            144
+#define NACL_sys_getpeername            145
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
@@ -301,19 +300,16 @@ typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
                                      void *optval, socklen_t *optlen);
 typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
+typedef int (*TYPE_nacl_getsockname) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
+typedef int (*TYPE_nacl_getpeername) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
 typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);
 typedef int (*TYPE_nacl_fcntl_set) (int fd, int cmd, long set_op);
-<<<<<<< HEAD
 typedef int (*TYPE_nacl_poll) (struct pollfd *fds, nfds_t nfds, int timeout);
-=======
 typedef int (*TYPE_nacl_select) (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout);
-
 typedef int (*TYPE_nacl_epoll_create) (int size);
 typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event *event);
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
-
->>>>>>> unified_syscalls
 
 #endif

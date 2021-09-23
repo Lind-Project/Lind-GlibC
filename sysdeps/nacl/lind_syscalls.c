@@ -24,26 +24,6 @@ typedef struct _LindArg
     uint64_t len;
 } LindArg;
 
-int lind_getpeername (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen_in, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)addr, addrlen_in}};
-    if(addrlen_out) {
-        *addrlen_out = addrlen_in;
-    }
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_getpeername, 2, in_args, 1, out_args);
-}
-
-int lind_getsockname (int sockfd, socklen_t addrlen_in, struct sockaddr * addr, socklen_t * addrlen_out)
-{
-    LindArg in_args[2] = {{AT_INT, sockfd, 0}, {AT_INT, addrlen_in, 0}};
-    LindArg out_args[1] = {{AT_DATA, (uintptr_t)addr, addrlen_in}};
-    if(addrlen_out) {
-        *addrlen_out = addrlen_in;
-    }
-    return NACL_SYSCALL(lind_api)(LIND_safe_net_getsockname, 2, in_args, 1, out_args);
-}
-
 int lind_socketpair (int domain, int type, int protocol, int *fds)
 {
     LindArg in_args[3] = {{AT_INT, domain, 0}, {AT_INT, type, 0}, {AT_INT, protocol, 0}};
