@@ -3,7 +3,6 @@
 #include <stddef.h>
 
 #include "lind_util.h"
-#include "lind_strace.h"
 #include <irt_syscalls.h>
 
 /* Return information about the filesystem on which FD resides.  */
