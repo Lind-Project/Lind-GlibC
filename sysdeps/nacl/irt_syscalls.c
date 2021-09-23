@@ -662,7 +662,7 @@ static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[
 static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL(getpeername) (sockfd, addrlen, addr, addrlen);
+    int rv = NACL_SYSCALL(getpeername) (sockfd, addrlen, addr);
     if (rv < 0)
         return -rv;
     return 0;
