@@ -5,7 +5,6 @@
 #include <futex_emulation.h>
 #include <irt_syscalls.h>
 #include <lowlevellock.h>
-#include <lind_syscalls.h>
 #include <string.h>
 
 /* Implementation of all syscalls for use in platform- and OS- independent code
