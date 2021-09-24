@@ -80,7 +80,7 @@ extern int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 extern int (*__nacl_irt_select) (int nfds, fd_set *readfds,
                                  fd_set *writefds, fd_set *exceptfds,
-                                 const struct timeval *timeout, int *count);
+                                 const struct timeval *timeout);
 extern int (*__nacl_irt_pselect) (int nfds, fd_set *readfds,
                                   fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout,
                                   void* sigmask, int *count);
