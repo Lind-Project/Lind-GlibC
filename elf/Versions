@@ -172,7 +172,6 @@ ld {
     __nacl_irt_fcntl_set;
     lind_getdents;
     lind_getifaddrs;
-    lind_socketpair;
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;

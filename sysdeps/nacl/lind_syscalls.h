@@ -13,7 +13,6 @@
 #define LIND_fs_ioctl                   15
 #define LIND_safe_fs_mmap               21
 #define LIND_safe_fs_munmap             22
-#define LIND_safe_net_socketpair        49
 #define LIND_safe_fs_rename             55
 #define LIND_safe_net_epoll_create      56
 #define LIND_safe_net_epoll_ctl         57
@@ -29,6 +28,5 @@
         return result; \
     } while (0)
 
-int lind_socketpair (int domain, int type, int protocol, int *fds);
 #endif /* _LIND_SYSCALLS_H_ */
 
