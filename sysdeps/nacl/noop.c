@@ -22,7 +22,6 @@
 #include <sys/types.h>
 
 #include "lind_util.h"
-#include "lind_syscalls.h"
 
 /* Create a directory named PATH with protections MODE.  */
 int
