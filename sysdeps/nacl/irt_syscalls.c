@@ -469,7 +469,6 @@ int (*__nacl_irt_execv) (char const *path, char *const *argv);
 int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
 
-#include <lind_syscalls.h>
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
 static int nacl_irt_mkdir (const char *pathname, mode_t mode)
