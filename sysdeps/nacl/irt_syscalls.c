@@ -591,16 +591,15 @@ static int nacl_irt_sendto(int sockfd, const void *buf, size_t len, int flags,
 static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count)
 {
-    socklen_t in_len = addrlen ? *addrlen : sizeof(struct sockaddr);
-    socklen_t out_len;
+    socklen_t alen = addrlen ? *addrlen : sizeof(struct sockaddr);
     struct sockaddr outaddr;
-    int rv = NACL_SYSCALL (recvfrom) (sockfd, len, flags, in_len, &out_len, buf, &outaddr);
+    int rv = NACL_SYSCALL (recvfrom) (sockfd, buf, len, flags, &alen, &outaddr);
     if (rv < 0)
         return -rv;
     if(dest_addr)
         *dest_addr = outaddr;
     if(addrlen)
-        *addrlen = out_len;
+        *addrlen = alen;
     if(count)
         *count = rv;
     return 0;

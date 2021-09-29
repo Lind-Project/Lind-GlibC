@@ -206,8 +206,8 @@ typedef int (*TYPE_nacl_send) (int sockfd, size_t len, int flags, const void *bu
 typedef int (*TYPE_nacl_sendto) (int sockfd, const void *buf, size_t len, int flags,
                                      const struct sockaddr *dest_addr, socklen_t addrlen);
 typedef int (*TYPE_nacl_recv) (int sockfd, size_t len, int flags, void *buf);
-typedef int (*TYPE_nacl_recvfrom) (int sockfd, size_t len, int flags, socklen_t addrlen, 
-                                       socklen_t * addrlen_out, void *buf, struct sockaddr *src_addr);
+typedef int (*TYPE_nacl_recvfrom) (int sockfd, void* buf, size_t len, int flags,
+                                   struct sockaddr *src_addr, socklen_t* addrlen);
 typedef int (*TYPE_nacl_imc_accept) (int d);
 typedef int (*TYPE_nacl_imc_connect) (int d);
 typedef int (*TYPE_nacl_accept) (int sockfd, struct sockaddr *addr, socklen_t addrlen);
