@@ -292,15 +292,10 @@ typedef int (*TYPE_nacl_waitpid) (int pid, int *stat_loc, int options);
 typedef int (*TYPE_nacl_wait) (int *stat_loc);
 typedef int (*TYPE_nacl_wait4) (pid_t pid, int *wstatus, int options, struct rusage *rusage);
 typedef int (*TYPE_nacl_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
-
-<<<<<<< HEAD
 typedef int (*TYPE_nacl_gethostname) (char *name, size_t len);
-
 typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset);
 typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t offset);
-
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
-
 typedef int (*TYPE_nacl_flock) (int fd, int operation);
 typedef int (*TYPE_nacl_getsockopt) (int sockfd, int level, int optname,
                                      void *optval, socklen_t *optlen);
@@ -318,9 +313,4 @@ typedef int (*TYPE_nacl_epoll_create) (int size);
 typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event *event);
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
 
-=======
-typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset);
-typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t offset);
-
->>>>>>> main
 #endif
