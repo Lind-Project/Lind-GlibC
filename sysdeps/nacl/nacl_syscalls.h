@@ -15,7 +15,6 @@
 #define NATIVE_CLIENT_SRC_TRUSTED_SERVICE_RUNTIME_INCLUDE_BITS_NACL_SYSCALLS_H_
 
 
-#include <nacl_stat.h>
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -187,15 +186,15 @@ typedef int (*TYPE_nacl_dup2)(int oldfd, int newfd);
 typedef int (*TYPE_nacl_dup3)(int oldfd, int newfd, int flags);
 typedef int (*TYPE_nacl_read) (int desc, void *buf, size_t count);
 typedef int (*TYPE_nacl_close) (int desc);
-typedef int (*TYPE_nacl_fstat) (int fd, struct nacl_abi_stat *stbp);
+typedef int (*TYPE_nacl_fstat) (int fd, struct stat *stbp);
 typedef int (*TYPE_nacl_fstatfs) (int fd, struct statfs *buf);
 typedef int (*TYPE_nacl_statfs) (const char *path, struct statfs *buf);
 typedef int (*TYPE_nacl_access) (const char *name, int mode);
 typedef int (*TYPE_nacl_write) (int desc, void const *buf, size_t count);
 typedef int (*TYPE_nacl_open) (char const *pathname, int flags, mode_t mode);
 typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
-typedef int (*TYPE_nacl_stat) (const char *file, struct nacl_abi_stat *st);
-typedef int (*TYPE_nacl_lstat) (const char *file, struct nacl_abi_stat *st);
+typedef int (*TYPE_nacl_stat) (const char *file, struct stat *st);
+typedef int (*TYPE_nacl_lstat) (const char *file, struct stat *st);
 
 typedef int (*TYPE_nacl_getuid) (void);
 typedef int (*TYPE_nacl_geteuid) (void);

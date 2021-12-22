@@ -7,8 +7,6 @@
 #ifndef _NACL_DIRENT_H
 #define _NACL_DIRENT_H
 
-/* nacl_stat.h is required for nacl_abi_{ino_t,off_t} */
-#include <nacl_stat.h>
 
 /* From native_client/src/trusted/service_runtime/include/sys/dirent.h */
 /* TODO(mikhailt): extract the shared part of the dirent declarations to

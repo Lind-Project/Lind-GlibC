@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <errno.h>
-#include <nacl_stat.h>
 #include <nacl_syscalls.h>
 #undef stat
 #define stat nacl_abi_stat
@@ -125,7 +124,7 @@ static int nacl_irt_dup3 (int oldfd, int newfd, int flags) {
   return NACL_SYSCALL (dup3) (oldfd, newfd, flags);
 }
 
-static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
+static int nacl_irt_fstat (int fd, struct stat *st) {
   return -NACL_SYSCALL (fstat) (fd, st);
 }
 
@@ -137,11 +136,11 @@ static int nacl_irt_statfs (const char* path, struct statfs *buf) {
   return -NACL_SYSCALL (statfs) (path, buf);
 }
 
-static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
+static int nacl_irt_stat (const char *pathname, struct stat *st) {
   return -NACL_SYSCALL (stat) (pathname, st);
 }
 
-static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
+static int nacl_irt_lstat (const char *pathname, struct stat *st) {
   return -NACL_SYSCALL (lstat) (pathname, st);
 }
 

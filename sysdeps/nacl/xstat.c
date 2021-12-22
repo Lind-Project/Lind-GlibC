@@ -2,7 +2,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include <nacl_stat.h>
 #include <irt_syscalls.h>
 
 int __xstat (int version, const char *path, struct stat *buf)
@@ -12,8 +11,7 @@ int __xstat (int version, const char *path, struct stat *buf)
       errno = EFAULT;
       return -1;
     }
-  struct nacl_abi_stat st;
-  int result = __nacl_irt_stat (path, &st);
+  int result = __nacl_irt_stat (path, buf);
   if (result != 0)
     {
       errno = result;
@@ -21,7 +19,6 @@ int __xstat (int version, const char *path, struct stat *buf)
     }
   else
     {
-      __nacl_abi_stat_to_stat (&st, buf);
       return 0;
     }
 }
