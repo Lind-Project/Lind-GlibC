@@ -10,6 +10,8 @@
 #include <sys/select.h>
 #include <time.h>
 #include <sys/statfs.h>
+#include <nacl_syscalls.h>
+
 
 
 struct dirent;
@@ -20,9 +22,6 @@ struct msghdr;
 struct rusage;
 
 #define socklen_t unsigned int
-
-typedef int64_t nacl_abi_off_t;
-typedef uint64_t nacl_abi_ino_t;
 
 
 

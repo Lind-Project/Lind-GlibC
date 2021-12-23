@@ -22,6 +22,7 @@
 #include <sys/statfs.h>
 #include <sys/poll.h>
 #include <sys/select.h>
+#include <nacl_dirent.h>
 
 /* intentionally not using zero */
 

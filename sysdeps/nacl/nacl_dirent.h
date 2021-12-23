@@ -7,7 +7,8 @@
 #ifndef _NACL_DIRENT_H
 #define _NACL_DIRENT_H
 
-#include <irt_syscalls.h>
+typedef int64_t nacl_abi_off_t;
+typedef uint64_t nacl_abi_ino_t;
 
 /* From native_client/src/trusted/service_runtime/include/sys/dirent.h */
 /* TODO(mikhailt): extract the shared part of the dirent declarations to
