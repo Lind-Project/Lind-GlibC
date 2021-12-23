@@ -22,6 +22,9 @@
 #include <sys/statfs.h>
 #include <sys/poll.h>
 #include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 #include <nacl_dirent.h>
 
 /* intentionally not using zero */
@@ -177,7 +180,6 @@ struct nacl_abi_stat;
 struct timeval;
 struct timespec;
 
-#define socklen_t unsigned int
 
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
