@@ -13,16 +13,8 @@
 #include <sys/statfs.h>
 #include <nacl_syscalls.h>
 
-
-
 struct dirent;
-struct timeval;
-struct timespec;
-struct sockaddr;
 struct msghdr;
-struct rusage;
-
-
 
 
 extern size_t (*__nacl_irt_query)(const char *interface_ident,

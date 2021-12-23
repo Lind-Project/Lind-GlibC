@@ -23,7 +23,7 @@
 #include <sys/poll.h>
 #include <sys/select.h>
 #include <sys/socket.h>
-#include <sys/time.h>
+#include <time.h>
 #include <sys/resource.h>
 #include <nacl_dirent.h>
 
@@ -176,10 +176,6 @@
 
 
 struct NaClImcMsgHdr;
-struct nacl_abi_stat;
-struct timeval;
-struct timespec;
-
 
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
