@@ -21,6 +21,11 @@ struct rusage;
 
 #define socklen_t unsigned int
 
+typedef int64_t nacl_abi_off_t;
+typedef uint64_t nacl_abi_ino_t;
+
+
+
 extern size_t (*__nacl_irt_query)(const char *interface_ident,
                                   void *table, size_t tablesize);
 
