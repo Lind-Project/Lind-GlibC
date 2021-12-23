@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/epoll.h>
 #include <sys/select.h>
+#include <sys/socket.h>
 #include <time.h>
 #include <sys/statfs.h>
 #include <nacl_syscalls.h>
@@ -21,7 +22,6 @@ struct sockaddr;
 struct msghdr;
 struct rusage;
 
-#define socklen_t unsigned int
 
 
 
@@ -176,8 +176,6 @@ extern int (*__nacl_irt_flock) (int fd, int operation);
 extern int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
 extern int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
 extern int (*__nacl_irt_access) (const char *file, int mode);
-
-#undef socklen_t
 
 #if defined(_LIBC)
 void init_irt_table (void) attribute_hidden;

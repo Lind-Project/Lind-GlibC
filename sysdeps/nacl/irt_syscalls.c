@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <errno.h>
-#include <nacl_syscalls.h>
 #undef stat
 #define stat nacl_abi_stat
 #include <irt.h>
