@@ -604,18 +604,6 @@ INTERNAL_SYSCALL_getcpu_3 (int *err, unsigned *cpu, unsigned *node,
   return 0;
 }
 
-/* NOTE! The user-level library version returns a character pointer.
-
-   The system call just returns the length of the buffer filled (which includes
-   the ending '\0' character), or zero in case of error.  */
-__extern_always_inline int
-INTERNAL_SYSCALL_getcwd_2 (int *err, char *buf, size_t size)
-{
-  int len;
-  *err = __nacl_irt_getcwd (buf, size, &len);
-  return len;
-}
-
 __extern_always_inline gid_t
 INTERNAL_SYSCALL_getegid_0 (int *err)
 {
