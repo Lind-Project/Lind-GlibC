@@ -1,7 +1,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-int __lxstat (int vers, const char *name, struct stat *buf)
+int __lxstat (int vers, const char *path, struct stat *buf)
 {
   if (buf == NULL || path == NULL)
     {
