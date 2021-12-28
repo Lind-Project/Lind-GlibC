@@ -171,6 +171,7 @@ override_list = [
     "sysdeps/nacl/wait4.c",
     "sysdeps/nacl/sigprocmask.c",
     "sysdeps/nacl/lstat.c",
+    "sysdeps/nacl/getcwd.c",
     "sysdeps/nacl/gethostname.c",
     "sysdeps/nacl/pread.c",
     "sysdeps/nacl/pwrite.c"

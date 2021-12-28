@@ -698,6 +698,11 @@ static int nacl_irt_epoll_wait_lind (int epfd, struct epoll_event *events,
     return 0;
 }
 
+static int nacl_irt_getcwd (char* buf, size_t size)
+{ 
+    return NACL_SYSCALL (getcwd) (buf, size);
+}
+
 static int nacl_irt_gethostname (char *name, size_t len)
 { 
     return NACL_SYSCALL (gethostname) (name, len);
@@ -1006,7 +1011,7 @@ init_irt_table (void)
   __nacl_irt_geteuid = nacl_irt_geteuid;
   __nacl_irt_getgid = nacl_irt_getgid;
   __nacl_irt_getegid = nacl_irt_getegid;
-  __nacl_irt_getcwd = not_implemented;
+  __nacl_irt_getcwd = nacl_irt_getcwd;
 
   __nacl_irt_epoll_create = nacl_irt_epoll_create_lind;
   __nacl_irt_epoll_create1 = not_implemented;
