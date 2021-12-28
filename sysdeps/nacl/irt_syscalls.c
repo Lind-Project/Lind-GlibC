@@ -340,7 +340,7 @@ int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
 int (*__nacl_irt_getegid) (void);
-int (*__nacl_irt_getcwd) (char* buf, size_t size, int *len);
+int (*__nacl_irt_getcwd) (char* buf, size_t size);
 
 void (*__nacl_irt_exit) (int status);
 int (*__nacl_irt_gettod) (struct timeval *tv);
