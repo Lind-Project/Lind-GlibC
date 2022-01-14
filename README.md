@@ -1,3 +1,5 @@
+[![Build Status](https://github.com/Lind-Project/Lind-GlibC/actions/workflows/lind-selfhost.yml/badge.svg?branch=develop)](https://github.com/Lind-Project/Lind-GlibC/actions/workflows/lind-selfhost.yml)
+
 This directory contains the version 2.7 release of the GNU C Library.
 
 The GNU C Library is the standard system C library for all GNU systems,
