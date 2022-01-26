@@ -308,7 +308,7 @@ typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct socka
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);
 typedef int (*TYPE_nacl_fcntl_set) (int fd, int cmd, long set_op);
-typedef int (*TYPE_nacl_ioctl) (int fd, unsigned long int request, int arg);
+typedef int (*TYPE_nacl_ioctl) (int fd, unsigned long int request, void* arg_ptr);
 typedef int (*TYPE_nacl_poll) (struct pollfd *fds, nfds_t nfds, int timeout);
 typedef int (*TYPE_nacl_select) (int nfds, fd_set * readfds, fd_set * writefds, fd_set * exceptfds, const struct timeval *timeout);
 typedef int (*TYPE_nacl_epoll_create) (int size);
