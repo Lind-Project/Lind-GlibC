@@ -72,7 +72,7 @@ static int nacl_irt_fcntl_set (int fd, int cmd, long set_op) {
   return NACL_SYSCALL (fcntl_set) (fd, cmd, set_op);
 }
 
-static int nacl_irt_ioctl (int fd, unsigned long int request, void* arg_ptr) {
+static int nacl_irt_ioctl (int fd, unsigned long request, void* arg_ptr) {
   return NACL_SYSCALL (ioctl) (fd, request, arg_ptr);
 }
 
@@ -356,7 +356,7 @@ int (*__nacl_irt_sysconf) (int name, int *value);
 int (*__nacl_irt_fcntl_get) (int fd, int cmd);
 int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
-int (*__nacl_irt_ioctl) (int fd, unsigned long int request, void* arg_ptr);
+int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
 int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
                         int *newfd);

@@ -4,7 +4,7 @@
 
 #include <irt_syscalls.h>
 
-int __ioctl (int fd, unsigned long int request, ...) {
+int __ioctl (int fd, unsigned long request, ...) {
 
     if (fd < 0) {
       __set_errno (EBADF);
