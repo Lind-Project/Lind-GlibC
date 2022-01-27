@@ -13,6 +13,7 @@ int __ioctl (int fd, unsigned long request, ...) {
 
     int arg = 0;
     void* arg_ptr = &arg;
+    int result;
 
     if (request == FIONBIO) {
       /* This command has a single void pointer as an arg, pointing to an integer*/
