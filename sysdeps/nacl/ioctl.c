@@ -25,6 +25,9 @@ int __ioctl (int fd, unsigned long request, ...) {
       return -1;
     }
 
+    //As all the valid commands are not listed right now, we return ENOSYS even when
+    //the given request is invalid for ioctl. (Which should normally return EINVAL)
+
     result = __nacl_irt_ioctl(fd, request, arg_ptr);
 
     return result;
