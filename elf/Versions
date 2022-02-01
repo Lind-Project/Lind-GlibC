@@ -170,6 +170,7 @@ ld {
     __nacl_irt_listen;
     __nacl_irt_fcntl_get;
     __nacl_irt_fcntl_set;
+    __nacl_irt_ioctl;
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;

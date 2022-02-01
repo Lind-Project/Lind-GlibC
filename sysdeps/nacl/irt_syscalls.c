@@ -72,6 +72,10 @@ static int nacl_irt_fcntl_set (int fd, int cmd, long set_op) {
   return NACL_SYSCALL (fcntl_set) (fd, cmd, set_op);
 }
 
+static int nacl_irt_ioctl (int fd, unsigned long request, void* arg_ptr) {
+  return NACL_SYSCALL (ioctl) (fd, request, arg_ptr);
+}
+
 static int nacl_irt_read (int fd, void *buf, size_t count, size_t *nread) {
   int rv = NACL_SYSCALL (read) (fd, buf, count);
   if (rv < 0)
@@ -351,6 +355,8 @@ int (*__nacl_irt_sysconf) (int name, int *value);
 
 int (*__nacl_irt_fcntl_get) (int fd, int cmd);
 int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
+
+int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
 int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
                         int *newfd);
@@ -1063,6 +1069,7 @@ init_irt_table (void)
   __nacl_irt_access = nacl_irt_access;
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
+  __nacl_irt_ioctl = nacl_irt_ioctl;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
