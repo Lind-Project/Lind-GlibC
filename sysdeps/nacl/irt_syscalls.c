@@ -677,7 +677,7 @@ static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
     int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
     if (rv < 0)
         return -rv;
-    return 0;
+    return rv;
 }
 
 static int nacl_irt_epoll_create_lind (int size, int *fd)
