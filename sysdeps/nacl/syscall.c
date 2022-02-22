@@ -1,6 +1,6 @@
 #include <errno.h>
 #include <stdarg.h>
-
+#include <nacl_syscalls.h>
 #include <irt_syscalls.h>
 
 int __syscall (int callnum, ...) {
@@ -9,7 +9,7 @@ int __syscall (int callnum, ...) {
     long result;
     va_list argptr;
     va_start(argptr, callnum);
-    result = __nacl_irt_syscall(callnum, argptr);
+    result = -NACL_SYSCALL_ADDR (callnum) (argptr);
     va_end(argptr);
 
     if (result < 0) {

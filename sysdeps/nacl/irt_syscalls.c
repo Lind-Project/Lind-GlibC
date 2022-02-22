@@ -21,11 +21,6 @@ static void nacl_irt_exit (int status) {
       (*(void (*)(void)) 0) ();
   }
 }
-
-static int nacl_irt_syscall(int callnum, va_list argptr) {
-  return -NACL_SYSCALL_ADDR (callnum) (argptr);
-}
-
 static int nacl_irt_link (const char *from, const char *to) {
   return -NACL_SYSCALL (link) (from, to);
 }
@@ -1074,7 +1069,6 @@ init_irt_table (void)
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
   __nacl_irt_ioctl = nacl_irt_ioctl;
-  __nacl_irt_syscall = nacl_irt_syscall;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
