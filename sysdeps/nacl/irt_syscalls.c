@@ -539,7 +539,7 @@ static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrle
 
 static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (bind) (sockfd, addrlen, addr);
+    int rv = NACL_SYSCALL (bind) (sockfd, addr, addrlen);
     if (rv < 0)
         return -rv;
     return 0;
@@ -597,15 +597,15 @@ static int nacl_irt_sendto(int sockfd, const void *buf, size_t len, int flags,
 static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count)
 {
-    socklen_t alen = addrlen ? *addrlen : sizeof(struct sockaddr);
-    struct sockaddr outaddr;
-    int rv = NACL_SYSCALL (recvfrom) (sockfd, buf, len, flags, &alen, &outaddr);
+    socklen_t alen = addrlen ? *addrlen : sizeof(struct sockaddr_in6);
+    struct sockaddr_in6 outaddr;//conservatively allocate the largest sockaddr we support which is sockaddr_in6
+    int rv = NACL_SYSCALL (recvfrom) (sockfd, buf, len, flags, &outaddr, &alen);
     if (rv < 0)
         return -rv;
-    if(dest_addr)
-        *dest_addr = outaddr;
     if(addrlen)
         *addrlen = alen;
+    if(dest_addr)
+        memcpy(dest_addr, &outaddr, alen);
     if(count)
         *count = rv;
     return 0;
