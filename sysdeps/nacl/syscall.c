@@ -6,6 +6,8 @@
 int __syscall (int callnum, ...) {
 
 
+    write(1, "in syscall\n", 11);
+
     long result;
     va_list argptr;
     va_start(argptr, callnum);
