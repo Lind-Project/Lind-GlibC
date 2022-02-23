@@ -178,7 +178,7 @@ struct timeval;
 struct timespec;
 
 #define socklen_t unsigned int
-
+typedef int (*TYPE_nacl_syscall)(long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
 typedef int (*TYPE_nacl_unlink)(char *name);

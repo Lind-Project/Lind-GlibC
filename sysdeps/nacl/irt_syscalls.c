@@ -13,6 +13,15 @@
 # include <ldsodefs.h>
 #endif
 #include "trusted-dirs.h"
+#include <stdarg.h>
+
+
+
+static int nacl_irt_syscall (int callnum, ...) {
+  va_list args;
+  va_start(args, callnum);
+  return -((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (args);
+}
 
 static void nacl_irt_exit (int status) {
   NACL_SYSCALL (exit) (status);
@@ -1069,6 +1078,7 @@ init_irt_table (void)
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
   __nacl_irt_ioctl = nacl_irt_ioctl;
+  __nacl_irt_syscall = nacl_irt_syscall;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
