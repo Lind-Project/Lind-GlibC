@@ -3,14 +3,14 @@
 #include <nacl_syscalls.h>
 #include <irt_syscalls.h>
 
-int __syscall (int callnum, ...) {
+long int __syscall (long int __sysno, ...) {
 
 
     write(1, "in syscall\n", 11);
 
     va_list argptr;
-    va_start(argptr, callnum);
-    int result = __nacl_irt_syscall(callnum, argptr);
+    va_start(argptr, __sysno);
+    int result = __nacl_irt_syscall(__sysno, argptr);
     va_end(argptr);
 
     if (result < 0) {
