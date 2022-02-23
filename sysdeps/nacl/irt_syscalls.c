@@ -20,7 +20,16 @@
 static int nacl_irt_syscall (int callnum, ...) {
   va_list args;
   va_start(args, callnum);
-  return -((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (args);
+  long arg1 = va_arg(args, long);
+  long arg2 = va_arg(args, long); 
+  long arg3 = va_arg(args, long); 
+  long arg4 = va_arg(args, long); 
+  long arg5 = va_arg(args, long); 
+  long arg6 = va_arg(args, long); 
+
+  int rv = -((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (arg1, arg2, arg3, arg4, arg5, arg6);
+  va_end(args);
+  return rv;
 }
 
 static void nacl_irt_exit (int status) {
