@@ -68,6 +68,7 @@ ld {
     __nacl_futex_wake_op;
     __nacl_futex_cmp_requeue;
     # Syscall table: can be used to intercept syscalls.
+    __nacl_irt_syscall;
     __nacl_irt_clock;
     __nacl_irt_clock_getres;
     __nacl_irt_clock_gettime;
