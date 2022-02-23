@@ -15,23 +15,6 @@
 #include "trusted-dirs.h"
 #include <stdarg.h>
 
-
-
-static int nacl_irt_syscall (int callnum, ...) {
-  va_list args;
-  va_start(args, callnum);
-  long arg1 = va_arg(args, long);
-  long arg2 = va_arg(args, long); 
-  long arg3 = va_arg(args, long); 
-  long arg4 = va_arg(args, long); 
-  long arg5 = va_arg(args, long); 
-  long arg6 = va_arg(args, long); 
-
-  int rv = ((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (arg1, arg2, arg3, arg4, arg5, arg6);
-  va_end(args);
-  return rv;
-}
-
 static void nacl_irt_exit (int status) {
   NACL_SYSCALL (exit) (status);
   /* Crash. */
@@ -353,8 +336,6 @@ static int not_implemented() {
 
 size_t (*__nacl_irt_query) (const char *interface_ident,
                             void *table, size_t tablesize);
-
-int (*__nacl_irt_syscall) (int callnum, ...);
 int (*__nacl_irt_link) (const char *from, const char *to);
 int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
@@ -1090,7 +1071,6 @@ init_irt_table (void)
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
   __nacl_irt_ioctl = nacl_irt_ioctl;
-  __nacl_irt_syscall = nacl_irt_syscall;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
