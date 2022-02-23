@@ -10,7 +10,8 @@ int __syscall (int callnum, ...) {
 
     va_list argptr;
     va_start(argptr, callnum);
-    int result = -((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (argptr);
+    int dummy = 0;
+    int result = -(NACL_SYSCALL_ADDR (callnum)) (argptr);
     va_end(argptr);
 
     if (result < 0) {

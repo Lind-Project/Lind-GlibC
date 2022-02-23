@@ -179,7 +179,6 @@ struct timespec;
 
 #define socklen_t unsigned int
 
-typedef int (*TYPE_nacl_syscall)(...);
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
 typedef int (*TYPE_nacl_unlink)(char *name);
