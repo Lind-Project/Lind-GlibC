@@ -27,7 +27,7 @@ static int nacl_irt_syscall (int callnum, ...) {
   long arg5 = va_arg(args, long); 
   long arg6 = va_arg(args, long); 
 
-  int rv = -((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (arg1, arg2, arg3, arg4, arg5, arg6);
+  int rv = ((TYPE_nacl_syscall) NACL_SYSCALL_ADDR (callnum)) (arg1, arg2, arg3, arg4, arg5, arg6);
   va_end(args);
   return rv;
 }
@@ -39,9 +39,11 @@ static void nacl_irt_exit (int status) {
       (*(void (*)(void)) 0) ();
   }
 }
+
 static int nacl_irt_link (const char *from, const char *to) {
   return -NACL_SYSCALL (link) (from, to);
 }
+
 static int nacl_irt_unlink (const char *name) {
   return -NACL_SYSCALL (unlink) (name);
 }
