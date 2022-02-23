@@ -352,6 +352,7 @@ static int not_implemented() {
 size_t (*__nacl_irt_query) (const char *interface_ident,
                             void *table, size_t tablesize);
 
+int (*__nacl_irt_syscall) (int callnum, ...);
 int (*__nacl_irt_link) (const char *from, const char *to);
 int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
