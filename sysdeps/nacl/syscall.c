@@ -6,7 +6,10 @@
 long int __syscall (long int __sysno, ...) {
 
 
-    write(1, "in syscall\n", 11);
+    if (__sysno < 0 || __sysno > NACL_MAX_SYSCALLS) {
+      __set_errno (ENOSYS);
+      return -1;
+    }
 
     va_list args;
     va_start(args, __sysno);
