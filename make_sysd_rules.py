@@ -57,7 +57,6 @@ override_list = [
     "math/s_significandl.c",
     "misc/mkostemp.c",
     "misc/mkstemp.c",
-    # "misc/syscall.c",
     "misc/truncate.c",
     "nptl/pthread_barrier_wait.c",
     "nptl/pthread_cond_broadcast.c",
