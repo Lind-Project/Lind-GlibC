@@ -25,7 +25,7 @@ struct rusage;
 
 extern size_t (*__nacl_irt_query)(const char *interface_ident,
                                   void *table, size_t tablesize);
-                                  
+
 extern int (*__nacl_irt_link) (const char *from, const char *to);
 extern int (*__nacl_irt_unlink) (const char *name);
 extern void (*__nacl_irt_exit) (int status);
