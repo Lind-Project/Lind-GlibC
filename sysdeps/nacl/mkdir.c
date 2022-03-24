@@ -3,7 +3,12 @@
 #include <irt_syscalls.h>
 
 int __mkdir(const char* pathname, mode_t mode) {
-    return __nacl_irt_mkdir(pathname, mode);
+  int ret = _nacl_irt_mkdir(pathname, mode);
+  if (ret < 0) {
+      __set_errno (-ret);
+      return -1;
+  }
+  return ret;    
 }
 
 weak_alias (__mkdir, mkdir)
