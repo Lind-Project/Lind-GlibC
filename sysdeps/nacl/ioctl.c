@@ -23,7 +23,7 @@ int __ioctl (int fd, unsigned long request, ...) {
       instead of va_arg (ap, void *) for requests that directly accept 
       an arg value and not a pointer.*/
 
-    if (request == FIONBIO) {
+    if (request == FIONBIO || request == FIOASYNC) {
       /* This command has a single void pointer as an arg, pointing to an integer*/
       va_list ap;
       va_start (ap, request);
