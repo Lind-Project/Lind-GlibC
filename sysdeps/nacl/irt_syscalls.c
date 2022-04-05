@@ -534,7 +534,10 @@ static int nacl_irt_socket_lind (int domain, int type, int protocol, int *sd)
 
 static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-    return NACL_SYSCALL (accept) (sockfd, addr, addrlen);
+    int rv = NACL_SYSCALL (accept) (sockfd, addr, addrlen);
+    if (rv < 0)
+        return -rv;
+    return rv;
 }
 
 static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
