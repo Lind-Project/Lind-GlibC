@@ -1761,7 +1761,7 @@ INTERNAL_SYSCALL_accept_3 (int *err, int sockfd, struct sockaddr* addr,
 {
   int rv = __nacl_irt_accept (sockfd, addr, addr_len);
   if(rv < 0) {
-    *err = rv;
+    *err = -rv;
     return -1;
   }
   return rv;
