@@ -7,7 +7,7 @@
 /* Detach shared memory segment starting at address specified by SHMADDR
    from the caller's data segment.  */
 
-int __shmdt (__ptr_t *shmaddr) {
+int __shmdt (const void *shmaddr) {
 
     int result;
 
