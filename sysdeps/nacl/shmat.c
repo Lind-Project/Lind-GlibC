@@ -8,7 +8,7 @@
    segment of the calling process.  SHMADDR and SHMFLG determine how
    and where the segment is attached.  */
 
-__ptr_t __shmat (int shmid, __ptr_t *shmaddr, int shmflg) {
+void *__shmat (int shmid, void *shmaddr, int shmflg) {
 
     int result;
 
