@@ -185,7 +185,7 @@ static int nacl_irt_sysbrk (void **newbrk) {
 
 
 static int nacl_irt_shmget (key_t key, size_t size, int shmflg) {
-  return NACL_SYSCALL (shmget) (oldfd, newfd);
+  return NACL_SYSCALL (shmget) (key, size, shmflg);
 }
 
 static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
@@ -201,7 +201,7 @@ static int nacl_irt_shmdt (void *shmaddr) {
 }
 
 static int nacl_irt_shmctl (int shmid, int cmd, struct shmid_ds *buf) {
-  return NACL_SYSCALL (shmctl) (oldfd, newfd);
+  return NACL_SYSCALL (shmctl) (shmid, cmd, buf);
 }
 
 static int nacl_irt_mmap (void **addr, size_t len,
