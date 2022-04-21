@@ -183,6 +183,27 @@ static int nacl_irt_sysbrk (void **newbrk) {
   return (12 /* ENOSYS */);
 }
 
+
+static int nacl_irt_shmget (key_t key, size_t size, int shmflg) {
+  return NACL_SYSCALL (shmget) (oldfd, newfd);
+}
+
+static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
+  uint32_t rv = (uintptr_t) NACL_SYSCALL (shmat) (shmid, *shmaddr, shmflg);
+  if ((uint32_t) rv > 0xffff0000u)
+    return -(int32_t) rv;
+  *shmaddr = (void *) (uintptr_t) rv;
+  return 0;
+}
+
+static int nacl_irt_shmdt (void *shmaddr) {
+  return -NACL_SYSCALL (shmdt) (shmaddr);
+}
+
+static int nacl_irt_shmctl (int shmid, int cmd, struct shmid_ds *buf) {
+  return NACL_SYSCALL (shmctl) (oldfd, newfd);
+}
+
 static int nacl_irt_mmap (void **addr, size_t len,
                           int prot, int flags, int fd, off_t off) {
   uint32_t rv = (uintptr_t) NACL_SYSCALL (mmap) (*addr, len, prot, flags,
@@ -419,8 +440,13 @@ int (*__nacl_irt_setsockopt) (int sockfd, int level, int optname,
 int (*__nacl_irt_socketpair) (int domain, int type, int protocol, int sv[static 2]);
 int (*__nacl_irt_shutdown) (int sockfd, int how);
 
-
 int (*__nacl_irt_sysbrk) (void **newbrk);
+
+int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
+int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
+int (*__nacl_irt_shmdt)(void *shmaddr);
+int (*__nacl_irt_shmctl)(int shmid, int cmd, struct shmid_ds *buf);
+
 int (*__nacl_irt_mmap) (void **addr, size_t len, int prot, int flags,
                         int fd, off_t off);
 int (*__nacl_irt_munmap) (void *addr, size_t len);
@@ -1070,6 +1096,10 @@ init_irt_table (void)
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
   __nacl_irt_ioctl = nacl_irt_ioctl;
+  __nacl_irt_shmget = nacl_irt_shmget;
+  __nacl_irt_shmat = nacl_irt_shmat;
+  __nacl_irt_shmdt = nacl_irt_shmdt;
+  __nacl_irt_shmctl = nacl_irt_shmctl;
 }
 
 size_t nacl_interface_query(const char *interface_ident,

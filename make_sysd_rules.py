@@ -176,7 +176,10 @@ override_list = [
     "sysdeps/nacl/pwrite.c",
     "sysdeps/nacl/mkdir.c",
     "sysdeps/nacl/ioctl.c",
-    "sysdeps/nacl/setsid.c"
+    "sysdeps/nacl/shmget.c",
+    "sysdeps/nacl/shmat.c",
+    "sysdeps/nacl/shmdt.c",
+    "sysdeps/nacl/shmctl.c"
     ]
 
 def get_override_map():
