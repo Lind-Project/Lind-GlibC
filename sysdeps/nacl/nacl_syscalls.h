@@ -23,6 +23,7 @@
 #include <sys/statfs.h>
 #include <sys/poll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
 
 /* intentionally not using zero */
 
