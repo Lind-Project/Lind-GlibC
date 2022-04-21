@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <sys/epoll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
+
 #include <time.h>
 #include <sys/statfs.h>
 
