@@ -124,7 +124,7 @@ extern int (*__nacl_irt_sysbrk)(void **newbrk);
 extern int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
 extern int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
 extern int (*__nacl_irt_shmdt)(void *shmaddr);
-extern int (*__nacl_irt_shmctl)(int shmid, int cmd, struct shmid_ds *buf);
+extern int (*__nacl_irt_shmctl)(int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
 
 extern int (*__nacl_irt_mmap)(void **addr, size_t len, int prot, int flags,
                               int fd, nacl_abi_off_t off);
