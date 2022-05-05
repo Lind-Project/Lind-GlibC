@@ -229,7 +229,7 @@ typedef int (*TYPE_nacl_imc_mem_obj_create) (size_t nbytes);
 typedef int (*TYPE_nacl_shmget) (key_t key, size_t size, int shmflg);
 typedef void *(*TYPE_nacl_shmat) (int shmid, void *shmaddr, int shmflg);
 typedef int (*TYPE_nacl_shmdt) (void *shmaddr);
-typedef int (*TYPE_nacl_shmctl) (int shmid, int cmd, struct shmid_ds *buf);
+typedef int (*TYPE_nacl_shmctl) (int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
 
 typedef void *(*TYPE_nacl_mmap) (void *start, size_t length,
                                  int prot, int flags, int desc,

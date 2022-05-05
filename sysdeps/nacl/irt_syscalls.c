@@ -200,7 +200,7 @@ static int nacl_irt_shmdt (void *shmaddr) {
   return -NACL_SYSCALL (shmdt) (shmaddr);
 }
 
-static int nacl_irt_shmctl (int shmid, int cmd, struct shmid_ds *buf) {
+static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
   return NACL_SYSCALL (shmctl) (shmid, cmd, buf);
 }
 
@@ -445,7 +445,7 @@ int (*__nacl_irt_sysbrk) (void **newbrk);
 int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
 int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
 int (*__nacl_irt_shmdt)(void *shmaddr);
-int (*__nacl_irt_shmctl)(int shmid, int cmd, struct shmid_ds *buf);
+int (*__nacl_irt_shmctl)(int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
 
 int (*__nacl_irt_mmap) (void **addr, size_t len, int prot, int flags,
                         int fd, off_t off);

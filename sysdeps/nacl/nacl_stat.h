@@ -139,7 +139,7 @@ struct nacl_abi_shmid_ds {  /* must be renamed when ABI is exported */
   struct nacl_abi_ipc_perm  nacl_abi_shm_perm;
   nacl_abi_size_t           nacl_abi_shm_segsz;
   nacl_abi_time_t           nacl_abi_shm_atime;
-  nacl_abi_time_t           nacl_abi_shm_mtime;
+  nacl_abi_time_t           nacl_abi_shm_dtime;
   nacl_abi_time_t           nacl_abi_shm_ctime;
   nacl_abi_pid_t            nacl_abi_shm_cpid;
   nacl_abi_pid_t            nacl_abi_shm_lpid;
