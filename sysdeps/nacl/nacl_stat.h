@@ -41,7 +41,7 @@ typedef nacl_abi___mode_t nacl_abi_mode_t;
 
 #ifndef nacl_abi___key_t_defined
 #define nacl_abi___key_t_defined
-typedef uint32_t      nacl_abi___key_t;
+typedef int32_t      nacl_abi___key_t;
 typedef nacl_abi___key_t nacl_abi_key_t;
 #endif
 
