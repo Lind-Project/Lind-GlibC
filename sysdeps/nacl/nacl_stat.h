@@ -127,12 +127,12 @@ struct nacl_abi_ipc_perm {  /* must be renamed when ABI is exported */
   nacl_abi_gid_t        nacl_abi_shm_gid;
   nacl_abi_uid_t        nacl_abi_shm_cuid;
   nacl_abi_gid_t        nacl_abi_shm_cgid;
-  unsigned short int    nacl_abi_shm_mode;
-  unsigned short int    nacl_abi_shm_pad1;
-  unsigned short int    nacl_abi_shm_seq;
-  unsigned short int    nacl_abi_shm_pad2;
-  unsigned long int     nacl_abi_shm_unused1;
-  unsigned long int     nacl_abi_shm_unused2;
+  uint16_t              nacl_abi_shm_mode;
+  uint16_t              nacl_abi_shm_pad1;
+  uint16_t              nacl_abi_shm_seq;
+  uint16_t              nacl_abi_shm_pad2;
+  uint32_t              nacl_abi_shm_unused1;
+  uint32_t              nacl_abi_shm_unused2;
 };
 
 struct nacl_abi_shmid_ds {  /* must be renamed when ABI is exported */
