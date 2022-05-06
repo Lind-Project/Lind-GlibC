@@ -31,13 +31,17 @@ int __shmctl (int shmid, int cmd, struct shmid_ds *buf) {
 
     struct nacl_abi_shmid_ds nacl_buf;
 
-    result = __nacl_irt_shmctl(shmid, cmd, &nacl_buf);
+    if (cmd == IPC_STAT)  {
+      result = __nacl_irt_shmctl(shmid, cmd, &nacl_buf);
+      __nacl_abi_shmidstat_to_shmidstat(&nacl_buf, buf);
+    } else {
+       result = __nacl_irt_shmctl(shmid, cmd, NULL);
+    }
+
     if (result < 0) {
       __set_errno (-result);
       return -1;
     }
-
-    __nacl_abi_shmidstat_to_shmidstat(&nacl_buf, buf);
 
     return result;
 }
