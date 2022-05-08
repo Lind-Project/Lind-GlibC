@@ -189,10 +189,10 @@ static int nacl_irt_shmget (key_t key, size_t size, int shmflg) {
 }
 
 static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
-  uint32_t rv = (uintptr_t) NACL_SYSCALL (shmat) (shmid, *shmaddr, shmflg);
-  if ((uint32_t) rv > 0xffff0000u)
+  uintptr_t rv = NACL_SYSCALL (shmat) (shmid, *shmaddr, shmflg);
+  if (rv > 0xffff0000u)
     return -(int32_t) rv;
-  *shmaddr = (void *) (uintptr_t) rv;
+  *shmaddr = (void *) rv;
   return 0;
 }
 
@@ -206,11 +206,11 @@ static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
 
 static int nacl_irt_mmap (void **addr, size_t len,
                           int prot, int flags, int fd, off_t off) {
-  uint32_t rv = (uintptr_t) NACL_SYSCALL (mmap) (*addr, len, prot, flags,
+  uintptr_t rv = NACL_SYSCALL (mmap) (*addr, len, prot, flags,
                                                  fd, &off);
-  if ((uint32_t) rv > 0xffff0000u)
+  if (rv > 0xffff0000u)
     return -(int32_t) rv;
-  *addr = (void *) (uintptr_t) rv;
+  *addr = (void *) rv;
   return 0;
 }
 
