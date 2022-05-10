@@ -31,7 +31,7 @@ static int nacl_irt_unlink (const char *name) {
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
-  return -NACL_SYSCALL (rename) (name);
+  return -NACL_SYSCALL (rename) (oldpath, newpath);
 }
 
 static int nacl_irt_gettod (struct timeval *tv) {
@@ -536,7 +536,7 @@ static int nacl_irt_chdir (const char *pathname)
 
 static int nacl_irt_chmod (const char *pathname, mode_t mode)
 {
-    int rv = NACL_SYSCALL (chmod) (pathname);
+    int rv = NACL_SYSCALL (chmod) (pathname, mode);
     if (rv < 0)
         return -rv;
     return 0;
