@@ -179,7 +179,7 @@ override_list = [
     "sysdeps/nacl/shmget.c",
     "sysdeps/nacl/shmat.c",
     "sysdeps/nacl/shmdt.c",
-    "sysdeps/nacl/shmctl.c"
+    "sysdeps/nacl/shmctl.c",
     "sysdeps/nacl/rename.c"
     ]
 
