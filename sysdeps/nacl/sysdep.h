@@ -135,7 +135,7 @@ INTERNAL_SYSCALL_chdir_1 (int *err, const char *path)
 __extern_always_inline int
 INTERNAL_SYSCALL_chmod_2 (int *err, const char *path, mode_t mode)
 {
-  int rv = __nacl_irt_chdmod (path);
+  int rv = __nacl_irt_chmod (path);
   if(rv < 0) {
     *err = -rv;
     return -1;
