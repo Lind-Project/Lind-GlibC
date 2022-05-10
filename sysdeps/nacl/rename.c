@@ -1,7 +1,7 @@
 #include <errno.h>
 #include <sysdep.h>
 #include <unistd.h>
-
+#include <irt_syscalls.h>
 
 int __rename(const char *oldpath, const char *newpath)
 {
