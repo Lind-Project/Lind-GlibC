@@ -39,6 +39,11 @@ int __ioctl (int fd, unsigned long request, ...) {
 
     result = __nacl_irt_ioctl(fd, request, arg_ptr);
 
+    if (result < 0) {
+      __set_errno(-result);
+      return -1;
+    }
+
     return result;
 }
 

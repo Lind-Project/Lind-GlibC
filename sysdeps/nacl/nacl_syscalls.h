@@ -23,6 +23,7 @@
 #include <sys/statfs.h>
 #include <sys/poll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
 
 /* intentionally not using zero */
 
@@ -82,6 +83,11 @@
 #define NACL_sys_getgid                 52
 #define NACL_sys_getegid                53
 #define NACL_sys_flock                  54
+
+#define NACL_sys_shmget                 56
+#define NACL_sys_shmat                  57
+#define NACL_sys_shmdt                  58
+#define NACL_sys_shmctl                 59
 
 #define NACL_sys_imc_makeboundsock      60
 #define NACL_sys_imc_accept             61
@@ -219,6 +225,11 @@ typedef int (*TYPE_nacl_imc_makeboundsock) (int *dp);
 typedef int (*TYPE_nacl_imc_socketpair) (int *d2);
 typedef int (*TYPE_nacl_socketpair) (int domain, int type, int protocol, int *fds);
 typedef int (*TYPE_nacl_imc_mem_obj_create) (size_t nbytes);
+
+typedef int (*TYPE_nacl_shmget) (key_t key, size_t size, int shmflg);
+typedef void *(*TYPE_nacl_shmat) (int shmid, void *shmaddr, int shmflg);
+typedef int (*TYPE_nacl_shmdt) (void *shmaddr);
+typedef int (*TYPE_nacl_shmctl) (int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
 
 typedef void *(*TYPE_nacl_mmap) (void *start, size_t length,
                                  int prot, int flags, int desc,

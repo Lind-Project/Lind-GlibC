@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <sys/epoll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
+
 #include <time.h>
 #include <sys/statfs.h>
 
@@ -118,6 +120,12 @@ extern int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                                    size_t *nread);
 
 extern int (*__nacl_irt_sysbrk)(void **newbrk);
+
+extern int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
+extern int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
+extern int (*__nacl_irt_shmdt)(void *shmaddr);
+extern int (*__nacl_irt_shmctl)(int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
+
 extern int (*__nacl_irt_mmap)(void **addr, size_t len, int prot, int flags,
                               int fd, nacl_abi_off_t off);
 extern int (*__nacl_irt_munmap)(void *addr, size_t len);
