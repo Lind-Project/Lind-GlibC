@@ -12,5 +12,4 @@ int __rename(const char *oldpath, const char *newpath)
     }
     return ret;
 }
-libc_hidden_def (__rename)
 weak_alias (__rename, rename)
