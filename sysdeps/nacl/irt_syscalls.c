@@ -528,18 +528,12 @@ static int nacl_irt_rmdir (const char *pathname)
 
 static int nacl_irt_chdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (chdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (chdir) (pathname);
 }
 
 static int nacl_irt_chmod (const char *pathname, mode_t mode)
 {
-    int rv = NACL_SYSCALL (chmod) (pathname, mode);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (chmod) (pathname, mode);
 }
 
 static int nacl_irt_getuid(void) {
