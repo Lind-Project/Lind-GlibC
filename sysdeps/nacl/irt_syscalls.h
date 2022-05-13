@@ -30,6 +30,7 @@ extern size_t (*__nacl_irt_query)(const char *interface_ident,
 
 extern int (*__nacl_irt_link) (const char *from, const char *to);
 extern int (*__nacl_irt_unlink) (const char *name);
+extern int (*__nacl_irt_rename) (const char *oldpath, const char *newpath);
 extern void (*__nacl_irt_exit) (int status);
 extern int (*__nacl_irt_gettod) (struct timeval *tv);
 extern int (*__nacl_irt_clock) (clock_t *ticks);
@@ -41,6 +42,8 @@ extern int (*__nacl_irt_sysconf) (int name, int *value);
 extern int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 extern int (*__nacl_irt_rmdir) (const char* pathname);
 extern int (*__nacl_irt_chdir) (const char* pathname);
+extern int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
+
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
 extern int (*__nacl_irt_getgid) (void);

@@ -25,8 +25,13 @@ static void nacl_irt_exit (int status) {
 static int nacl_irt_link (const char *from, const char *to) {
   return -NACL_SYSCALL (link) (from, to);
 }
+
 static int nacl_irt_unlink (const char *name) {
   return -NACL_SYSCALL (unlink) (name);
+}
+
+static int nacl_irt_rename(const char *oldpath, const char *newpath) {
+  return -NACL_SYSCALL (rename) (oldpath, newpath);
 }
 
 static int nacl_irt_gettod (struct timeval *tv) {
@@ -357,10 +362,12 @@ size_t (*__nacl_irt_query) (const char *interface_ident,
                             void *table, size_t tablesize);
 
 int (*__nacl_irt_link) (const char *from, const char *to);
+int (*__nacl_irt_rename) (const char *oldpath, const char *newpath);
 int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
+int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -521,10 +528,12 @@ static int nacl_irt_rmdir (const char *pathname)
 
 static int nacl_irt_chdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (chdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (chdir) (pathname);
+}
+
+static int nacl_irt_chmod (const char *pathname, mode_t mode)
+{
+    return NACL_SYSCALL (chmod) (pathname, mode);
 }
 
 static int nacl_irt_getuid(void) {
@@ -1036,8 +1045,10 @@ init_irt_table (void)
 
   __nacl_irt_link = nacl_irt_link;
   __nacl_irt_unlink = nacl_irt_unlink;
+  __nacl_irt_rename = nacl_irt_rename;
   __nacl_irt_mkdir = nacl_irt_mkdir;
   __nacl_irt_chdir = nacl_irt_chdir;
+  __nacl_irt_chmod = nacl_irt_chmod;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;

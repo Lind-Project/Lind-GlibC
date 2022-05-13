@@ -175,6 +175,8 @@ ld {
     __nacl_irt_shmat;
     __nacl_irt_shmdt;
     __nacl_irt_shmctl;
+    __nacl_irt_rename;
+    __nacl_irt_chmod;
     
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;

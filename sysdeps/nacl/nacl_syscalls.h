@@ -36,9 +36,7 @@
 
 #define NACL_sys_unlink                  4
 #define NACL_sys_link                    5
-/*
- * TODO: why is there a gap here? -jp
- */
+#define NACL_sys_rename                  6
 
 #define NACL_sys_dup                     8
 #define NACL_sys_dup2                    9
@@ -121,10 +119,6 @@
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
 
-/*
- * TODO: why is there a gap here? -jp
- */
-
 #define NACL_sys_lind_api               113
 
 #define NACL_sys_pipe                   114
@@ -188,6 +182,7 @@ struct timespec;
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
 typedef int (*TYPE_nacl_unlink)(char *name);
+typedef int (*TYPE_nacl_rename)(const char *oldpath, const char *newpath);
 typedef int (*TYPE_nacl_dup)(int oldfd);
 typedef int (*TYPE_nacl_dup2)(int oldfd, int newfd);
 typedef int (*TYPE_nacl_dup3)(int oldfd, int newfd, int flags);
@@ -208,6 +203,7 @@ typedef int (*TYPE_nacl_geteuid) (void);
 typedef int (*TYPE_nacl_getgid) (void);
 typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
+typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 

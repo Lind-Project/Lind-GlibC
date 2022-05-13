@@ -124,16 +124,23 @@ INTERNAL_SYSCALL_capset_2 (int *err, struct __user_cap_header_struct *hdrp,
 __extern_always_inline int
 INTERNAL_SYSCALL_chdir_1 (int *err, const char *path)
 {
-  *err = __nacl_irt_chdir (path);
-  return 0;
+  int rv = __nacl_irt_chdir (path);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_chmod_2 (int *err, const char *path, mode_t mode)
 {
-  log_unimplemented("chmod unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_chmod (path, mode);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
