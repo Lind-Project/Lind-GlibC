@@ -29,17 +29,43 @@
 #include <netinet/in.h>
 #include <irt_syscalls.h>
 
-/* We don't know if we have NETLINK support compiled in in our
-   Kernel, so include the old implementation as fallback.  */
-#if __ASSUME_NETLINK_SUPPORT == 0
-int __no_netlink_support attribute_hidden;
-#endif
+
+int __no_netlink_support 0;
 
 
 /* Create a linked list of `struct ifaddrs' structures, one for each
    network interface on the host machine.  If successful, store the
    list in *IFAP and 2004, 2005, 2006, return 0.  On errors, return -1 and set `errno'.  */
 #define IFADDRS_BUFSIZE 2048
+
+void 
+__netlink_free_handle (struct netlink_handle *h)
+{
+	return;
+}
+
+int
+__netlink_request (struct netlink_handle *h, int type)
+{
+	return -EOPNOTSUPP;
+}
+
+static int
+__netlink_sendreq (struct netlink_handle *h, int type) {
+	return -EOPNOTSUPP
+}
+
+void
+__netlink_close (struct netlink_handle *h)
+{
+	return;
+}
+
+int
+__netlink_open (struct netlink_handle *h)
+{
+	return -EOPNOTSUPP;
+}
 
 int
 getifaddrs (struct ifaddrs **ifap)
