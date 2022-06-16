@@ -29,6 +29,12 @@
 #include <netinet/in.h>
 #include <irt_syscalls.h>
 
+/* We don't know if we have NETLINK support compiled in in our
+   Kernel, so include the old implementation as fallback.  */
+#if __ASSUME_NETLINK_SUPPORT == 0
+int __no_netlink_support attribute_hidden;
+#endif
+
 
 /* Create a linked list of `struct ifaddrs' structures, one for each
    network interface on the host machine.  If successful, store the
