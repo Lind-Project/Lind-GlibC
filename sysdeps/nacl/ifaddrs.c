@@ -17,25 +17,16 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <alloca.h>
-#include <assert.h>
-#include <errno.h>
-#include <ifaddrs.h>
-#include <net/if.h>
-#include <netinet/in.h>
-#include <netpacket/packet.h>
-#include <stdbool.h>
-#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ioctl.h>
+#include <arpa/inet.h>
 #include <sys/socket.h>
-#include <sysdep.h>
-#include <time.h>
-#include <unistd.h>
-#include <kernel-features.h>
-
-#include "netlinkaccess.h"
+#include <ifaddrs.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include <irt_syscalls.h>
 
 
 /* Create a linked list of `struct ifaddrs' structures, one for each
