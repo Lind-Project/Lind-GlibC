@@ -17,6 +17,7 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -111,13 +112,13 @@ void
 freeifaddrs (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
-	for (ifas != NULL) {
+	while (ifas != NULL) {
 		free(ifa->ifa_name);
 		free(ifa->ifa_addr);
 		free(ifa->ifa_netmask);
 		free(ifa->ifa_broadaddr);
-		stuct ifaddrs *tmp = ifas;
-		ifas = ifas->next;
+		struct ifaddrs *tmp = ifas;
+		ifas = ifas->ifa_next;
 		free (tmp);
 	}
 }
