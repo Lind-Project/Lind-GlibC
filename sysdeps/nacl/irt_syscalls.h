@@ -168,6 +168,7 @@ extern int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 extern int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
 
 extern int (*__nacl_irt_gethostname) (char *name, size_t len);
+extern int (*__nacl_irt_getifaddrs) (char *buf, size_t len);
 
 extern pid_t (*__nacl_irt_getpid) (void);
 extern pid_t (*__nacl_irt_getppid) (void);
