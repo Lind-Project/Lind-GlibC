@@ -30,7 +30,7 @@
 #include <irt_syscalls.h>
 
 
-int __no_netlink_support 1;
+int __no_netlink_support = 1;
 
 
 /* Create a linked list of `struct ifaddrs' structures, one for each
@@ -52,7 +52,7 @@ __netlink_request (struct netlink_handle *h, int type)
 
 static int
 __netlink_sendreq (struct netlink_handle *h, int type) {
-	return -EOPNOTSUPP
+	return -EOPNOTSUPP;
 }
 
 void
