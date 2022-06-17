@@ -84,6 +84,8 @@ getifaddrs (struct ifaddrs **ifap)
 	struct ifaddrs *ifa;
 
 	ifa = calloc(1, sizeof(struct ifaddrs));
+	printf("allocating ifa %p\n", ifa);
+	fflush(stdout);
 	*ifap = ifa;
 
 	/* get the first token */
@@ -128,6 +130,8 @@ getifaddrs (struct ifaddrs **ifap)
 		if (token != NULL) {
 			ifa->ifa_next = calloc(1, sizeof(struct ifaddrs));
 			ifa = ifa->ifa_next;
+			printf("freeing ifa %p\n", ifa);
+			fflush(stdout);
 		} else {
 			ifa->ifa_next = NULL;
 		}
@@ -145,6 +149,8 @@ freeifaddrs (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
+		printf("freeing ifa %p\n", ifas);
+		fflush(stdout);
 		free(ifas->ifa_name);
 		free(ifas->ifa_addr);
 		free(ifas->ifa_netmask);
