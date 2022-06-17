@@ -146,9 +146,9 @@ freeifaddrs (struct ifaddrs *ifa)
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
 		// free(ifas->ifa_name);
-		// free(ifas->ifa_addr);
-		// free(ifas->ifa_netmask);
-		// free(ifas->ifa_broadaddr);
+		free(ifas->ifa_addr);
+		free(ifas->ifa_netmask);
+		free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
 		free (tmp);
