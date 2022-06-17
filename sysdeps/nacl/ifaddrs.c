@@ -150,7 +150,7 @@ freeifaddrs (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
-		// free(ifas->ifa_name);
+		free(ifas->ifa_name);
 		free(ifas->ifa_addr);
 		free(ifas->ifa_netmask);
 		free(ifas->ifa_broadaddr);
