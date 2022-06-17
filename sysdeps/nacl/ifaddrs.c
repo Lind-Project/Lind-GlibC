@@ -95,7 +95,7 @@ getifaddrs (struct ifaddrs **ifap)
 	while( token != NULL ) {
 		char* hostname = calloc(1, IF_NAMESIZE + 1);
 		printf("allocating hostname %p\n", hostname);
-		fflsuh(stdout);
+		fflush(stdout);
 		char addr[16] = {0};
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
