@@ -107,6 +107,9 @@ getifaddrs (struct ifaddrs **ifap)
 		sscanf(scanstring, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 		int bdflag = strncmp(bdaddr, "none", 4);
 
+		printf("%s-%d-%s-%s-%s\n", name, flags, addr, naddr, bdaddr);
+		fflush(stdout);
+
 		struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
 		struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
 		struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
