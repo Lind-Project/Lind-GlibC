@@ -157,6 +157,9 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
   char *tmpbuf;
   int r;
 
+  printf("in gaih inet serv\n");
+  fflush(stdout);
+
   do
     {
       tmpbuf = __alloca (tmpbuflen);
@@ -178,7 +181,8 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
   st->protocol = ((tp->protoflag & GAI_PROTO_PROTOANY)
 		  ? req->ai_protocol : tp->protocol);
   st->port = s->s_port;
-
+  printf("return from gaih inetserv\n");
+  fflush(stdout);
   return 0;
 }
 
