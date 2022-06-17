@@ -113,18 +113,18 @@ getifaddrs (struct ifaddrs **ifap)
 		strcpy(ifa->ifa_name, name);
 		ifa->ifa_flags = flags;
 
-		sa->sin_family = AF_INET;
-		sa->sin_port = htons(0);
-		inet_aton(addr, &(sa->sin_addr));
+		// sa->sin_family = AF_INET;
+		// sa->sin_port = htons(0);
+		// inet_aton(addr, &(sa->sin_addr));
 
-		na->sin_family = AF_INET;
-		na->sin_port = htons(0);
-		inet_aton(naddr, &(na->sin_addr));
+		// na->sin_family = AF_INET;
+		// na->sin_port = htons(0);
+		// inet_aton(naddr, &(na->sin_addr));
 
-		bda->sin_family = AF_INET;
-		bda->sin_port = htons(0);
-		if (bdflag) inet_aton(bdaddr, &(bda->sin_addr));
-		else inet_aton("0.0.0.0", &(bda->sin_addr));
+		// bda->sin_family = AF_INET;
+		// bda->sin_port = htons(0);
+		// if (bdflag) inet_aton(bdaddr, &(bda->sin_addr));
+		// else inet_aton("0.0.0.0", &(bda->sin_addr));
 
 		ifa->ifa_data = NULL;
 
