@@ -304,16 +304,21 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
   int ret = getifaddrs (&ifa);
   printf("ret %d\n");
   fflush(stdout);
-  if ( ret != 0)
-    {
+
+  if (ret == 0) {
+    printf(" ret is 0, why is this weird\n");
+    fflush(stdout);
+  }
+
       /* We cannot determine what interfaces are available.  Be
 	 pessimistic.  */
+  if (ret != 0) {
       printf("getifaddrs non det interfaces\n");
       fflush(stdout);
       *seen_ipv4 = true;
       *seen_ipv6 = true;
       return;
-    }
+  }
 
   struct ifaddrs *runp;
   for (runp = ifa; runp != NULL; runp = runp->ifa_next)

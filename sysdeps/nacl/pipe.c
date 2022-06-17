@@ -19,15 +19,11 @@ __pipe (int __pipedes[static 2])
     return -1;
   }
 
-  char* buf = malloc(16);
-
   ret = __nacl_irt_pipe(__pipedes);
   if (ret) {
     __set_errno (-ret);
     return -1;
   }
-
-  free(buf);
 
   return 0;
 }
