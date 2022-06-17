@@ -84,7 +84,7 @@ getifaddrs (struct ifaddrs **ifap)
 	struct ifaddrs *ifa;
 
 	ifa = calloc(1, sizeof(struct ifaddrs));
-	ifap = &ifa;
+	*ifap = ifa;
 
 	/* get the first token */
 	token = strtok(buf, s);
@@ -145,10 +145,10 @@ freeifaddrs (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
-		free(ifa->ifa_name);
-		free(ifa->ifa_addr);
-		free(ifa->ifa_netmask);
-		free(ifa->ifa_broadaddr);
+		free(ifas->ifa_name);
+		free(ifas->ifa_addr);
+		free(ifas->ifa_netmask);
+		free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
 		free (tmp);
