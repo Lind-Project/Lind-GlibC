@@ -91,17 +91,27 @@ getifaddrs (struct ifaddrs **ifap)
 
 	/* walk through other tokens */
 	while( token != NULL ) {
-		char* hostname = calloc(1, sizeof(char) * IF_NAMESIZE);
+
+		ifa->ifa_name = calloc(1, sizeof(char) * IF_NAMESIZE);
+		ifa->ifa_addr = malloc(sizeof(struct sockaddr));
+		ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
+		ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
+		int flags;
+
+		char name[IF_NAMESIZE];
 		char addr[16] = {0};
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
-		struct sockaddr_in *sa = malloc(sizeof(struct sockaddr_in));
-		struct sockaddr_in *na = malloc(sizeof(struct sockaddr_in));
-		struct sockaddr_in *bda = malloc(sizeof(struct sockaddr_in));
-		int flags;
 
-		sscanf(token, "%s %d %s %s %s", hostname, &flags, addr, naddr, bdaddr);
+		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 		int bdflag = strncmp(bdaddr, "none", 4);
+
+		struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
+		struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
+		struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
+
+		strcpy(ifa->ifa_name, name);
+		ifa->ifa_flags = flags;
 
 		sa->sin_family = AF_INET;
 		sa->sin_port = htons(0);
@@ -116,11 +126,6 @@ getifaddrs (struct ifaddrs **ifap)
 		if (bdflag) inet_aton(bdaddr, &(bda->sin_addr));
 		else inet_aton("0.0.0.0", &(bda->sin_addr));
 
-		ifa->ifa_name = hostname;
-		ifa->ifa_flags = flags;
-		ifa->ifa_addr = (struct sockaddr*) sa;
-		ifa->ifa_netmask = (struct sockaddr*) na;
-		ifa->ifa_broadaddr = (struct sockaddr*) bda;
 		ifa->ifa_data = NULL;
 
 		token = strtok(NULL, s);
