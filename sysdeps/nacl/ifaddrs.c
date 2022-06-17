@@ -93,9 +93,9 @@ getifaddrs (struct ifaddrs **ifap)
 	while( token != NULL ) {
 
 		ifa->ifa_name = malloc(sizeof(char) * IF_NAMESIZE);
-		ifa->ifa_addr = malloc(sizeof(struct sockaddr));
-		ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
-		ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
+		// ifa->ifa_addr = malloc(sizeof(struct sockaddr));
+		// ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
+		// ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
 		int flags;
 
 		char name[IF_NAMESIZE];
@@ -106,9 +106,9 @@ getifaddrs (struct ifaddrs **ifap)
 		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 		int bdflag = strncmp(bdaddr, "none", 4);
 
-		struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
-		struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
-		struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		// struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
+		// struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
+		// struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
 
 		strcpy(ifa->ifa_name, name);
 		ifa->ifa_flags = flags;
@@ -151,9 +151,9 @@ freeifaddrs (struct ifaddrs *ifa)
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
 		free(ifas->ifa_name);
-		free(ifas->ifa_addr);
-		free(ifas->ifa_netmask);
-		free(ifas->ifa_broadaddr);
+		// free(ifas->ifa_addr);
+		// free(ifas->ifa_netmask);
+		// free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
 		free (tmp);
