@@ -2104,7 +2104,8 @@ getaddrinfo (const char *name, const char *service,
      cannot cache the results since new interfaces could be added at
      any time.  */
   __check_pf (&seen_ipv4, &seen_ipv6, &in6ai, &in6ailen);
-
+  printf("post check pf\n");
+  fflush(stdout);
   if (hints->ai_flags & AI_ADDRCONFIG)
     {
       /* Now make a decision on what we return, if anything.  */
@@ -2127,6 +2128,9 @@ getaddrinfo (const char *name, const char *service,
 	  return EAI_NONAME;
 	}
     }
+
+  printf("past hints\n");
+  fflush(stdout);
 
   if (service && service[0])
     {
@@ -2155,6 +2159,8 @@ getaddrinfo (const char *name, const char *service,
   if (hints->ai_family == AF_UNSPEC || hints->ai_family == AF_INET
       || hints->ai_family == AF_INET6)
     {
+	  printf("pret gaih\n");
+	  fflush(stdout);
       last_i = gaih_inet (name, pservice, hints, end, &naddrs);
       if (last_i != 0)
 	{
