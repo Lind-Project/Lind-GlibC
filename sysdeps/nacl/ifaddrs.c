@@ -83,7 +83,7 @@ getifaddrs (struct ifaddrs **ifap)
 	char *token;
 	struct ifaddrs *ifa;
 
-	ifa = calloc(1, sizeof(struct ifaddrs));
+	ifa = malloc(sizeof(struct ifaddrs));
 	*ifap = ifa;
 
 	/* get the first token */
@@ -96,21 +96,21 @@ getifaddrs (struct ifaddrs **ifap)
 		// ifa->ifa_addr = malloc(sizeof(struct sockaddr));
 		// ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
 		// ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
-		int flags;
+		int flags = 1;
 
 		char name[IF_NAMESIZE];
 		char addr[16] = {0};
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
 
-		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
-		int bdflag = strncmp(bdaddr, "none", 4);
+		// sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
+		// int bdflag = strncmp(bdaddr, "none", 4);
 
 		// struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
 		// struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
 		// struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
 
-		strcpy(ifa->ifa_name, name);
+		strcpy(ifa->ifa_name, "lol");
 		ifa->ifa_flags = flags;
 
 		// sa->sin_family = AF_INET;
@@ -131,7 +131,7 @@ getifaddrs (struct ifaddrs **ifap)
 		token = strtok(NULL, s);
 
 		if (token != NULL) {
-			ifa->ifa_next = calloc(1, sizeof(struct ifaddrs));
+			ifa->ifa_next = malloc(sizeof(struct ifaddrs));
 			ifa = ifa->ifa_next;
 		} else {
 			ifa->ifa_next = NULL;
