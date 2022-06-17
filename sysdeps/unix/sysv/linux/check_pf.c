@@ -301,24 +301,16 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
   fflush(stdout);
   /* No netlink.  Get the interface list via getifaddrs.  */
   struct ifaddrs *ifa = NULL;
-  int ret = getifaddrs (&ifa);
-  printf("ret %d\n");
-  fflush(stdout);
-
-  if (ret == 0) {
-    printf(" ret is 0, why is this weird\n");
-    fflush(stdout);
-  }
-
+  if (getifaddrs (&ifa) != 0)
+    {
       /* We cannot determine what interfaces are available.  Be
 	 pessimistic.  */
-  if (ret != 0) {
       printf("getifaddrs non det interfaces\n");
       fflush(stdout);
       *seen_ipv4 = true;
       *seen_ipv6 = true;
       return;
-  }
+    }
 
   struct ifaddrs *runp;
   for (runp = ifa; runp != NULL; runp = runp->ifa_next)

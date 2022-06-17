@@ -68,9 +68,10 @@ __netlink_open (struct netlink_handle *h)
 }
 
 int
-getifaddrs (struct ifaddrs **ifap)
+getifaddrs2 (struct ifaddrs **ifap)
 {
 	char* buf = malloc(IFADDRS_BUFSIZE); //"lo 65609 127.0.0.1 127.0.0.1 none\nwlp0s20f3 69699 192.168.1.255 192.168.1.255 192.168.1.255\n";
+    int result = 0;
 	int result = __nacl_irt_getifaddrs(buf, IFADDRS_BUFSIZE);
 
 	if (result < 0) {
@@ -84,9 +85,6 @@ getifaddrs (struct ifaddrs **ifap)
 	struct ifaddrs *ifa;
 
 	ifa = calloc(1, sizeof(struct ifaddrs));
-	printf("allocating ifa %p\n", ifa);
-	printf("size of ifa %d", sizeof(struct ifaddrs));
-	fflush(stdout);
 	*ifap = ifa;
 
 	/* get the first token */
@@ -94,9 +92,7 @@ getifaddrs (struct ifaddrs **ifap)
 
 	/* walk through other tokens */
 	while( token != NULL ) {
-		char* hostname = calloc(1, IF_NAMESIZE);
-		printf("allocating hostname %p\n", hostname);
-		fflush(stdout);
+		char* hostname = calloc(1, sizeof(char) * IF_NAMESIZE);
 		char addr[16] = {0};
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
@@ -122,8 +118,6 @@ getifaddrs (struct ifaddrs **ifap)
 		else inet_aton("0.0.0.0", &(bda->sin_addr));
 
 		ifa->ifa_name = hostname;
-		printf("added hostname to ifa_name %p\n", ifa->ifa_name);
-		fflush(stdout);
 		ifa->ifa_flags = flags;
 		ifa->ifa_addr = (struct sockaddr*) sa;
 		ifa->ifa_netmask = (struct sockaddr*) na;
@@ -135,8 +129,6 @@ getifaddrs (struct ifaddrs **ifap)
 		if (token != NULL) {
 			ifa->ifa_next = calloc(1, sizeof(struct ifaddrs));
 			ifa = ifa->ifa_next;
-			printf("allocating ifa %p\n", ifa);
-			fflush(stdout);
 		} else {
 			ifa->ifa_next = NULL;
 		}
@@ -150,28 +142,16 @@ libc_hidden_def (getifaddrs)
 
 
 void
-freeifaddrs (struct ifaddrs *ifa)
+freeifaddrs2 (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
-		printf("freeing ifa %p\n", ifas);
-		fflush(stdout);
-		printf("freeing name %p\n", ifas->ifa_name);
-		fflush(stdout);
 		free(ifas->ifa_name);
-		printf("freeing addr\n");
-		fflush(stdout);
 		free(ifas->ifa_addr);
-		printf("freeing netmask\n");
-		fflush(stdout);
 		free(ifas->ifa_netmask);
-		printf("freeing broadaddr\n");
-		fflush(stdout);
 		free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
-		printf("freeing struct\n");
-		fflush(stdout);
 		free (tmp);
 	}
 }
