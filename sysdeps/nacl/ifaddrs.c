@@ -103,8 +103,7 @@ getifaddrs (struct ifaddrs **ifap)
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
 
-		char* scanstring = strdup(token);
-		sscanf(scanstring, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
+		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 		int bdflag = strncmp(bdaddr, "none", 4);
 
 		printf("%s-%d-%s-%s-%s\n", name, flags, addr, naddr, bdaddr);
@@ -119,20 +118,19 @@ getifaddrs (struct ifaddrs **ifap)
 
 		sa->sin_family = AF_INET;
 		sa->sin_port = htons(0);
-		inet_aton("0.0.0.0", &(sa->sin_addr));
+		inet_aton(addr, &(sa->sin_addr));
 
 		na->sin_family = AF_INET;
 		na->sin_port = htons(0);
-		inet_aton("0.0.0.0", &(na->sin_addr));
+		inet_aton(naddr, &(na->sin_addr));
 
 		bda->sin_family = AF_INET;
 		bda->sin_port = htons(0);
-		if (bdflag) inet_aton("0.0.0.0", &(bda->sin_addr));
+		if (bdflag) inet_aton(bdaddr, &(bda->sin_addr));
 		else inet_aton("0.0.0.0", &(bda->sin_addr));
 
 		ifa->ifa_data = NULL;
 
-		free(scanstring);
 		token = strtok(NULL, s);
 
 		if (token != NULL) {
