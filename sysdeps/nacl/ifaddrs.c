@@ -130,7 +130,7 @@ getifaddrs (struct ifaddrs **ifap)
 		if (token != NULL) {
 			ifa->ifa_next = calloc(1, sizeof(struct ifaddrs));
 			ifa = ifa->ifa_next;
-			printf("freeing ifa %p\n", ifa);
+			printf("allocating ifa %p\n", ifa);
 			fflush(stdout);
 		} else {
 			ifa->ifa_next = NULL;
@@ -151,12 +151,22 @@ freeifaddrs (struct ifaddrs *ifa)
 	while (ifas != NULL) {
 		printf("freeing ifa %p\n", ifas);
 		fflush(stdout);
+		printf("freeing name\n");
+		fflush(stdout);
 		free(ifas->ifa_name);
+		printf("freeing addr\n");
+		fflush(stdout);
 		free(ifas->ifa_addr);
+		printf("freeing netmask\n");
+		fflush(stdout);
 		free(ifas->ifa_netmask);
+		printf("freeing broadaddr\n");
+		fflush(stdout);
 		free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
+		printf("freeing struct\n");
+		fflush(stdout);
 		free (tmp);
 	}
 }
