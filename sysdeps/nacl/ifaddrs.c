@@ -93,9 +93,9 @@ getifaddrs (struct ifaddrs **ifap)
 	while( token != NULL ) {
 
 		ifa->ifa_name = malloc(sizeof(char) * IF_NAMESIZE);
-		// ifa->ifa_addr = malloc(sizeof(struct sockaddr));
-		// ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
-		// ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
+		ifa->ifa_addr = malloc(sizeof(struct sockaddr));
+		ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
+		ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
 		int flags = 1;
 
 		char name[IF_NAMESIZE];
@@ -104,7 +104,7 @@ getifaddrs (struct ifaddrs **ifap)
 		char bdaddr[16] = {0};
 
 		// sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
-		// int bdflag = strncmp(bdaddr, "none", 4);
+		int bdflag = 1;//strncmp(bdaddr, "none", 4);
 
 		// struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
 		// struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
@@ -113,18 +113,18 @@ getifaddrs (struct ifaddrs **ifap)
 		strcpy(ifa->ifa_name, "lol");
 		ifa->ifa_flags = flags;
 
-		// sa->sin_family = AF_INET;
-		// sa->sin_port = htons(0);
-		// inet_aton(addr, &(sa->sin_addr));
+		sa->sin_family = AF_INET;
+		sa->sin_port = htons(0);
+		inet_aton("0.0.0.0", &(sa->sin_addr));
 
-		// na->sin_family = AF_INET;
-		// na->sin_port = htons(0);
-		// inet_aton(naddr, &(na->sin_addr));
+		na->sin_family = AF_INET;
+		na->sin_port = htons(0);
+		inet_aton("0.0.0.0", &(na->sin_addr));
 
-		// bda->sin_family = AF_INET;
-		// bda->sin_port = htons(0);
-		// if (bdflag) inet_aton(bdaddr, &(bda->sin_addr));
-		// else inet_aton("0.0.0.0", &(bda->sin_addr));
+		bda->sin_family = AF_INET;
+		bda->sin_port = htons(0);
+		if (bdflag) inet_aton("0.0.0.0", &(bda->sin_addr));
+		else inet_aton("0.0.0.0", &(bda->sin_addr));
 
 		ifa->ifa_data = NULL;
 
@@ -151,9 +151,9 @@ freeifaddrs (struct ifaddrs *ifa)
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
 		free(ifas->ifa_name);
-		// free(ifas->ifa_addr);
-		// free(ifas->ifa_netmask);
-		// free(ifas->ifa_broadaddr);
+		free(ifas->ifa_addr);
+		free(ifas->ifa_netmask);
+		free(ifas->ifa_broadaddr);
 		struct ifaddrs *tmp = ifas;
 		ifas = ifas->ifa_next;
 		free (tmp);
