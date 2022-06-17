@@ -92,7 +92,7 @@ getifaddrs (struct ifaddrs **ifap)
 	/* walk through other tokens */
 	while( token != NULL ) {
 
-		ifa->ifa_name = calloc(1, sizeof(char) * IF_NAMESIZE);
+		ifa->ifa_name = malloc(sizeof(char) * IF_NAMESIZE);
 		ifa->ifa_addr = malloc(sizeof(struct sockaddr));
 		ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
 		ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
