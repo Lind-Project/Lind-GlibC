@@ -19,7 +19,7 @@
 
 #include <ifaddrs.h>
 #include <netdb.h>
-
+#include <stdio.h>
 
 void
 attribute_hidden
@@ -31,6 +31,9 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
   *in6ai = NULL;
   *in6ailen = 0;
 
+  printf("preifaddrs pf\n");
+  fflush(stdout);
+
   /* Get the interface list via getifaddrs.  */
   struct ifaddrs *ifa = NULL;
   if (getifaddrs (&ifa) != 0)
@@ -39,8 +42,13 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
 	 pessimistic.  */
       *seen_ipv4 = true;
       *seen_ipv6 = true;
+      printf("ifaddrs non det\n");
+      fflush(stdout);
       return;
     }
+
+  printf("postifaddrs pf\n");
+  fflush(stdout);
 
   *seen_ipv4 = false;
   *seen_ipv6 = false;
@@ -51,6 +59,10 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
       *seen_ipv4 = true;
     else if (runp->ifa_addr->sa_family == PF_INET6)
       *seen_ipv6 = true;
+
+
+  printf("pf free and return\n");
+  fflush(stdout);
 
   (void) freeifaddrs (ifa);
 }
