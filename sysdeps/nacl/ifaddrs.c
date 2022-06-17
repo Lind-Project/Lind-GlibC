@@ -85,6 +85,7 @@ getifaddrs (struct ifaddrs **ifap)
 
 	ifa = calloc(1, sizeof(struct ifaddrs));
 	printf("allocating ifa %p\n", ifa);
+	printf("size of ifa %d", sizeof(struct ifaddrs));
 	fflush(stdout);
 	*ifap = ifa;
 
