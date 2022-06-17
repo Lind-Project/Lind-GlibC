@@ -94,6 +94,8 @@ getifaddrs (struct ifaddrs **ifap)
 	/* walk through other tokens */
 	while( token != NULL ) {
 		char* hostname = calloc(1, IF_NAMESIZE + 1);
+		printf("allocating hostname %p\n", hostname);
+		fflsuh(stdout);
 		char addr[16] = {0};
 		char naddr[16] = {0};
 		char bdaddr[16] = {0};
@@ -119,6 +121,8 @@ getifaddrs (struct ifaddrs **ifap)
 		else inet_aton("0.0.0.0", &(bda->sin_addr));
 
 		ifa->ifa_name = hostname;
+		printf("added hostname to ifa_name %p\n", ifa->ifa_name);
+		fflush(stdout);
 		ifa->ifa_flags = flags;
 		ifa->ifa_addr = (struct sockaddr*) sa;
 		ifa->ifa_netmask = (struct sockaddr*) na;
@@ -151,7 +155,7 @@ freeifaddrs (struct ifaddrs *ifa)
 	while (ifas != NULL) {
 		printf("freeing ifa %p\n", ifas);
 		fflush(stdout);
-		printf("freeing name\n");
+		printf("freeing name %p\n", ifas->ifa_name);
 		fflush(stdout);
 		free(ifas->ifa_name);
 		printf("freeing addr\n");
