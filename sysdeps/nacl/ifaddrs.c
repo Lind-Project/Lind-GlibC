@@ -68,10 +68,9 @@ __netlink_open (struct netlink_handle *h)
 }
 
 int
-getifaddrs2 (struct ifaddrs **ifap)
+getifaddrs (struct ifaddrs **ifap)
 {
 	char* buf = malloc(IFADDRS_BUFSIZE); //"lo 65609 127.0.0.1 127.0.0.1 none\nwlp0s20f3 69699 192.168.1.255 192.168.1.255 192.168.1.255\n";
-    int result = 0;
 	int result = __nacl_irt_getifaddrs(buf, IFADDRS_BUFSIZE);
 
 	if (result < 0) {
@@ -142,7 +141,7 @@ libc_hidden_def (getifaddrs)
 
 
 void
-freeifaddrs2 (struct ifaddrs *ifa)
+freeifaddrs (struct ifaddrs *ifa)
 {
 	struct ifaddrs *ifas = ifa;
 	while (ifas != NULL) {
