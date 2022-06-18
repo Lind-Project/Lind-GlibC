@@ -271,7 +271,7 @@ _nss_dns_gethostbyname4_r (const char *name, struct gaih_addrtuple **pat,
 			   int *herrnop, int32_t *ttlp)
 {
   printf("LIBRESOLVE NSS DNS GHBN name %s\n", name);
-  fflush
+  fflush(stdout);
   if (__res_maybe_init (&_res, 0) == -1)
     return NSS_STATUS_UNAVAIL;
 
