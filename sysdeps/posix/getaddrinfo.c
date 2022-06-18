@@ -485,7 +485,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  if (inet_pton (AF_INET6, namebuf, at->addr) > 0)
 	    {
-			printf("pton inet6 %d\n", namebuf);
+			printf("pton inet6 %s\n", namebuf);
 			fflush(stdout);
 
 	      if (req->ai_family == AF_UNSPEC || req->ai_family == AF_INET6)
@@ -756,7 +756,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		= __nss_lookup_function (nip, "gethostbyname4_r");
 	      if (fct4 != NULL)
 		{
-		   printf("fct4 is not null", )
+		   printf("fct4 is not null");
+		   fflush(stdout);
 		  int herrno;
 
 		  while (1)
