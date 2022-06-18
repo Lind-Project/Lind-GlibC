@@ -283,7 +283,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
   const char *canon = NULL;
   const char *orig_name = name;
 
-  printf("in gaih_inet\n");
+  printf("in gaih_inet, name = %s\n", name);
   fflush(stdout);
 
   if (req->ai_protocol || req->ai_socktype)
@@ -406,8 +406,12 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
     }
 
+  printf("post serv/port\n");
+  fflush(stdout);
   if (name != NULL)
     {
+	  printf("name not null\n");
+	  fflush(stdout);
       at = __alloca (sizeof (struct gaih_addrtuple));
 
       at->family = AF_UNSPEC;
@@ -445,6 +449,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
       if (__inet_aton (name, (struct in_addr *) at->addr) != 0)
 	{
+		printf("inet aton not 0\n");
+		fflush(stdout);
 	  if (req->ai_family == AF_UNSPEC || req->ai_family == AF_INET)
 	    at->family = AF_INET;
 	  else if (req->ai_family == AF_INET6 && (req->ai_flags & AI_V4MAPPED))
@@ -455,8 +461,11 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	      at->addr[0] = 0;
 	      at->family = AF_INET6;
 	    }
-	  else
+	  else {
+		printf(" return -addrfamily\n");
+		fflush(stdout);
 	    return -EAI_ADDRFAMILY;
+	  }
 
 	  if (req->ai_flags & AI_CANONNAME)
 	    canon = name;
