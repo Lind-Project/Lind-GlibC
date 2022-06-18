@@ -750,13 +750,13 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  while (!no_more)
 	    {
-			printf("per 1st lookup\n");
+			printf("per 1st lookup nip %s\n", nip->name);
 			fflush(stdout);
 	      nss_gethostbyname4_r fct4
 		= __nss_lookup_function (nip, "gethostbyname4_r");
 	      if (fct4 != NULL)
 		{
-		   printf("fct4 is not null");
+		   printf("fct4 is not null\n");
 		   fflush(stdout);
 		  int herrno;
 
@@ -920,6 +920,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
     process_list:
       if (at->family == AF_UNSPEC) {
 		printf("process list NONAME\n");
+		fflush(stdout);
 	return GAIH_OKIFUNSPEC | -EAI_NONAME;
 	  }
     }
