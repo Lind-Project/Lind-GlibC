@@ -283,6 +283,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
   const char *canon = NULL;
   const char *orig_name = name;
 
+  printf("in gaih_inet\m");
+  fflush(stdout);
+
   if (req->ai_protocol || req->ai_socktype)
     {
       ++tp;
@@ -315,7 +318,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    {
 	      st = (struct gaih_servtuple *)
 		__alloca (sizeof (struct gaih_servtuple));
-
+	
 	      if ((rc = gaih_inet_serv (service->name, tp, req, st)))
 		return rc;
 	    }
@@ -2180,6 +2183,9 @@ getaddrinfo (const char *name, const char *service,
       free (in6ai);
       return EAI_FAMILY;
     }
+  printf("post gaih clauses, prenaddrs\n");
+  fflush(stdout);
+
 
   if (naddrs > 1)
     {
@@ -2193,7 +2199,8 @@ getaddrinfo (const char *name, const char *service,
       struct addrinfo *q;
       struct addrinfo *last = NULL;
       char *canonname = NULL;
-
+	printf("pre sort\n");
+	fflush(stdout);
       /* If we have information about deprecated and temporary addresses
 	 sort the array now.  */
       if (in6ai != NULL)
@@ -2239,15 +2246,21 @@ getaddrinfo (const char *name, const char *service,
 		    close_not_cancel_no_status (fd);
 		  af = q->ai_family;
 		  fd = __socket (af, SOCK_DGRAM, IPPROTO_IP);
+		  printf("opened socket fd %d\n", fd);
+		  fflush(stdout);
 		}
 	      else
 		{
 		  /* Reset the connection.  */
+		  printf("connecting unspec??\n");
+		  fflush(stdout);
 		  struct sockaddr sa = { .sa_family = AF_UNSPEC };
 		  __connect (fd, &sa, sizeof (sa));
 		}
 
 	      socklen_t sl = sizeof (results[i].source_addr);
+		  printf("connect on q\n");
+		  fflush(stdout);
 	      if (fd != -1
 		  && __connect (fd, q->ai_addr, q->ai_addrlen) == 0
 		  && __getsockname (fd,
