@@ -756,11 +756,14 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		= __nss_lookup_function (nip, "gethostbyname4_r");
 	      if (fct4 != NULL)
 		{
+		   printf("fct4 is not null", )
 		  int herrno;
 
 		  while (1)
 		    {
 		      rc = 0;
+			  printf("pre dl call, fct4 is %s", fct4);
+			  fflush(stdout);
 		      status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
 						   tmpbuflen, &rc, &herrno,
 						   NULL));
