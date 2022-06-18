@@ -283,7 +283,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
   const char *canon = NULL;
   const char *orig_name = name;
 
-  printf("in gaih_inet\m");
+  printf("in gaih_inet\n");
   fflush(stdout);
 
   if (req->ai_protocol || req->ai_socktype)
@@ -306,9 +306,14 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
     }
 
+	printf("post first if\n");
+	fflush(stdout);
+
   int port = 0;
   if (service != NULL)
     {
+	  printf("service not null\n");
+	  fflush(stdout);
       if ((tp->protoflag & GAI_PROTO_NOSERVICE) != 0)
 	return GAIH_OKIFUNSPEC | -EAI_SERVICE;
 
@@ -366,6 +371,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
   else
     {
     got_port:
+	  
+	  printf("got port\n");
+	  fflush(stdout);
 
       if (req->ai_socktype || req->ai_protocol)
 	{
@@ -535,6 +543,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    simple_again:
 	      while (1)
 		{
+		  printf("calling get hostbyname\n");
+		  fflush(stdout);
 		  rc = __gethostbyname2_r (name, family, &th, tmpbuf,
 					   tmpbuflen, &h, &herrno);
 		  if (rc != ERANGE || herrno != NETDB_INTERNAL)
