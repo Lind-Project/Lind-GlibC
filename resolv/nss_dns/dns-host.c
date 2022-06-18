@@ -271,7 +271,7 @@ _nss_dns_gethostbyname4_r (const char *name, struct gaih_addrtuple **pat,
 			   int *herrnop, int32_t *ttlp)
 {
   printf("LIBRESOLVE NSS DNS GHBN name %s\n", name);
-  fflush(stdout);
+  fflush
   if (__res_maybe_init (&_res, 0) == -1)
     return NSS_STATUS_UNAVAIL;
 
@@ -301,9 +301,14 @@ _nss_dns_gethostbyname4_r (const char *name, struct gaih_addrtuple **pat,
 
   int olderr = errno;
   enum nss_status status;
+  printf("entering nsearch\n");
+  fflush(stdout);
   int n = __libc_res_nsearch (&_res, name, C_IN, T_UNSPEC,
 			      host_buffer.buf->buf, 2048, &host_buffer.ptr,
 			      &ans2p, &nans2p, &resplen2);
+
+  printf("post nsearch %d\n", n);
+  fflush(stdout);
   if (n < 0)
     {
       status = (errno == ECONNREFUSED
@@ -316,7 +321,8 @@ _nss_dns_gethostbyname4_r (const char *name, struct gaih_addrtuple **pat,
 
       if (host_buffer.buf != orig_host_buffer)
 	free (host_buffer.buf);
-
+      printf("n<0 return\n");
+      fflush(stdout);
       return status;
     }
 
@@ -326,7 +332,8 @@ _nss_dns_gethostbyname4_r (const char *name, struct gaih_addrtuple **pat,
 
   if (host_buffer.buf != orig_host_buffer)
     free (host_buffer.buf);
-
+  printf("end of dns return\n");
+  fflush(stdout);
   return status;
 }
 
