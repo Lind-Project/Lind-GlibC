@@ -762,11 +762,13 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		  while (1)
 		    {
 		      rc = 0;
-			  printf("pre dl call, fct4 is %s", fct4);
+			  printf("pre dl call\n");
 			  fflush(stdout);
 		      status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
 						   tmpbuflen, &rc, &herrno,
 						   NULL));
+			  printf("status returned %d\n", status);
+			  fflush(stdout);
 		      if (status != NSS_STATUS_TRYAGAIN
 			  || rc != ERANGE || herrno != NETDB_INTERNAL)
 			{
