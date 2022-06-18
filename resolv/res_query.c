@@ -330,6 +330,9 @@ __libc_res_nsearch(res_state statp,
 		   int *nanswerp2,
 		   int *resplen2)
 {
+
+	printf("in nsearch\n");
+	fflush(stdout);
 	const char *cp, * const *domain;
 	HEADER *hp = (HEADER *) answer;
 	char tmp[NS_MAXDNAME];
@@ -365,6 +368,8 @@ __libc_res_nsearch(res_state statp,
 	 * try 'as is'. The threshold can be set with the "ndots" option.
 	 * Also, query 'as is', if there is a trailing dot in the name.
 	 */
+	printf("pre nquery\n");
+	fflush(stdout);
 	saved_herrno = -1;
 	if (dots >= statp->ndots || trailing_dot) {
 		ret = __libc_res_nquerydomain(statp, name, NULL, class, type,
@@ -386,12 +391,17 @@ __libc_res_nsearch(res_state statp,
 		  }
 	}
 
+	printf("post nquery\n");
+	fflush(stdout);
+
 	/*
 	 * We do at least one level of search if
 	 *	- there is no dot and RES_DEFNAME is set, or
 	 *	- there is at least one dot, there is no trailing dot,
 	 *	  and RES_DNSRCH is set.
 	 */
+	printf("pre nquery2\n");
+	fflush(stdout);
 	if ((!dots && (statp->options & RES_DEFNAMES) != 0) ||
 	    (dots && !trailing_dot && (statp->options & RES_DNSRCH) != 0)) {
 		int done = 0;
@@ -399,6 +409,9 @@ __libc_res_nsearch(res_state statp,
 		for (domain = (const char * const *)statp->dnsrch;
 		     *domain && !done;
 		     domain++) {
+
+			printf("nquery2 domain %s", domain);
+			fflush(stdout);
 
 			if (domain[0][0] == '\0' ||
 			    (domain[0][0] == '.' && domain[0][1] == '\0'))
@@ -411,6 +424,9 @@ __libc_res_nsearch(res_state statp,
 						      resplen2);
 			if (ret > 0)
 				return (ret);
+
+			printf("answer: %s", answer);
+			fflush(stdout);
 
 			if (answerp && *answerp != answer) {
 				answer = *answerp;
