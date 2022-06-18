@@ -555,6 +555,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		  && ((req->ai_flags & AI_V4MAPPED) == 0
 		      || (req->ai_flags & AI_ALL) == 0)))
 	    {
+
+			printf("inet or inet6 with flags\n");
+			fflush(stdout);
 	      int family = req->ai_family;
 	      size_t tmpbuflen = 512;
 	      char *tmpbuf = alloca (tmpbuflen);
@@ -718,6 +721,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    {
 	      no_more = 0;
 	      nip = __nss_hosts_database;
+		  printf(" non null hosts db\n");
+		  fflush(stdout);
 	    }
 	  else
 	    no_more = __nss_database_lookup ("hosts", NULL,
@@ -740,8 +745,13 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	  size_t tmpbuflen = 1024;
 	  char *tmpbuf = alloca (tmpbuflen);
 
+	  printf("get host loop enter\n");
+	  fflush(stdout);
+
 	  while (!no_more)
 	    {
+			printf("per 1st lookup\n");
+			fflush(stdout);
 	      nss_gethostbyname4_r fct4
 		= __nss_lookup_function (nip, "gethostbyname4_r");
 	      if (fct4 != NULL)
@@ -784,6 +794,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		}
 	      else
 		{
+		  printf("else 2ndlookup \n");
+		  fflush(stdout);
 		  nss_gethostbyname3_r fct = NULL;
 		  if (req->ai_flags & AI_CANONNAME)
 		    /* No need to use this function if we do not look for
@@ -801,6 +813,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 		  if (fct != NULL)
 		    {
+				printf("non null fct\n");
+				fflush(stdout);
 		      if (req->ai_family == AF_INET6
 			  || req->ai_family == AF_UNSPEC)
 			{
@@ -816,6 +830,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 				 know we are not going to need them.  */
 			      && ((req->ai_flags & AI_ALL) || !got_ipv6)))
 			{
+				printf("per gethosts\n");
+				fflush(stdout);
 			  gethosts (AF_INET, struct in_addr);
 
 			  if (req->ai_family == AF_INET)
@@ -837,7 +853,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 				 from the same service as the result.  */
 			      nss_getcanonname_r cfct;
 			      int herrno;
-
+				  printf("lookup get canon\n");
+				  fflush(stdout);
 			      cfct = __nss_lookup_function (nip,
 							    "getcanonname_r");
 			      if (cfct != NULL)
@@ -895,8 +912,10 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
 
     process_list:
-      if (at->family == AF_UNSPEC)
+      if (at->family == AF_UNSPEC) {
+		printf("process list NONAME\n");
 	return GAIH_OKIFUNSPEC | -EAI_NONAME;
+	  }
     }
   else
     {
