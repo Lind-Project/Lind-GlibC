@@ -375,6 +375,8 @@ __libc_res_nsearch(res_state statp,
 		ret = __libc_res_nquerydomain(statp, name, NULL, class, type,
 					      answer, anslen, answerp,
 					      answerp2, nanswerp2, resplen2);
+		printf("post nquery domain %s\n", answer);
+		fflush(stdout);
 		if (ret > 0 || trailing_dot)
 			return (ret);
 		saved_herrno = h_errno;
