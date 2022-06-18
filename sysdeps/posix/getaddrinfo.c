@@ -472,6 +472,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
       else if (at->family == AF_UNSPEC)
 	{
+		printf("family unspec\n");
+		fflush(stdout);
 	  char *namebuf = (char *) name;
 	  char *scope_delim = strchr (name, SCOPE_DELIMITER);
 
@@ -483,6 +485,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  if (inet_pton (AF_INET6, namebuf, at->addr) > 0)
 	    {
+			printf("pton inet6 %d\n", namebuf);
+			fflush(stdout);
+
 	      if (req->ai_family == AF_UNSPEC || req->ai_family == AF_INET6)
 		at->family = AF_INET6;
 	      else if (req->ai_family == AF_INET
@@ -513,8 +518,11 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		      assert (sizeof (uint32_t) <= sizeof (unsigned long));
 		      at->scopeid = (uint32_t) strtoul (scope_delim + 1, &end,
 							10);
-		      if (*end != '\0')
+		      if (*end != '\0') {
+				printf("return noname in addr\n");
+				fflush(stdout);
 			return GAIH_OKIFUNSPEC | -EAI_NONAME;
+			  }
 		    }
 		}
 
@@ -522,6 +530,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		canon = name;
 	    }
 	}
+
+	printf("post family unspec\n");
+	fflush(stdout);
 
       if (at->family == AF_UNSPEC && (req->ai_flags & AI_NUMERICHOST) == 0)
 	{
@@ -533,6 +544,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	  enum nss_status status = NSS_STATUS_UNAVAIL;
 	  int no_more;
 	  int old_res_options;
+
+	  printf("pre gethost\n");
+	  fflush(stdout);
 
 	  /* If we do not have to look for IPv4 and IPv6 together, use
 	     the simple, old functions.  */
