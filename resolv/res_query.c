@@ -202,6 +202,9 @@ __libc_res_nquery(res_state statp,
 	printf("prebuiltin\n");
 	fflush(stdout);
 
+	printf("pre builtin n is %d\n", n);
+	fflush(stdout);
+
 	if (__builtin_expect (n <= 0, 0) && !use_malloc) {
 		/* Retry just in case res_nmkquery failed because of too
 		   short buffer.  Shouldn't happen.  */
