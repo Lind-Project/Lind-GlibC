@@ -753,56 +753,56 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  while (!no_more)
 	    {
-			printf("per 1st lookup nip %s\n", nip->name);
-			fflush(stdout);
-	      nss_gethostbyname4_r fct4
-		= __nss_lookup_function (nip, "gethostbyname4_r");
-	      if (fct4 != NULL)
-		{
-		   printf("fct4 is not null\n");
-		   fflush(stdout);
-		  int herrno;
+		// 	printf("per 1st lookup nip %s\n", nip->name);
+		// 	fflush(stdout);
+	    //   nss_gethostbyname4_r fct4
+		// = __nss_lookup_function (nip, "gethostbyname4_r");
+	    //   if (fct4 != NULL)
+		// {
+		//    printf("fct4 is not null\n");
+		//    fflush(stdout);
+		//   int herrno;
 
-		  while (1)
-		    {
-		      rc = 0;
-			  printf("pre dl call\n");
-			  fflush(stdout);
-		      status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
-						   tmpbuflen, &rc, &herrno,
-						   NULL));
-			  printf("status returned %d\n", status);
-			  fflush(stdout);
-		      if (status != NSS_STATUS_TRYAGAIN
-			  || rc != ERANGE || herrno != NETDB_INTERNAL)
-			{
-			  if (herrno == NETDB_INTERNAL)
-			    {
-			      __set_h_errno (herrno);
-			      _res.options = old_res_options;
-			      return -EAI_SYSTEM;
-			    }
-			  if (herrno == TRY_AGAIN)
-			    no_data = EAI_AGAIN;
-			  else
-			    no_data = herrno == NO_DATA;
-			  break;
-			}
-		      tmpbuf = extend_alloca (tmpbuf,
-					      tmpbuflen, 2 * tmpbuflen);
-		    }
+		//   while (1)
+		//     {
+		//       rc = 0;
+		// 	  printf("pre dl call\n");
+		// 	  fflush(stdout);
+		//       status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
+		// 				   tmpbuflen, &rc, &herrno,
+		// 				   NULL));
+		// 	  printf("status returned %d\n", status);
+		// 	  fflush(stdout);
+		//       if (status != NSS_STATUS_TRYAGAIN
+		// 	  || rc != ERANGE || herrno != NETDB_INTERNAL)
+		// 	{
+		// 	  if (herrno == NETDB_INTERNAL)
+		// 	    {
+		// 	      __set_h_errno (herrno);
+		// 	      _res.options = old_res_options;
+		// 	      return -EAI_SYSTEM;
+		// 	    }
+		// 	  if (herrno == TRY_AGAIN)
+		// 	    no_data = EAI_AGAIN;
+		// 	  else
+		// 	    no_data = herrno == NO_DATA;
+		// 	  break;
+		// 	}
+		//       tmpbuf = extend_alloca (tmpbuf,
+		// 			      tmpbuflen, 2 * tmpbuflen);
+		//     }
 
-		  if (status == NSS_STATUS_SUCCESS)
-		    {
-		      if ((req->ai_flags & AI_CANONNAME) != 0 && canon == NULL)
-			canon = (*pat)->name;
+		//   if (status == NSS_STATUS_SUCCESS)
+		//     {
+		//       if ((req->ai_flags & AI_CANONNAME) != 0 && canon == NULL)
+		// 	canon = (*pat)->name;
 
-		      while (*pat != NULL)
-			pat = &((*pat)->next);
-		    }
-		}
-	      else
-		{
+		//       while (*pat != NULL)
+		// 	pat = &((*pat)->next);
+		//     }
+		// }
+	    //   else
+		// {
 		  printf("else 2ndlookup \n");
 		  fflush(stdout);
 		  nss_gethostbyname3_r fct = NULL;
@@ -895,7 +895,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 			       && inet6_status != NSS_STATUS_UNAVAIL)
 			status = inet6_status;
 		    }
-		}
+		// }
 
 	      if (nss_next_action (nip, status) == NSS_ACTION_RETURN)
 		break;
