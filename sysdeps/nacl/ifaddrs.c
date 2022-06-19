@@ -122,8 +122,7 @@ getifaddrs (struct ifaddrs **ifap)
 
 		bda->sin_family = AF_INET;
 		bda->sin_port = htons(0);
-		if (strncmp(bdaddr, "none", 4)) inet_aton(bdaddr, &(bda->sin_addr)); // if we have a bdaddr assign it
-		else inet_aton("0.0.0.0", &(bda->sin_addr));
+		inet_aton(bdaddr, &(bda->sin_addr));
 
 		ifa->ifa_data = NULL;
 
