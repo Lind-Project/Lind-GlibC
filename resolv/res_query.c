@@ -216,9 +216,13 @@ __libc_res_nquery(res_state statp,
 	printf("prebuiltin2\n");
 	fflush(stdout);
 	if (__builtin_expect (n <= 0, 0)) {
+		printf("in builtin2\n");
+		fflush(stdout);
 		/* If the query choked with EDNS0, retry without EDNS0.  */
 		if ((statp->options & RES_USE_EDNS0) != 0
 		    && ((oflags ^ statp->_flags) & RES_F_EDNS0ERR) != 0) {
+				printf("in inner if\n");
+				fflush(stdout);
 			statp->_flags |= RES_F_EDNS0ERR;
 #ifdef DEBUG
 			if (statp->options & RES_DEBUG)
@@ -230,7 +234,10 @@ __libc_res_nquery(res_state statp,
 		if (statp->options & RES_DEBUG)
 			printf(";; res_query: mkquery failed\n");
 #endif
+		printf("pre set errno\n");
 		RES_SET_H_ERRNO(statp, NO_RECOVERY);
+		printf("post set errno\n");
+		fflush(stdout);
 		if (use_malloc)
 			free (buf);
 		printf("builtin return\n");
