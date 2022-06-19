@@ -132,7 +132,7 @@ __libc_res_nquery(res_state statp,
 	u_char *query2 = NULL;
 	int nquery2 = 0;
 
-	printf("in res_nquery %s", name);
+	printf("in res_nquery %s\n", name);
 	fflush(stdout);
 
  again:
@@ -145,8 +145,13 @@ __libc_res_nquery(res_state statp,
 
 	if (type == T_UNSPEC)
 	  {
+		printf("tunspec\n");
+		fflush(stdout);
 	    n = res_nmkquery(statp, QUERY, name, class, T_A, NULL, 0, NULL,
 			     query1, bufsize);
+
+		printf("res nmk n1 = %d\n", n);
+		fflush(stdout);
 	    if (n > 0)
 	      {
 		if ((oflags & RES_F_EDNS0ERR) == 0
@@ -170,6 +175,8 @@ __libc_res_nquery(res_state statp,
 		query2 = buf + nused;
 		n = res_nmkquery(statp, QUERY, name, class, T_AAAA, NULL, 0,
 				 NULL, query2, bufsize - nused);
+		printf("res nmk n2 = %d\n", n);
+		fflush(stdout);
 		if (n > 0
 		    && (oflags & RES_F_EDNS0ERR) == 0
 		    && (statp->options & RES_USE_EDNS0) != 0)
@@ -192,6 +199,8 @@ __libc_res_nquery(res_state statp,
 
 	    nquery1 = n;
 	  }
+	printf("prebuiltin\n");
+	fflush(stdout);
 
 	if (__builtin_expect (n <= 0, 0) && !use_malloc) {
 		/* Retry just in case res_nmkquery failed because of too
@@ -204,6 +213,8 @@ __libc_res_nquery(res_state statp,
 			goto again;
 		}
 	}
+	printf("prebuiltin2\n");
+	fflush(stdout);
 	if (__builtin_expect (n <= 0, 0)) {
 		/* If the query choked with EDNS0, retry without EDNS0.  */
 		if ((statp->options & RES_USE_EDNS0) != 0
@@ -222,13 +233,15 @@ __libc_res_nquery(res_state statp,
 		RES_SET_H_ERRNO(statp, NO_RECOVERY);
 		if (use_malloc)
 			free (buf);
+		printf("builtin return\n");
+		fflush(stdout);
 		return (n);
 	}
 	printf("pre nsend %s %s\n", query1, query2);
 	assert (answerp == NULL || (void *) *answerp == (void *) answer);
 	n = __libc_res_nsend(statp, query1, nquery1, query2, nquery2, answer,
 			     anslen, answerp, answerp2, nanswerp2, resplen2);
-	printf("n = %d", n);
+	printf("n = %d\n", n);
 	fflush(stdout);
 	if (use_malloc)
 		free (buf);
