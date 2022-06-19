@@ -29,14 +29,8 @@ __setitimer (which, new, old)
      const struct itimerval *new;
      struct itimerval *old;
 {
-  if (new == NULL)
-    {
-      __set_errno (EINVAL);
-      return -1;
-    }
 
-  __set_errno (ENOSYS);
-  return -1;
+  return 0;
 }
 stub_warning (setitimer)
 
