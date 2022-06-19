@@ -132,6 +132,9 @@ __libc_res_nquery(res_state statp,
 	u_char *query2 = NULL;
 	int nquery2 = 0;
 
+	printf("in res_nquery %s", name);
+	fflush(stdout);
+
  again:
 	hp->rcode = NOERROR;	/* default */
 
@@ -221,9 +224,12 @@ __libc_res_nquery(res_state statp,
 			free (buf);
 		return (n);
 	}
+	printf("pre nsend %s %s\n", query1, query2);
 	assert (answerp == NULL || (void *) *answerp == (void *) answer);
 	n = __libc_res_nsend(statp, query1, nquery1, query2, nquery2, answer,
 			     anslen, answerp, answerp2, nanswerp2, resplen2);
+	printf("n = %d", n);
+	fflush(stdout);
 	if (use_malloc)
 		free (buf);
 	if (n < 0) {
