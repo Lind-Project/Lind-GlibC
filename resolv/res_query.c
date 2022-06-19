@@ -399,6 +399,8 @@ __libc_res_nsearch(res_state statp,
 		  {
 			printf("second if\n");
 			fflush(stdout);
+			printf("%s %s %d\n", *answerp2, answer, anslen);
+			fflush(stdout);
 		    free (*answerp2);
 		    *answerp2 = NULL;
 		  }
