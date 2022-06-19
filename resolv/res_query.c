@@ -249,7 +249,10 @@ __libc_res_nquery(res_state statp,
 	}
 	printf("electric boogalol!!!\n");
 	fflush(stdout);
-	printf("pre nsend %s %s\n", query1, query2);
+	printf("pre nsend %s\n", query1);
+	fflush(stdout);
+	if (query2 != NULL) printf("query2 %s", query2);
+	fflush(stdout);
 	assert (answerp == NULL || (void *) *answerp == (void *) answer);
 	n = __libc_res_nsend(statp, query1, nquery1, query2, nquery2, answer,
 			     anslen, answerp, answerp2, nanswerp2, resplen2);
