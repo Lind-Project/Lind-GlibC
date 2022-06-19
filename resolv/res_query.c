@@ -205,8 +205,7 @@ __libc_res_nquery(res_state statp,
 	printf("pre builtin n is %d\n", n);
 	fflush(stdout);
 
-	// if (__builtin_expect (n <= 0, 0)
-	if ((n <= 0) && !use_malloc) {
+	if (__builtin_expect (n <= 0, 0) && !use_malloc) {
 		/* Retry just in case res_nmkquery failed because of too
 		   short buffer.  Shouldn't happen.  */
 		bufsize = (type == T_UNSPEC ? 2 : 1) * MAXPACKET;
@@ -219,8 +218,7 @@ __libc_res_nquery(res_state statp,
 	}
 	printf("prebuiltin2\n");
 	fflush(stdout);
-	// if (__builtin_expect (n <= 0, 0)) {
-		if (n <= 0) {
+	if (__builtin_expect (n <= 0, 0)) {
 		printf("in builtin2\n");
 		fflush(stdout);
 		/* If the query choked with EDNS0, retry without EDNS0.  */
@@ -249,6 +247,8 @@ __libc_res_nquery(res_state statp,
 		fflush(stdout);
 		return (n);
 	}
+	printf("electric boogalol!!!\n");
+	fflush(stdout);
 	printf("pre nsend %s %s\n", query1, query2);
 	assert (answerp == NULL || (void *) *answerp == (void *) answer);
 	n = __libc_res_nsend(statp, query1, nquery1, query2, nquery2, answer,
