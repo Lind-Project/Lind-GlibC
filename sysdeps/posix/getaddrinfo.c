@@ -447,6 +447,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
 #endif
 
+	printf(" about to aton name %s \n", name);
+	fflush(stdout);
+
       if (__inet_aton (name, (struct in_addr *) at->addr) != 0)
 	{
 		printf("inet aton not 0\n");
