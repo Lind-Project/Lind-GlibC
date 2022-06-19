@@ -344,12 +344,17 @@ __libc_res_nsearch(res_state statp,
 	__set_errno (0);
 	RES_SET_H_ERRNO(statp, HOST_NOT_FOUND);  /* True if we never query. */
 
+	printf("checking name %s\n", name);
+	fflush(stdout);
 	dots = 0;
 	for (cp = name; *cp != '\0'; cp++)
 		dots += (*cp == '.');
+	printf("dots %d", dots);
 	trailing_dot = 0;
 	if (cp > name && *--cp == '.')
 		trailing_dot++;
+	printf("trailing dot %d\n", trailing_dot);
+	fflush(stdout);
 
 	/* If there aren't any dots, it could be a user-level alias. */
 	if (!dots && (cp = res_hostalias(statp, name, tmp, sizeof tmp))!= NULL)
