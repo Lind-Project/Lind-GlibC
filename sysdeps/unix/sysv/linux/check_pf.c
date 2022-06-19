@@ -26,7 +26,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <stdio.h>
 
 #include <asm/types.h>
 #include <linux/netlink.h>
@@ -259,12 +258,8 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
   *in6ai = NULL;
   *in6ailen = 0;
 
-  printf("in check pf sysv\n");
-  fflush(stdout);
   if (! __no_netlink_support)
     {
-      printf("! no netlink support WE SHOULDNT BE HERE\n");
-      fflush(stdout);
       int fd = __socket (PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
 
       struct sockaddr_nl nladdr;
@@ -296,17 +291,12 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
     }
 
 #if __ASSUME_NETLINK_SUPPORT == 0
-
-  printf("okat, were going to do ifaddrs\n");
-  fflush(stdout);
   /* No netlink.  Get the interface list via getifaddrs.  */
   struct ifaddrs *ifa = NULL;
   if (getifaddrs (&ifa) != 0)
     {
       /* We cannot determine what interfaces are available.  Be
 	 pessimistic.  */
-      printf("getifaddrs non det interfaces\n");
-      fflush(stdout);
       *seen_ipv4 = true;
       *seen_ipv6 = true;
       return;
@@ -319,8 +309,6 @@ __check_pf (bool *seen_ipv4, bool *seen_ipv6,
     else if (runp->ifa_addr->sa_family == PF_INET6)
       *seen_ipv6 = true;
 
-  printf("sysv, returning and freeing\n");
-  fflush(stdout);
   (void) freeifaddrs (ifa);
 #endif
 }
