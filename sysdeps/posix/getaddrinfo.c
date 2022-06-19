@@ -35,6 +35,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* This software is Copyright 1996 by Craig Metz, All Rights Reserved.  */
 
+/*
+* LIND
+* We've made a minor change in this file to not use gethostbyname4_r which is buggy
+* instead we make it fallback to gethostbyname3_r which works fine and is used elsewhere for DNS
+*/
+
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -157,9 +163,6 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
   char *tmpbuf;
   int r;
 
-  printf("in gaih inet serv\n");
-  fflush(stdout);
-
   do
     {
       tmpbuf = __alloca (tmpbuflen);
@@ -181,8 +184,7 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
   st->protocol = ((tp->protoflag & GAI_PROTO_PROTOANY)
 		  ? req->ai_protocol : tp->protocol);
   st->port = s->s_port;
-  printf("return from gaih inetserv\n");
-  fflush(stdout);
+
   return 0;
 }
 
@@ -283,9 +285,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
   const char *canon = NULL;
   const char *orig_name = name;
 
-  printf("in gaih_inet, name = %s\n", name);
-  fflush(stdout);
-
   if (req->ai_protocol || req->ai_socktype)
     {
       ++tp;
@@ -306,14 +305,9 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
     }
 
-	printf("post first if\n");
-	fflush(stdout);
-
   int port = 0;
   if (service != NULL)
     {
-	  printf("service not null\n");
-	  fflush(stdout);
       if ((tp->protoflag & GAI_PROTO_NOSERVICE) != 0)
 	return GAIH_OKIFUNSPEC | -EAI_SERVICE;
 
@@ -323,7 +317,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    {
 	      st = (struct gaih_servtuple *)
 		__alloca (sizeof (struct gaih_servtuple));
-	
+
 	      if ((rc = gaih_inet_serv (service->name, tp, req, st)))
 		return rc;
 	    }
@@ -371,9 +365,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
   else
     {
     got_port:
-	  
-	  printf("got port\n");
-	  fflush(stdout);
 
       if (req->ai_socktype || req->ai_protocol)
 	{
@@ -406,12 +397,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
     }
 
-  printf("post serv/port\n");
-  fflush(stdout);
   if (name != NULL)
     {
-	  printf("name not null\n");
-	  fflush(stdout);
       at = __alloca (sizeof (struct gaih_addrtuple));
 
       at->family = AF_UNSPEC;
@@ -447,13 +434,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
 #endif
 
-	printf(" about to aton name %s \n", name);
-	fflush(stdout);
-
       if (__inet_aton (name, (struct in_addr *) at->addr) != 0)
 	{
-		printf("inet aton not 0\n");
-		fflush(stdout);
 	  if (req->ai_family == AF_UNSPEC || req->ai_family == AF_INET)
 	    at->family = AF_INET;
 	  else if (req->ai_family == AF_INET6 && (req->ai_flags & AI_V4MAPPED))
@@ -464,19 +446,14 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	      at->addr[0] = 0;
 	      at->family = AF_INET6;
 	    }
-	  else {
-		printf(" return -addrfamily\n");
-		fflush(stdout);
+	  else
 	    return -EAI_ADDRFAMILY;
-	  }
 
 	  if (req->ai_flags & AI_CANONNAME)
 	    canon = name;
 	}
       else if (at->family == AF_UNSPEC)
 	{
-		printf("family unspec\n");
-		fflush(stdout);
 	  char *namebuf = (char *) name;
 	  char *scope_delim = strchr (name, SCOPE_DELIMITER);
 
@@ -488,9 +465,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  if (inet_pton (AF_INET6, namebuf, at->addr) > 0)
 	    {
-			printf("pton inet6 %s\n", namebuf);
-			fflush(stdout);
-
 	      if (req->ai_family == AF_UNSPEC || req->ai_family == AF_INET6)
 		at->family = AF_INET6;
 	      else if (req->ai_family == AF_INET
@@ -521,11 +495,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		      assert (sizeof (uint32_t) <= sizeof (unsigned long));
 		      at->scopeid = (uint32_t) strtoul (scope_delim + 1, &end,
 							10);
-		      if (*end != '\0') {
-				printf("return noname in addr\n");
-				fflush(stdout);
+		      if (*end != '\0')
 			return GAIH_OKIFUNSPEC | -EAI_NONAME;
-			  }
 		    }
 		}
 
@@ -533,9 +504,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		canon = name;
 	    }
 	}
-
-	printf("post family unspec\n");
-	fflush(stdout);
 
       if (at->family == AF_UNSPEC && (req->ai_flags & AI_NUMERICHOST) == 0)
 	{
@@ -548,9 +516,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	  int no_more;
 	  int old_res_options;
 
-	  printf("pre gethost\n");
-	  fflush(stdout);
-
 	  /* If we do not have to look for IPv4 and IPv6 together, use
 	     the simple, old functions.  */
 	  if (req->ai_family == AF_INET
@@ -558,9 +523,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		  && ((req->ai_flags & AI_V4MAPPED) == 0
 		      || (req->ai_flags & AI_ALL) == 0)))
 	    {
-
-			printf("inet or inet6 with flags\n");
-			fflush(stdout);
 	      int family = req->ai_family;
 	      size_t tmpbuflen = 512;
 	      char *tmpbuf = alloca (tmpbuflen);
@@ -572,8 +534,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    simple_again:
 	      while (1)
 		{
-		  printf("calling get hostbyname\n");
-		  fflush(stdout);
 		  rc = __gethostbyname2_r (name, family, &th, tmpbuf,
 					   tmpbuflen, &h, &herrno);
 		  if (rc != ERANGE || herrno != NETDB_INTERNAL)
@@ -724,8 +684,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    {
 	      no_more = 0;
 	      nip = __nss_hosts_database;
-		  printf(" non null hosts db\n");
-		  fflush(stdout);
 	    }
 	  else
 	    no_more = __nss_database_lookup ("hosts", NULL,
@@ -748,63 +706,51 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	  size_t tmpbuflen = 1024;
 	  char *tmpbuf = alloca (tmpbuflen);
 
-	  printf("get host loop enter\n");
-	  fflush(stdout);
-
 	  while (!no_more)
 	    {
-		// 	printf("per 1st lookup nip %s\n", nip->name);
-		// 	fflush(stdout);
-	    //   nss_gethostbyname4_r fct4
-		// = __nss_lookup_function (nip, "gethostbyname4_r");
-	    //   if (fct4 != NULL)
-		// {
-		//    printf("fct4 is not null\n");
-		//    fflush(stdout);
-		//   int herrno;
+	      nss_gethostbyname4_r fct4
+		= __nss_lookup_function (nip, "gethostbyname4_r");
+		fct4 = NULL; // LIND, set this to NULL regardless because we don't want to use gethostbyname4_r, instead fall back to 3_r
+	      if (fct4 != NULL)
+		{
+		  int herrno;
 
-		//   while (1)
-		//     {
-		//       rc = 0;
-		// 	  printf("pre dl call\n");
-		// 	  fflush(stdout);
-		//       status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
-		// 				   tmpbuflen, &rc, &herrno,
-		// 				   NULL));
-		// 	  printf("status returned %d\n", status);
-		// 	  fflush(stdout);
-		//       if (status != NSS_STATUS_TRYAGAIN
-		// 	  || rc != ERANGE || herrno != NETDB_INTERNAL)
-		// 	{
-		// 	  if (herrno == NETDB_INTERNAL)
-		// 	    {
-		// 	      __set_h_errno (herrno);
-		// 	      _res.options = old_res_options;
-		// 	      return -EAI_SYSTEM;
-		// 	    }
-		// 	  if (herrno == TRY_AGAIN)
-		// 	    no_data = EAI_AGAIN;
-		// 	  else
-		// 	    no_data = herrno == NO_DATA;
-		// 	  break;
-		// 	}
-		//       tmpbuf = extend_alloca (tmpbuf,
-		// 			      tmpbuflen, 2 * tmpbuflen);
-		//     }
+		  while (1)
+		    {
+		      rc = 0;
+		      status = DL_CALL_FCT (fct4, (name, pat, tmpbuf,
+						   tmpbuflen, &rc, &herrno,
+						   NULL));
+		      if (status != NSS_STATUS_TRYAGAIN
+			  || rc != ERANGE || herrno != NETDB_INTERNAL)
+			{
+			  if (herrno == NETDB_INTERNAL)
+			    {
+			      __set_h_errno (herrno);
+			      _res.options = old_res_options;
+			      return -EAI_SYSTEM;
+			    }
+			  if (herrno == TRY_AGAIN)
+			    no_data = EAI_AGAIN;
+			  else
+			    no_data = herrno == NO_DATA;
+			  break;
+			}
+		      tmpbuf = extend_alloca (tmpbuf,
+					      tmpbuflen, 2 * tmpbuflen);
+		    }
 
-		//   if (status == NSS_STATUS_SUCCESS)
-		//     {
-		//       if ((req->ai_flags & AI_CANONNAME) != 0 && canon == NULL)
-		// 	canon = (*pat)->name;
+		  if (status == NSS_STATUS_SUCCESS)
+		    {
+		      if ((req->ai_flags & AI_CANONNAME) != 0 && canon == NULL)
+			canon = (*pat)->name;
 
-		//       while (*pat != NULL)
-		// 	pat = &((*pat)->next);
-		//     }
-		// }
-	    //   else
-		// {
-		  printf("else 2ndlookup \n");
-		  fflush(stdout);
+		      while (*pat != NULL)
+			pat = &((*pat)->next);
+		    }
+		}
+	      else
+		{
 		  nss_gethostbyname3_r fct = NULL;
 		  if (req->ai_flags & AI_CANONNAME)
 		    /* No need to use this function if we do not look for
@@ -822,8 +768,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 		  if (fct != NULL)
 		    {
-				printf("non null fct\n");
-				fflush(stdout);
 		      if (req->ai_family == AF_INET6
 			  || req->ai_family == AF_UNSPEC)
 			{
@@ -839,8 +783,6 @@ gaih_inet (const char *name, const struct gaih_service *service,
 				 know we are not going to need them.  */
 			      && ((req->ai_flags & AI_ALL) || !got_ipv6)))
 			{
-				printf("per gethosts\n");
-				fflush(stdout);
 			  gethosts (AF_INET, struct in_addr);
 
 			  if (req->ai_family == AF_INET)
@@ -862,8 +804,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 				 from the same service as the result.  */
 			      nss_getcanonname_r cfct;
 			      int herrno;
-				  printf("lookup get canon\n");
-				  fflush(stdout);
+
 			      cfct = __nss_lookup_function (nip,
 							    "getcanonname_r");
 			      if (cfct != NULL)
@@ -895,7 +836,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 			       && inet6_status != NSS_STATUS_UNAVAIL)
 			status = inet6_status;
 		    }
-		// }
+		}
 
 	      if (nss_next_action (nip, status) == NSS_ACTION_RETURN)
 		break;
@@ -921,11 +862,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	}
 
     process_list:
-      if (at->family == AF_UNSPEC) {
-		printf("process list NONAME\n");
-		fflush(stdout);
+      if (at->family == AF_UNSPEC)
 	return GAIH_OKIFUNSPEC | -EAI_NONAME;
-	  }
     }
   else
     {
@@ -2169,8 +2107,7 @@ getaddrinfo (const char *name, const char *service,
      cannot cache the results since new interfaces could be added at
      any time.  */
   __check_pf (&seen_ipv4, &seen_ipv6, &in6ai, &in6ailen);
-  printf("post check pf\n");
-  fflush(stdout);
+
   if (hints->ai_flags & AI_ADDRCONFIG)
     {
       /* Now make a decision on what we return, if anything.  */
@@ -2193,9 +2130,6 @@ getaddrinfo (const char *name, const char *service,
 	  return EAI_NONAME;
 	}
     }
-
-  printf("past hints\n");
-  fflush(stdout);
 
   if (service && service[0])
     {
@@ -2224,8 +2158,6 @@ getaddrinfo (const char *name, const char *service,
   if (hints->ai_family == AF_UNSPEC || hints->ai_family == AF_INET
       || hints->ai_family == AF_INET6)
     {
-	  printf("pret gaih\n");
-	  fflush(stdout);
       last_i = gaih_inet (name, pservice, hints, end, &naddrs);
       if (last_i != 0)
 	{
@@ -2245,9 +2177,6 @@ getaddrinfo (const char *name, const char *service,
       free (in6ai);
       return EAI_FAMILY;
     }
-  printf("post gaih clauses, prenaddrs\n");
-  fflush(stdout);
-
 
   if (naddrs > 1)
     {
@@ -2261,8 +2190,7 @@ getaddrinfo (const char *name, const char *service,
       struct addrinfo *q;
       struct addrinfo *last = NULL;
       char *canonname = NULL;
-	printf("pre sort\n");
-	fflush(stdout);
+
       /* If we have information about deprecated and temporary addresses
 	 sort the array now.  */
       if (in6ai != NULL)
@@ -2308,21 +2236,15 @@ getaddrinfo (const char *name, const char *service,
 		    close_not_cancel_no_status (fd);
 		  af = q->ai_family;
 		  fd = __socket (af, SOCK_DGRAM, IPPROTO_IP);
-		  printf("opened socket fd %d\n", fd);
-		  fflush(stdout);
 		}
 	      else
 		{
 		  /* Reset the connection.  */
-		  printf("connecting unspec??\n");
-		  fflush(stdout);
 		  struct sockaddr sa = { .sa_family = AF_UNSPEC };
 		  __connect (fd, &sa, sizeof (sa));
 		}
 
 	      socklen_t sl = sizeof (results[i].source_addr);
-		  printf("connect on q\n");
-		  fflush(stdout);
 	      if (fd != -1
 		  && __connect (fd, q->ai_addr, q->ai_addrlen) == 0
 		  && __getsockname (fd,

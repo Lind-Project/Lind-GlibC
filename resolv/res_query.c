@@ -132,9 +132,6 @@ __libc_res_nquery(res_state statp,
 	u_char *query2 = NULL;
 	int nquery2 = 0;
 
-	printf("in res_nquery %s\n", name);
-	fflush(stdout);
-
  again:
 	hp->rcode = NOERROR;	/* default */
 
@@ -145,13 +142,8 @@ __libc_res_nquery(res_state statp,
 
 	if (type == T_UNSPEC)
 	  {
-		printf("tunspec\n");
-		fflush(stdout);
 	    n = res_nmkquery(statp, QUERY, name, class, T_A, NULL, 0, NULL,
 			     query1, bufsize);
-
-		printf("res nmk n1 = %d\n", n);
-		fflush(stdout);
 	    if (n > 0)
 	      {
 		if ((oflags & RES_F_EDNS0ERR) == 0
@@ -175,8 +167,6 @@ __libc_res_nquery(res_state statp,
 		query2 = buf + nused;
 		n = res_nmkquery(statp, QUERY, name, class, T_AAAA, NULL, 0,
 				 NULL, query2, bufsize - nused);
-		printf("res nmk n2 = %d\n", n);
-		fflush(stdout);
 		if (n > 0
 		    && (oflags & RES_F_EDNS0ERR) == 0
 		    && (statp->options & RES_USE_EDNS0) != 0)
@@ -199,11 +189,6 @@ __libc_res_nquery(res_state statp,
 
 	    nquery1 = n;
 	  }
-	printf("prebuiltin\n");
-	fflush(stdout);
-
-	printf("pre builtin n is %d\n", n);
-	fflush(stdout);
 
 	if (__builtin_expect (n <= 0, 0) && !use_malloc) {
 		/* Retry just in case res_nmkquery failed because of too
@@ -216,16 +201,10 @@ __libc_res_nquery(res_state statp,
 			goto again;
 		}
 	}
-	printf("prebuiltin2\n");
-	fflush(stdout);
 	if (__builtin_expect (n <= 0, 0)) {
-		printf("in builtin2\n");
-		fflush(stdout);
 		/* If the query choked with EDNS0, retry without EDNS0.  */
 		if ((statp->options & RES_USE_EDNS0) != 0
 		    && ((oflags ^ statp->_flags) & RES_F_EDNS0ERR) != 0) {
-				printf("in inner if\n");
-				fflush(stdout);
 			statp->_flags |= RES_F_EDNS0ERR;
 #ifdef DEBUG
 			if (statp->options & RES_DEBUG)
@@ -237,27 +216,14 @@ __libc_res_nquery(res_state statp,
 		if (statp->options & RES_DEBUG)
 			printf(";; res_query: mkquery failed\n");
 #endif
-		printf("pre set errno\n");
 		RES_SET_H_ERRNO(statp, NO_RECOVERY);
-		printf("post set errno\n");
-		fflush(stdout);
 		if (use_malloc)
 			free (buf);
-		printf("builtin return\n");
-		fflush(stdout);
 		return (n);
 	}
-	printf("electric boogalol!!!\n");
-	fflush(stdout);
-	printf("pre nsend %s\n", query1);
-	fflush(stdout);
-	if (query2 != NULL) printf("query2 %s", query2);
-	fflush(stdout);
 	assert (answerp == NULL || (void *) *answerp == (void *) answer);
 	n = __libc_res_nsend(statp, query1, nquery1, query2, nquery2, answer,
 			     anslen, answerp, answerp2, nanswerp2, resplen2);
-	printf("n = %d\n", n);
-	fflush(stdout);
 	if (use_malloc)
 		free (buf);
 	if (n < 0) {
@@ -364,9 +330,6 @@ __libc_res_nsearch(res_state statp,
 		   int *nanswerp2,
 		   int *resplen2)
 {
-
-	printf("in nsearch\n");
-	fflush(stdout);
 	const char *cp, * const *domain;
 	HEADER *hp = (HEADER *) answer;
 	char tmp[NS_MAXDNAME];
@@ -378,17 +341,12 @@ __libc_res_nsearch(res_state statp,
 	__set_errno (0);
 	RES_SET_H_ERRNO(statp, HOST_NOT_FOUND);  /* True if we never query. */
 
-	printf("checking name %s\n", name);
-	fflush(stdout);
 	dots = 0;
 	for (cp = name; *cp != '\0'; cp++)
 		dots += (*cp == '.');
-	printf("dots %d", dots);
 	trailing_dot = 0;
 	if (cp > name && *--cp == '.')
 		trailing_dot++;
-	printf("trailing dot %d\n", trailing_dot);
-	fflush(stdout);
 
 	/* If there aren't any dots, it could be a user-level alias. */
 	if (!dots && (cp = res_hostalias(statp, name, tmp, sizeof tmp))!= NULL)
@@ -407,41 +365,26 @@ __libc_res_nsearch(res_state statp,
 	 * try 'as is'. The threshold can be set with the "ndots" option.
 	 * Also, query 'as is', if there is a trailing dot in the name.
 	 */
-	printf("pre nquery\n");
-	fflush(stdout);
 	saved_herrno = -1;
 	if (dots >= statp->ndots || trailing_dot) {
 		ret = __libc_res_nquerydomain(statp, name, NULL, class, type,
 					      answer, anslen, answerp,
 					      answerp2, nanswerp2, resplen2);
-		printf("post nquery domain %d %s\n", ret, answer);
-		fflush(stdout);
 		if (ret > 0 || trailing_dot)
 			return (ret);
 		saved_herrno = h_errno;
-		printf("pre pointer stuff\n");
-		fflush(stdout);
 		tried_as_is++;
 		if (answerp && *answerp != answer) {
-			printf("First if\n");
-			fflush(stdout);
 			answer = *answerp;
 			anslen = MAXPACKET;
 		}
 		if (answerp2
 		    && (*answerp2 < answer || *answerp2 >= answer + anslen))
 		  {
-			printf("second if\n");
-			fflush(stdout);
-			printf("%s %s %d\n", *answerp2, answer, anslen);
-			fflush(stdout);
 		    free (*answerp2);
 		    *answerp2 = NULL;
 		  }
 	}
-
-	printf("post nquery\n");
-	fflush(stdout);
 
 	/*
 	 * We do at least one level of search if
@@ -449,8 +392,6 @@ __libc_res_nsearch(res_state statp,
 	 *	- there is at least one dot, there is no trailing dot,
 	 *	  and RES_DNSRCH is set.
 	 */
-	printf("pre nquery2\n");
-	fflush(stdout);
 	if ((!dots && (statp->options & RES_DEFNAMES) != 0) ||
 	    (dots && !trailing_dot && (statp->options & RES_DNSRCH) != 0)) {
 		int done = 0;
@@ -458,9 +399,6 @@ __libc_res_nsearch(res_state statp,
 		for (domain = (const char * const *)statp->dnsrch;
 		     *domain && !done;
 		     domain++) {
-
-			printf("nquery2 domain %s", domain);
-			fflush(stdout);
 
 			if (domain[0][0] == '\0' ||
 			    (domain[0][0] == '.' && domain[0][1] == '\0'))
@@ -473,9 +411,6 @@ __libc_res_nsearch(res_state statp,
 						      resplen2);
 			if (ret > 0)
 				return (ret);
-
-			printf("answer: %s", answer);
-			fflush(stdout);
 
 			if (answerp && *answerp != answer) {
 				answer = *answerp;
