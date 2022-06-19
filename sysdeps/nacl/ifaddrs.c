@@ -70,7 +70,7 @@ __netlink_open (struct netlink_handle *h)
 int
 getifaddrs (struct ifaddrs **ifap)
 {
-	char* buf = malloc(IFADDRS_BUFSIZE); //"lo 65609 127.0.0.1 127.0.0.1 none\nwlp0s20f3 69699 192.168.1.255 192.168.1.255 192.168.1.255\n";
+	char* buf = malloc(IFADDRS_BUFSIZE);
 	int result = __nacl_irt_getifaddrs(buf, IFADDRS_BUFSIZE);
 
 	if (result < 0) {
@@ -92,7 +92,7 @@ getifaddrs (struct ifaddrs **ifap)
 	/* walk through other tokens */
 	while( token != NULL ) {
 
-		ifa->ifa_name = malloc(sizeof(char) * IF_NAMESIZE);
+		ifa->ifa_name = calloc(1, sizeof(char) * IF_NAMESIZE);
 		ifa->ifa_addr = malloc(sizeof(struct sockaddr));
 		ifa->ifa_netmask = malloc(sizeof(struct sockaddr));
 		ifa->ifa_broadaddr = malloc(sizeof(struct sockaddr));
@@ -106,14 +106,11 @@ getifaddrs (struct ifaddrs **ifap)
 		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 		int bdflag = strncmp(bdaddr, "none", 4);
 
-		printf("%s-%d-%s-%s-%s\n", name, flags, addr, naddr, bdaddr);
-		fflush(stdout);
-
 		struct sockaddr_in *sa = (struct sockaddr_in *)ifa->ifa_addr;
 		struct sockaddr_in *na = (struct sockaddr_in *)ifa->ifa_netmask;
 		struct sockaddr_in *bda = (struct sockaddr_in *)ifa->ifa_broadaddr;
 
-		strcpy(ifa->ifa_name, name);
+		strncpy(ifa->ifa_name, name, IF_NAMESIZE - 1);
 		ifa->ifa_flags = flags;
 
 		sa->sin_family = AF_INET;
