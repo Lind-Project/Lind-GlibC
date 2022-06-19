@@ -375,19 +375,25 @@ __libc_res_nsearch(res_state statp,
 		ret = __libc_res_nquerydomain(statp, name, NULL, class, type,
 					      answer, anslen, answerp,
 					      answerp2, nanswerp2, resplen2);
-		printf("post nquery domain %s\n", answer);
+		printf("post nquery domain %d %s\n", ret, answer);
 		fflush(stdout);
 		if (ret > 0 || trailing_dot)
 			return (ret);
 		saved_herrno = h_errno;
+		printf("pre pointer stuff\n");
+		fflush(stdout);
 		tried_as_is++;
 		if (answerp && *answerp != answer) {
+			printf("First if\n");
+			fflush(stdout);
 			answer = *answerp;
 			anslen = MAXPACKET;
 		}
 		if (answerp2
 		    && (*answerp2 < answer || *answerp2 >= answer + anslen))
 		  {
+			printf("second if\n");
+			fflush(stdout);
 		    free (*answerp2);
 		    *answerp2 = NULL;
 		  }
