@@ -26,7 +26,6 @@
 #include <hurd/sigpreempt.h>
 #include <hurd/msg_request.h>
 #include <mach/message.h>
-#include <stdio.h>
 
 /* XXX Temporary cheezoid implementation of ITIMER_REAL/SIGALRM.  */
 
@@ -335,8 +334,6 @@ __setitimer (enum __itimer_which which, const struct itimerval *new,
 	     struct itimerval *old)
 {
   void *crit;
-  printf("mach!!\n");
-  fflush(stdout);
 
   switch (which)
     {
