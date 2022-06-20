@@ -1,12 +1,12 @@
 #ifndef _NACL_SYSDEP_H
 #define _NACL_SYSDEP_H 1
+#include <stdio.h>
 
 #if !defined(__ASSEMBLER__)
 #include <futex_emulation.h>
 #include <irt_syscalls.h>
 #include <lowlevellock.h>
 #include <string.h>
-#include <stdio.h>
 
 /* Implementation of all syscalls for use in platform- and OS- independent code
    as inline functions.  Each function translates the syscall arguments into IRT
