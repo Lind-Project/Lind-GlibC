@@ -19,6 +19,7 @@
 #include <stddef.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <stdio.h>
 
 /* Set the timer WHICH to *NEW.  If OLD is not NULL,
    set *OLD to the old value of timer WHICH.
@@ -29,6 +30,8 @@ __setitimer (which, new, old)
      const struct itimerval *new;
      struct itimerval *old;
 {
+  printf("standard itimer\n");
+  fflush(stdout);
 
   return 0;
 }

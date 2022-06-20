@@ -6,6 +6,7 @@
 #include <irt_syscalls.h>
 #include <lowlevellock.h>
 #include <string.h>
+#include <stdio.h>
 
 /* Implementation of all syscalls for use in platform- and OS- independent code
    as inline functions.  Each function translates the syscall arguments into IRT
@@ -1603,6 +1604,8 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      struct itimerval *old_value)
 {
   log_unimplemented("setitimer unimplemented");
+  printf("internal setitimer\n");
+  fflush(stdout);
   *err = (38 /* ENOSYS */);
   return 0;
 }
