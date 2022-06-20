@@ -1,6 +1,5 @@
 #ifndef _NACL_SYSDEP_H
 #define _NACL_SYSDEP_H 1
-#include <stdio.h>
 
 #if !defined(__ASSEMBLER__)
 #include <futex_emulation.h>
@@ -1604,8 +1603,7 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      struct itimerval *old_value)
 {
   log_unimplemented("setitimer unimplemented");
-  printf("internal setitimer\n");
-  fflush(stdout);
+  write(1, "sysdeps\n", 9);
   *err = (38 /* ENOSYS */);
   return 0;
 }
