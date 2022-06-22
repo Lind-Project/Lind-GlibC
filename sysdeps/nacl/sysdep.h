@@ -1603,7 +1603,7 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      struct itimerval *old_value)
 {
   log_unimplemented("setitimer unimplemented");
-  *err = (38 /* ENOSYS */);
+  *err = 0; // Lind fake setitimer
   return 0;
 }
 
