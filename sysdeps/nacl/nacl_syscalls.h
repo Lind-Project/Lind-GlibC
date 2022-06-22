@@ -155,6 +155,7 @@
 
 #define NACL_sys_getsockname            144
 #define NACL_sys_getpeername            145
+#define NACL_sys_getifaddrs             146
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
@@ -311,6 +312,7 @@ typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
 typedef int (*TYPE_nacl_getsockname) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
 typedef int (*TYPE_nacl_getpeername) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
+typedef int (*TYPE_nacl_getifaddrs) (char *buf, size_t len);
 typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);

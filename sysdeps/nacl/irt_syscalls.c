@@ -491,6 +491,7 @@ int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
 
 int (*__nacl_irt_gethostname) (char *name, size_t len);
+int (*__nacl_irt_getifaddrs) (char *buf, size_t len);
 
 pid_t (*__nacl_irt_getpid) (void);
 pid_t (*__nacl_irt_getppid) (void);
@@ -747,6 +748,11 @@ static int nacl_irt_getcwd (char* buf, size_t size)
 static int nacl_irt_gethostname (char *name, size_t len)
 { 
     return NACL_SYSCALL (gethostname) (name, len);
+}
+
+static int nacl_irt_getifaddrs (char *buf, size_t len)
+{ 
+    return NACL_SYSCALL (getifaddrs) (buf, len);
 }
 
 /*
@@ -1081,6 +1087,7 @@ init_irt_table (void)
   __nacl_irt_socketpair = nacl_irt_socketpair_lind;
   __nacl_irt_shutdown = nacl_irt_shutdown;
   __nacl_irt_gethostname = nacl_irt_gethostname;
+  __nacl_irt_getifaddrs = nacl_irt_getifaddrs;
   __nacl_irt_getpid = nacl_irt_getpid;
   __nacl_irt_getppid = nacl_irt_getppid;
   __nacl_irt_fork = nacl_irt_fork;
