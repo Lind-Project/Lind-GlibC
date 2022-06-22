@@ -67,6 +67,15 @@ __netlink_open (struct netlink_handle *h)
 	return -EOPNOTSUPP;
 }
 
+
+/**
+ * LIND: we've replaced libc's getifaddrs with our own to avoid using NETLINK protocols
+ * Instead here we generate net devices in safeposix on startup.
+ * Our implementation sends a buffer to rustposix to populate with device information.
+ * Here, we parse that buffer into ifaddrs structs and set them up as a linked list.
+ * strtok is used to parse by newline, and scanf populates the relevant fields.
+ **/
+
 int
 getifaddrs (struct ifaddrs **ifap)
 {
@@ -99,9 +108,9 @@ getifaddrs (struct ifaddrs **ifap)
 		int flags;
 
 		char name[IF_NAMESIZE];
-		char addr[16] = {0};
-		char naddr[16] = {0};
-		char bdaddr[16] = {0};
+		char addr[40];
+		char naddr[40];
+		char bdaddr[40];
 
 		sscanf(token, "%s %d %s %s %s", name, &flags, addr, naddr, bdaddr);
 
