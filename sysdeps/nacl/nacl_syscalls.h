@@ -23,6 +23,7 @@
 #include <sys/statfs.h>
 #include <sys/poll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
 
 /* intentionally not using zero */
 
@@ -35,9 +36,7 @@
 
 #define NACL_sys_unlink                  4
 #define NACL_sys_link                    5
-/*
- * TODO: why is there a gap here? -jp
- */
+#define NACL_sys_rename                  6
 
 #define NACL_sys_dup                     8
 #define NACL_sys_dup2                    9
@@ -83,6 +82,11 @@
 #define NACL_sys_getegid                53
 #define NACL_sys_flock                  54
 
+#define NACL_sys_shmget                 56
+#define NACL_sys_shmat                  57
+#define NACL_sys_shmdt                  58
+#define NACL_sys_shmctl                 59
+
 #define NACL_sys_imc_makeboundsock      60
 #define NACL_sys_imc_accept             61
 #define NACL_sys_imc_connect            62
@@ -114,10 +118,6 @@
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
-
-/*
- * TODO: why is there a gap here? -jp
- */
 
 #define NACL_sys_lind_api               113
 
@@ -155,6 +155,7 @@
 
 #define NACL_sys_getsockname            144
 #define NACL_sys_getpeername            145
+#define NACL_sys_getifaddrs             146
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
@@ -182,6 +183,7 @@ typedef int (*TYPE_nacl_syscall)(long arg1, long arg2, long arg3, long arg4, lon
 typedef int (*TYPE_nacl_nameservice)(int *desc_in_out);
 typedef int (*TYPE_nacl_link)(char *from, char *to);
 typedef int (*TYPE_nacl_unlink)(char *name);
+typedef int (*TYPE_nacl_rename)(const char *oldpath, const char *newpath);
 typedef int (*TYPE_nacl_dup)(int oldfd);
 typedef int (*TYPE_nacl_dup2)(int oldfd, int newfd);
 typedef int (*TYPE_nacl_dup3)(int oldfd, int newfd, int flags);
@@ -202,6 +204,7 @@ typedef int (*TYPE_nacl_geteuid) (void);
 typedef int (*TYPE_nacl_getgid) (void);
 typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
+typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
@@ -219,6 +222,11 @@ typedef int (*TYPE_nacl_imc_makeboundsock) (int *dp);
 typedef int (*TYPE_nacl_imc_socketpair) (int *d2);
 typedef int (*TYPE_nacl_socketpair) (int domain, int type, int protocol, int *fds);
 typedef int (*TYPE_nacl_imc_mem_obj_create) (size_t nbytes);
+
+typedef int (*TYPE_nacl_shmget) (key_t key, size_t size, int shmflg);
+typedef void *(*TYPE_nacl_shmat) (int shmid, void *shmaddr, int shmflg);
+typedef int (*TYPE_nacl_shmdt) (void *shmaddr);
+typedef int (*TYPE_nacl_shmctl) (int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
 
 typedef void *(*TYPE_nacl_mmap) (void *start, size_t length,
                                  int prot, int flags, int desc,
@@ -304,6 +312,7 @@ typedef int (*TYPE_nacl_setsockopt) (int sockfd, int level, int optname,
                                      const void *optval, socklen_t optlen);
 typedef int (*TYPE_nacl_getsockname) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
 typedef int (*TYPE_nacl_getpeername) (int sockfd, struct sockaddr * addr, socklen_t *addrlen);
+typedef int (*TYPE_nacl_getifaddrs) (char *buf, size_t len);
 typedef int (*TYPE_nacl_bind) (int sockfd, socklen_t addrlen, const struct sockaddr *addr);
 typedef int (*TYPE_nacl_listen) (int sockfd, int backlog);
 typedef int (*TYPE_nacl_fcntl_get) (int fd, int cmd);

@@ -35,6 +35,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* This software is Copyright 1996 by Craig Metz, All Rights Reserved.  */
 
+/*
+* LIND
+* We've made a minor change in this file to not use gethostbyname4_r which is buggy
+* instead we make it fallback to gethostbyname3_r which works fine and is used elsewhere for DNS
+*/
+
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -704,6 +710,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	    {
 	      nss_gethostbyname4_r fct4
 		= __nss_lookup_function (nip, "gethostbyname4_r");
+		fct4 = NULL; // LIND, set this to NULL regardless because we don't want to use gethostbyname4_r, instead fall back to 3_r
 	      if (fct4 != NULL)
 		{
 		  int herrno;

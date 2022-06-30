@@ -27,10 +27,34 @@ typedef int64_t nacl_abi___ino_t;
 typedef nacl_abi___ino_t nacl_abi_ino_t;
 #endif
 
+#ifndef nacl_abi___size_t_defined
+#define nacl_abi___size_t_defined
+typedef uint32_t      nacl_abi___size_t;
+typedef nacl_abi___size_t nacl_abi_size_t;
+#endif
+
 #ifndef nacl_abi___mode_t_defined
 #define nacl_abi___mode_t_defined
 typedef uint32_t      nacl_abi___mode_t;
 typedef nacl_abi___mode_t nacl_abi_mode_t;
+#endif
+
+#ifndef nacl_abi___key_t_defined
+#define nacl_abi___key_t_defined
+typedef int32_t      nacl_abi___key_t;
+typedef nacl_abi___key_t nacl_abi_key_t;
+#endif
+
+#ifndef nacl_abi___pid_t_defined
+#define nacl_abi___pid_t_defined
+typedef uint32_t      nacl_abi___pid_t;
+typedef nacl_abi___pid_t nacl_abi_pid_t;
+#endif
+
+#ifndef nacl_abi___shmatt_t_defined
+#define nacl_abi___shmatt_t_defined
+typedef uint32_t      nacl_abi___shmatt_t;
+typedef nacl_abi___shmatt_t nacl_abi_shmatt_t;
 #endif
 
 #ifndef nacl_abi___nlink_t_defined
@@ -97,7 +121,35 @@ struct nacl_abi_stat {  /* must be renamed when ABI is exported */
   int64_t            nacl_abi_st_ctimensec; /* possibly just pad */
 };
 
+struct nacl_abi_ipc_perm {  /* must be renamed when ABI is exported */
+  nacl_abi_key_t        nacl_abi_shm_key;       
+  nacl_abi_uid_t        nacl_abi_shm_uid;
+  nacl_abi_gid_t        nacl_abi_shm_gid;
+  nacl_abi_uid_t        nacl_abi_shm_cuid;
+  nacl_abi_gid_t        nacl_abi_shm_cgid;
+  uint16_t              nacl_abi_shm_mode;
+  uint16_t              nacl_abi_shm_pad1;
+  uint16_t              nacl_abi_shm_seq;
+  uint16_t              nacl_abi_shm_pad2;
+  uint32_t              nacl_abi_shm_unused1;
+  uint32_t              nacl_abi_shm_unused2;
+};
+
+struct nacl_abi_shmid_ds {  /* must be renamed when ABI is exported */
+  struct nacl_abi_ipc_perm  nacl_abi_shm_perm;
+  nacl_abi_size_t           nacl_abi_shm_segsz;
+  nacl_abi_time_t           nacl_abi_shm_atime;
+  nacl_abi_time_t           nacl_abi_shm_dtime;
+  nacl_abi_time_t           nacl_abi_shm_ctime;
+  nacl_abi_pid_t            nacl_abi_shm_cpid;
+  nacl_abi_pid_t            nacl_abi_shm_lpid;
+  nacl_abi_shmatt_t         nacl_abi_shm_nattch;
+};
+
 /* Converts struct nacl_abi_stat to struct stat. Implemented in fxstat.c */
 void __nacl_abi_stat_to_stat (struct nacl_abi_stat *nacl_st,
                                 struct stat *st);
+
+void __nacl_abi_shmidstat_to_shmidstat (struct nacl_abi_shmid_ds *nacl_shmid_ds,
+                                struct shmid_ds *shmid_ds);
 #endif

@@ -30,6 +30,10 @@ static int nacl_irt_unlink (const char *name) {
   return -NACL_SYSCALL (unlink) (name);
 }
 
+static int nacl_irt_rename(const char *oldpath, const char *newpath) {
+  return -NACL_SYSCALL (rename) (oldpath, newpath);
+}
+
 static int nacl_irt_gettod (struct timeval *tv) {
   return -NACL_SYSCALL (gettimeofday) (tv, NULL);
 }
@@ -184,13 +188,34 @@ static int nacl_irt_sysbrk (void **newbrk) {
   return (12 /* ENOSYS */);
 }
 
+
+static int nacl_irt_shmget (key_t key, size_t size, int shmflg) {
+  return NACL_SYSCALL (shmget) (key, size, shmflg);
+}
+
+static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
+  uintptr_t rv = NACL_SYSCALL (shmat) (shmid, *shmaddr, shmflg);
+  if (rv > 0xffff0000u)
+    return -(int32_t) rv;
+  *shmaddr = (void *) rv;
+  return 0;
+}
+
+static int nacl_irt_shmdt (void *shmaddr) {
+  return -NACL_SYSCALL (shmdt) (shmaddr);
+}
+
+static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
+  return NACL_SYSCALL (shmctl) (shmid, cmd, buf);
+}
+
 static int nacl_irt_mmap (void **addr, size_t len,
                           int prot, int flags, int fd, off_t off) {
-  uint32_t rv = (uintptr_t) NACL_SYSCALL (mmap) (*addr, len, prot, flags,
+  uintptr_t rv = NACL_SYSCALL (mmap) (*addr, len, prot, flags,
                                                  fd, &off);
-  if ((uint32_t) rv > 0xffff0000u)
+  if (rv > 0xffff0000u)
     return -(int32_t) rv;
-  *addr = (void *) (uintptr_t) rv;
+  *addr = (void *) rv;
   return 0;
 }
 
@@ -337,10 +362,12 @@ size_t (*__nacl_irt_query) (const char *interface_ident,
                             void *table, size_t tablesize);
 
 int (*__nacl_irt_link) (const char *from, const char *to);
+int (*__nacl_irt_rename) (const char *oldpath, const char *newpath);
 int (*__nacl_irt_unlink) (const char *name);
 int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
+int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -420,8 +447,13 @@ int (*__nacl_irt_setsockopt) (int sockfd, int level, int optname,
 int (*__nacl_irt_socketpair) (int domain, int type, int protocol, int sv[static 2]);
 int (*__nacl_irt_shutdown) (int sockfd, int how);
 
-
 int (*__nacl_irt_sysbrk) (void **newbrk);
+
+int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
+int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
+int (*__nacl_irt_shmdt)(void *shmaddr);
+int (*__nacl_irt_shmctl)(int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
+
 int (*__nacl_irt_mmap) (void **addr, size_t len, int prot, int flags,
                         int fd, off_t off);
 int (*__nacl_irt_munmap) (void *addr, size_t len);
@@ -459,6 +491,7 @@ int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
 
 int (*__nacl_irt_gethostname) (char *name, size_t len);
+int (*__nacl_irt_getifaddrs) (char *buf, size_t len);
 
 pid_t (*__nacl_irt_getpid) (void);
 pid_t (*__nacl_irt_getppid) (void);
@@ -496,10 +529,12 @@ static int nacl_irt_rmdir (const char *pathname)
 
 static int nacl_irt_chdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (chdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (chdir) (pathname);
+}
+
+static int nacl_irt_chmod (const char *pathname, mode_t mode)
+{
+    return NACL_SYSCALL (chmod) (pathname, mode);
 }
 
 static int nacl_irt_getuid(void) {
@@ -713,6 +748,11 @@ static int nacl_irt_getcwd (char* buf, size_t size)
 static int nacl_irt_gethostname (char *name, size_t len)
 { 
     return NACL_SYSCALL (gethostname) (name, len);
+}
+
+static int nacl_irt_getifaddrs (char *buf, size_t len)
+{ 
+    return NACL_SYSCALL (getifaddrs) (buf, len);
 }
 
 /*
@@ -1011,8 +1051,10 @@ init_irt_table (void)
 
   __nacl_irt_link = nacl_irt_link;
   __nacl_irt_unlink = nacl_irt_unlink;
+  __nacl_irt_rename = nacl_irt_rename;
   __nacl_irt_mkdir = nacl_irt_mkdir;
   __nacl_irt_chdir = nacl_irt_chdir;
+  __nacl_irt_chmod = nacl_irt_chmod;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;
@@ -1045,6 +1087,7 @@ init_irt_table (void)
   __nacl_irt_socketpair = nacl_irt_socketpair_lind;
   __nacl_irt_shutdown = nacl_irt_shutdown;
   __nacl_irt_gethostname = nacl_irt_gethostname;
+  __nacl_irt_getifaddrs = nacl_irt_getifaddrs;
   __nacl_irt_getpid = nacl_irt_getpid;
   __nacl_irt_getppid = nacl_irt_getppid;
   __nacl_irt_fork = nacl_irt_fork;
@@ -1071,6 +1114,10 @@ init_irt_table (void)
   __nacl_irt_fcntl_get = nacl_irt_fcntl_get;
   __nacl_irt_fcntl_set = nacl_irt_fcntl_set;
   __nacl_irt_ioctl = nacl_irt_ioctl;
+  __nacl_irt_shmget = nacl_irt_shmget;
+  __nacl_irt_shmat = nacl_irt_shmat;
+  __nacl_irt_shmdt = nacl_irt_shmdt;
+  __nacl_irt_shmctl = nacl_irt_shmctl;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
