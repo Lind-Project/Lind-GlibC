@@ -57,7 +57,6 @@ override_list = [
     "math/s_significandl.c",
     "misc/mkostemp.c",
     "misc/mkstemp.c",
-    "misc/syscall.c",
     "misc/truncate.c",
     "nptl/pthread_barrier_wait.c",
     "nptl/pthread_cond_broadcast.c",
@@ -170,10 +169,19 @@ override_list = [
     "sysdeps/nacl/wait.c",
     "sysdeps/nacl/wait4.c",
     "sysdeps/nacl/sigprocmask.c",
-    "sysdeps/nacl/lstat.c",
+    "sysdeps/nacl/getcwd.c",
     "sysdeps/nacl/gethostname.c",
     "sysdeps/nacl/pread.c",
-    "sysdeps/nacl/pwrite.c"
+    "sysdeps/nacl/pwrite.c",
+    "sysdeps/nacl/mkdir.c",
+    "sysdeps/nacl/ioctl.c",
+    "sysdeps/nacl/setsid.c",
+    "sysdeps/nacl/syscall.c",
+    "sysdeps/nacl/shmget.c",
+    "sysdeps/nacl/shmat.c",
+    "sysdeps/nacl/shmdt.c",
+    "sysdeps/nacl/shmctl.c",
+    "sysdeps/nacl/rename.c"
     ]
 
 def get_override_map():

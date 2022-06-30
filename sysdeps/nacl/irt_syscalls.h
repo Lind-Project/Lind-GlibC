@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <sys/epoll.h>
 #include <sys/select.h>
+#include <sys/shm.h>
+
 #include <time.h>
 #include <sys/statfs.h>
 
@@ -28,6 +30,7 @@ extern size_t (*__nacl_irt_query)(const char *interface_ident,
 
 extern int (*__nacl_irt_link) (const char *from, const char *to);
 extern int (*__nacl_irt_unlink) (const char *name);
+extern int (*__nacl_irt_rename) (const char *oldpath, const char *newpath);
 extern void (*__nacl_irt_exit) (int status);
 extern int (*__nacl_irt_gettod) (struct timeval *tv);
 extern int (*__nacl_irt_clock) (clock_t *ticks);
@@ -39,14 +42,18 @@ extern int (*__nacl_irt_sysconf) (int name, int *value);
 extern int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 extern int (*__nacl_irt_rmdir) (const char* pathname);
 extern int (*__nacl_irt_chdir) (const char* pathname);
+extern int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
+
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
 extern int (*__nacl_irt_getgid) (void);
 extern int (*__nacl_irt_getegid) (void);
-extern int (*__nacl_irt_getcwd) (char* buf, size_t size, int *len);
+extern int (*__nacl_irt_getcwd) (char* buf, size_t size);
 
 extern int (*__nacl_irt_fcntl_get) (int fd, int cmd);
 extern int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
+
+extern int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
 extern int (*__nacl_irt_epoll_create) (int size, int *fd);
 extern int (*__nacl_irt_epoll_create1) (int flags, int *fd);
@@ -116,6 +123,12 @@ extern int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                                    size_t *nread);
 
 extern int (*__nacl_irt_sysbrk)(void **newbrk);
+
+extern int (*__nacl_irt_shmget)(key_t key, size_t size, int shmflg);
+extern int (*__nacl_irt_shmat)(int shmid, void **shmaddr, int shmflg);
+extern int (*__nacl_irt_shmdt)(void *shmaddr);
+extern int (*__nacl_irt_shmctl)(int shmid, int cmd, struct nacl_abi_shmid_ds *buf);
+
 extern int (*__nacl_irt_mmap)(void **addr, size_t len, int prot, int flags,
                               int fd, nacl_abi_off_t off);
 extern int (*__nacl_irt_munmap)(void *addr, size_t len);
@@ -155,6 +168,7 @@ extern int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 extern int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
 
 extern int (*__nacl_irt_gethostname) (char *name, size_t len);
+extern int (*__nacl_irt_getifaddrs) (char *buf, size_t len);
 
 extern pid_t (*__nacl_irt_getpid) (void);
 extern pid_t (*__nacl_irt_getppid) (void);

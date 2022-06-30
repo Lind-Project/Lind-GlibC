@@ -124,16 +124,23 @@ INTERNAL_SYSCALL_capset_2 (int *err, struct __user_cap_header_struct *hdrp,
 __extern_always_inline int
 INTERNAL_SYSCALL_chdir_1 (int *err, const char *path)
 {
-  *err = __nacl_irt_chdir (path);
-  return 0;
+  int rv = __nacl_irt_chdir (path);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_chmod_2 (int *err, const char *path, mode_t mode)
 {
-  log_unimplemented("chmod unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_chmod (path, mode);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
@@ -602,18 +609,6 @@ INTERNAL_SYSCALL_getcpu_3 (int *err, unsigned *cpu, unsigned *node,
   log_unimplemented("getcpu unimplemented");
   *err = (38 /* ENOSYS */);
   return 0;
-}
-
-/* NOTE! The user-level library version returns a character pointer.
-
-   The system call just returns the length of the buffer filled (which includes
-   the ending '\0' character), or zero in case of error.  */
-__extern_always_inline int
-INTERNAL_SYSCALL_getcwd_2 (int *err, char *buf, size_t size)
-{
-  int len;
-  *err = __nacl_irt_getcwd (buf, size, &len);
-  return len;
 }
 
 __extern_always_inline gid_t
@@ -1608,7 +1603,7 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      struct itimerval *old_value)
 {
   log_unimplemented("setitimer unimplemented");
-  *err = (38 /* ENOSYS */);
+  *err = 0; // Lind fake setitimer
   return 0;
 }
 
@@ -1773,7 +1768,7 @@ INTERNAL_SYSCALL_accept_3 (int *err, int sockfd, struct sockaddr* addr,
 {
   int rv = __nacl_irt_accept (sockfd, addr, addr_len);
   if(rv < 0) {
-    *err = rv;
+    *err = -rv;
     return -1;
   }
   return rv;

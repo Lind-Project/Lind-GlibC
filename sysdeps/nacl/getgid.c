@@ -19,17 +19,12 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <irt_syscalls.h> 
 
 /* Get the group ID of the calling process.  */
 gid_t
 __getgid ()
 {
-    static char firstcall = 1;
-    if(firstcall) {
-        firstcall = 0;
-        __set_errno(EAGAIN);
-        return -1;
-    }
     return (gid_t) __nacl_irt_getgid();
 }
 
