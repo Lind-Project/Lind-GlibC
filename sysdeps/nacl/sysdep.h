@@ -2103,7 +2103,7 @@ __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
   *err = 0;
-  return 1;
+  return 0777;
 }
 
 __extern_always_inline int
