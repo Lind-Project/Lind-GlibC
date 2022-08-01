@@ -2102,7 +2102,7 @@ INTERNAL_SYSCALL_tkill_2 (int *err, pid_t tid, int sig)
 __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
-  return 0777;
+  return -0777;
 }
 
 __extern_always_inline int
