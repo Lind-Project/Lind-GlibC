@@ -2102,9 +2102,7 @@ INTERNAL_SYSCALL_tkill_2 (int *err, pid_t tid, int sig)
 __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
-  log_unimplemented("umask unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  return 0777;
 }
 
 __extern_always_inline int
