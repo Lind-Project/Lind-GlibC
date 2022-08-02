@@ -147,8 +147,8 @@ __extern_always_inline int
 INTERNAL_SYSCALL_chown_3 (int *err, const char *path,
 			  uid_t owner, gid_t group)
 {
-  log_unimplemented("chown unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: chown is faked since we only have one user
+  *err = 0;
   return 0;
 }
 
