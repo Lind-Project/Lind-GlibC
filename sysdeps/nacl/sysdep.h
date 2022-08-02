@@ -1576,8 +1576,8 @@ INTERNAL_SYSCALL_setfsuid_1 (int *err, uid_t uid)
 __extern_always_inline int
 INTERNAL_SYSCALL_setgid_1 (int *err, gid_t gid)
 {
-  log_unimplemented("setgid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
@@ -1684,8 +1684,8 @@ INTERNAL_SYSCALL_setsid_0 (int *err)
 __extern_always_inline int
 INTERNAL_SYSCALL_setuid_1 (int *err, uid_t uid)
 {
-  log_unimplemented("setuid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
