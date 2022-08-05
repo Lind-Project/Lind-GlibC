@@ -6,6 +6,7 @@
 #include <irt_syscalls.h>
 #include <lowlevellock.h>
 #include <string.h>
+#include <stdio.h>
 
 /* Implementation of all syscalls for use in platform- and OS- independent code
    as inline functions.  Each function translates the syscall arguments into IRT
@@ -1685,6 +1686,7 @@ __extern_always_inline int
 INTERNAL_SYSCALL_setuid_1 (int *err, uid_t uid)
 {
   // LIND: setgid/uid are faked
+  fprintf(stderr, "in internal setuid");
   *err = 0;
   return 0;
 }
