@@ -31,6 +31,9 @@ seteuid (uid_t uid)
 {
   int result;
 
+  write(2, "in linux setuid\n", 16);
+
+
   if (uid == (uid_t) ~0)
     {
       __set_errno (EINVAL);

@@ -1570,6 +1570,8 @@ __extern_always_inline int
 INTERNAL_SYSCALL_setfsuid_1 (int *err, uid_t uid)
 {
   log_unimplemented("setfsuid unimplemented");
+  write(2, "in setfsuid\n", 12);
+
   *err = (38 /* ENOSYS */);
   return 0;
 }
@@ -1644,6 +1646,8 @@ __extern_always_inline int
 INTERNAL_SYSCALL_setresuid_3 (int *err, uid_t ruid, uid_t euid, uid_t suid)
 {
   log_unimplemented("setresuid unimplemented");
+  write(2, "in setresuid\n", 13);
+
   *err = (38 /* ENOSYS */);
   return 0;
 }
@@ -1651,6 +1655,7 @@ INTERNAL_SYSCALL_setresuid_3 (int *err, uid_t ruid, uid_t euid, uid_t suid)
 __extern_always_inline int
 INTERNAL_SYSCALL_setreuid_2 (int *err, uid_t ruid, uid_t euid)
 {
+  write(2, "in setreuid\n", 12);
   log_unimplemented("setreuid unimplemented");
   *err = (38 /* ENOSYS */);
   return 0;
