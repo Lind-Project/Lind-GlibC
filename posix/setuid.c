@@ -29,10 +29,7 @@ int
 __setuid (uid)
      uid_t uid;
 {
-   fprintf(stderr, "SETUID!!!");
-   fflush(stderr);
-//   __set_errno (ENOSYS);
-  return 0;
+   return 0;
 }
 stub_warning (setuid)
 

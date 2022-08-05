@@ -35,8 +35,6 @@ int
 __setuid (uid_t uid)
 {
   int result;
-  write(2, "in 386 setuid\n", 14);
-
 
 #if __ASSUME_32BITUIDS > 0 && defined __NR_setuid32
   result = INLINE_SETXID_SYSCALL (setuid32, 1, uid);

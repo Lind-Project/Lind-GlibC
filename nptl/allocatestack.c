@@ -950,7 +950,9 @@ __nptl_setxid (struct xid_command *cmdp)
 {
   int result;
 
-  write(2, "WHY???\n", 7);
+  // Lind: we fake any setxid calls to 0 but dont actually set them
+  return 0;
+
   lll_lock (stack_cache_lock, LLL_PRIVATE);
 
   __xidcmd = cmdp;
