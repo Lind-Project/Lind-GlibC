@@ -949,6 +949,8 @@ attribute_hidden
 __nptl_setxid (struct xid_command *cmdp)
 {
   int result;
+
+  write(2, "WHY???\n", 7);
   lll_lock (stack_cache_lock, LLL_PRIVATE);
 
   __xidcmd = cmdp;
