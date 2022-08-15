@@ -330,9 +330,12 @@ INTERNAL_SYSCALL_fchdir_1 (int *err, int fd)
 __extern_always_inline int
 INTERNAL_SYSCALL_fchmod_2 (int *err, int fd, mode_t mode)
 {
-  log_unimplemented("fchmod unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fchmod (fd, mode);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
