@@ -144,6 +144,7 @@
 #define NACL_sys_rmdir                  132
 #define NACL_sys_statfs                 133
 #define NACL_sys_fstatfs                134
+#define NACL_sys_fchmod                 135
 #define NACL_sys_socket                 136
 #define NACL_sys_getsockopt             137
 #define NACL_sys_setsockopt             138
@@ -205,6 +206,7 @@ typedef int (*TYPE_nacl_getgid) (void);
 typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
+typedef int (*TYPE_nacl_fchmod) (int fd, mode_t mode);
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
