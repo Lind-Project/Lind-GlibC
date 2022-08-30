@@ -6,7 +6,6 @@
 #include <irt_syscalls.h>
 #include <lowlevellock.h>
 #include <string.h>
-#include <unistd.h>
 
 /* Implementation of all syscalls for use in platform- and OS- independent code
    as inline functions.  Each function translates the syscall arguments into IRT
@@ -2106,6 +2105,7 @@ INTERNAL_SYSCALL_tkill_2 (int *err, pid_t tid, int sig)
 __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
+  // Lind: ignore setting umask, ignore setting umaskreturn full permissions as previous mask
   *err = 0;
   return 0777;
 }
