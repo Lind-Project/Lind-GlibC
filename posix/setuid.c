@@ -19,7 +19,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <stdio.h>
 
 /* Set the user ID of the calling process to UID.
    If the calling process is the super-user, the real
