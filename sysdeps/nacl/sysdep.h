@@ -147,8 +147,8 @@ __extern_always_inline int
 INTERNAL_SYSCALL_chown_3 (int *err, const char *path,
 			  uid_t owner, gid_t group)
 {
-  log_unimplemented("chown unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: chown is faked since we only have one user
+  *err = 0;
   return 0;
 }
 
@@ -1579,8 +1579,8 @@ INTERNAL_SYSCALL_setfsuid_1 (int *err, uid_t uid)
 __extern_always_inline int
 INTERNAL_SYSCALL_setgid_1 (int *err, gid_t gid)
 {
-  log_unimplemented("setgid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
@@ -1687,8 +1687,8 @@ INTERNAL_SYSCALL_setsid_0 (int *err)
 __extern_always_inline int
 INTERNAL_SYSCALL_setuid_1 (int *err, uid_t uid)
 {
-  log_unimplemented("setuid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
@@ -2105,9 +2105,9 @@ INTERNAL_SYSCALL_tkill_2 (int *err, pid_t tid, int sig)
 __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
-  log_unimplemented("umask unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  // Lind: ignore setting umask, ignore setting umaskreturn full permissions as previous mask
+  *err = 0;
+  return 0777;
 }
 
 __extern_always_inline int

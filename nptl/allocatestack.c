@@ -949,54 +949,58 @@ attribute_hidden
 __nptl_setxid (struct xid_command *cmdp)
 {
   int result;
-  lll_lock (stack_cache_lock, LLL_PRIVATE);
 
-  __xidcmd = cmdp;
-  cmdp->cntr = 0;
+  // Lind: we fake any setxid calls to 0 but dont actually set them
+  return 0;
 
-  struct pthread *self = THREAD_SELF;
+  // lll_lock (stack_cache_lock, LLL_PRIVATE);
 
-  /* Iterate over the list with system-allocated threads first.  */
-  list_t *runp;
-  list_for_each (runp, &stack_used)
-    {
-      struct pthread *t = list_entry (runp, struct pthread, list);
-      if (t == self)
-	continue;
+  // __xidcmd = cmdp;
+  // cmdp->cntr = 0;
 
-      setxid_signal_thread (cmdp, t);
-    }
+  // struct pthread *self = THREAD_SELF;
 
-  /* Now the list with threads using user-allocated stacks.  */
-  list_for_each (runp, &__stack_user)
-    {
-      struct pthread *t = list_entry (runp, struct pthread, list);
-      if (t == self)
-	continue;
+  // /* Iterate over the list with system-allocated threads first.  */
+  // list_t *runp;
+  // list_for_each (runp, &stack_used)
+  //   {
+  //     struct pthread *t = list_entry (runp, struct pthread, list);
+  //     if (t == self)
+	// continue;
 
-      setxid_signal_thread (cmdp, t);
-    }
+  //     setxid_signal_thread (cmdp, t);
+  //   }
 
-  int cur = cmdp->cntr;
-  while (cur != 0)
-    {
-      lll_futex_wait (&cmdp->cntr, cur, LLL_PRIVATE);
-      cur = cmdp->cntr;
-    }
+  // /* Now the list with threads using user-allocated stacks.  */
+  // list_for_each (runp, &__stack_user)
+  //   {
+  //     struct pthread *t = list_entry (runp, struct pthread, list);
+  //     if (t == self)
+	// continue;
 
-  /* This must be last, otherwise the current thread might not have
-     permissions to send SIGSETXID syscall to the other threads.  */
-  INTERNAL_SYSCALL_DECL (err);
-  result = INTERNAL_SYSCALL_NCS (cmdp->syscall_no, err, 3,
-				 cmdp->id[0], cmdp->id[1], cmdp->id[2]);
-  if (INTERNAL_SYSCALL_ERROR_P (result, err))
-    {
-      __set_errno (INTERNAL_SYSCALL_ERRNO (result, err));
-      result = -1;
-    }
+  //     setxid_signal_thread (cmdp, t);
+  //   }
 
-  lll_unlock (stack_cache_lock, LLL_PRIVATE);
-  return result;
+  // int cur = cmdp->cntr;
+  // while (cur != 0)
+  //   {
+  //     lll_futex_wait (&cmdp->cntr, cur, LLL_PRIVATE);
+  //     cur = cmdp->cntr;
+  //   }
+
+  // /* This must be last, otherwise the current thread might not have
+  //    permissions to send SIGSETXID syscall to the other threads.  */
+  // INTERNAL_SYSCALL_DECL (err);
+  // result = INTERNAL_SYSCALL_NCS (cmdp->syscall_no, err, 3,
+	// 			 cmdp->id[0], cmdp->id[1], cmdp->id[2]);
+  // if (INTERNAL_SYSCALL_ERROR_P (result, err))
+  //   {
+  //     __set_errno (INTERNAL_SYSCALL_ERRNO (result, err));
+  //     result = -1;
+  //   }
+
+  // lll_unlock (stack_cache_lock, LLL_PRIVATE);
+  // return result;
 }
 
 static inline void __attribute__((always_inline))
