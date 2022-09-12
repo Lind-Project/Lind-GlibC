@@ -262,24 +262,32 @@ static int nacl_irt_mutex_create (int *mutex_handle) {
   return 0;
 }
 
-/*
- * Today a mutex handle is just an fd and we destroy it with close.
- * But this might not always be so.
- */
 static int nacl_irt_mutex_destroy (int mutex_handle) {
-  return -NACL_SYSCALL (close) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_destroy) (mutex_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_lock (int mutex_handle) {
-  return -NACL_SYSCALL (mutex_lock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_lock) (mutex_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_unlock(int mutex_handle) {
-  return -NACL_SYSCALL (mutex_unlock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_unlock) (mutex_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_trylock(int mutex_handle) {
-  return -NACL_SYSCALL (mutex_trylock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_trylock) (mutex_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_create (int *cond_handle) {
@@ -290,30 +298,41 @@ static int nacl_irt_cond_create (int *cond_handle) {
   return 0;
 }
 
-/*
- * Today a cond handle is just an fd and we destroy it with close.
- * But this might not always be so.
- */
 static int nacl_irt_cond_destroy (int cond_handle) {
-  return -NACL_SYSCALL (close) (cond_handle);
+  int rv = NACL_SYSCALL (cond_destroy) (cond_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_signal (int cond_handle) {
-  return -NACL_SYSCALL (cond_signal) (cond_handle);
+  int rv = NACL_SYSCALL (cond_signal) (cond_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_broadcast (int cond_handle) {
-  return -NACL_SYSCALL (cond_broadcast) (cond_handle);
+  int rv = NACL_SYSCALL (cond_broadcast) (cond_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_wait (int cond_handle, int mutex_handle) {
-  return -NACL_SYSCALL (cond_wait) (cond_handle, mutex_handle);
+  int rv = NACL_SYSCALL (cond_wait) (cond_handle, mutex_handle);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
                                          const struct timespec *abstime) {
-  return -NACL_SYSCALL (cond_timed_wait_abs) (cond_handle, mutex_handle,
-                                              abstime);
+  int rv = NACL_SYSCALL (cond_timed_wait_abs) (cond_handle, mutex_handle,
+                                               abstime);
+  if(rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_tls_init (void *tdb) {
