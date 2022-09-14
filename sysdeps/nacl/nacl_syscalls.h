@@ -94,6 +94,7 @@
 #define NACL_sys_imc_recvmsg            64
 #define NACL_sys_imc_mem_obj_create     65
 #define NACL_sys_imc_socketpair         66
+#define NACL_sys_mutex_destroy          69
 #define NACL_sys_mutex_create           70
 #define NACL_sys_mutex_lock             71
 #define NACL_sys_mutex_trylock          72
@@ -102,6 +103,7 @@
 #define NACL_sys_cond_wait              75
 #define NACL_sys_cond_signal            76
 #define NACL_sys_cond_broadcast         77
+#define NACL_sys_cond_destroy           78
 #define NACL_sys_cond_timed_wait_abs    79
 #define NACL_sys_thread_create          80
 #define NACL_sys_thread_exit            81
@@ -245,6 +247,7 @@ typedef int (*TYPE_nacl_thread_create) (void *start_user_address,
                                         void *second_thread_ptr);
 typedef int (*TYPE_nacl_thread_nice) (const int nice);
 
+typedef int (*TYPE_nacl_mutex_destroy) (int mutex);
 typedef int (*TYPE_nacl_mutex_create) (void);
 typedef int (*TYPE_nacl_mutex_lock) (int mutex);
 typedef int (*TYPE_nacl_mutex_unlock) (int mutex);
@@ -253,6 +256,7 @@ typedef int (*TYPE_nacl_cond_create) (void);
 typedef int (*TYPE_nacl_cond_wait) (int cv, int mutex);
 typedef int (*TYPE_nacl_cond_signal) (int cv);
 typedef int (*TYPE_nacl_cond_broadcast) (int cv);
+typedef int (*TYPE_nacl_cond_destroy) (int cv);
 typedef int (*TYPE_nacl_cond_timed_wait_abs) (int condvar,
                                               int mutex,
                                               const struct timespec *abstime);
