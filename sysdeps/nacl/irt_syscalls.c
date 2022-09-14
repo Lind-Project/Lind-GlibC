@@ -422,6 +422,8 @@ int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                             size_t *nread);
 int (*__nacl_irt_access) (const char *file, int mode);
+int (*__nacl_irt_truncate) (const char *path, off_t length);
+int (*__nacl_irt_ftruncate) (int fd, off_t length);
 int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
 int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrlen);
@@ -846,6 +848,21 @@ static int nacl_irt_flock (int fd, int operation)
   return NACL_SYSCALL (flock) (fd, operation);
 }
 
+static int nacl_irt_truncate (const char *path, off_t length)
+{
+    int rv = NACL_SYSCALL (truncate) (path, length);
+    if (rv < 0)
+        return -rv;
+    return 0;
+}
+static int nacl_irt_ftruncate (int fd, off_t length)
+{
+    int rv = NACL_SYSCALL (ftruncate) (fd, length);
+    if (rv < 0)
+        return -rv;
+    return 0;
+}
+
 void
 init_irt_table (void)
 {
@@ -1144,6 +1161,8 @@ init_irt_table (void)
   __nacl_irt_shmat = nacl_irt_shmat;
   __nacl_irt_shmdt = nacl_irt_shmdt;
   __nacl_irt_shmctl = nacl_irt_shmctl;
+  __nacl_irt_truncate = nacl_irt_truncate;
+  __nacl_irt_ftruncate = nacl_irt_ftruncate;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
