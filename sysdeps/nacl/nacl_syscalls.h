@@ -58,6 +58,8 @@
 #define NACL_sys_munmap                 22
 #define NACL_sys_getdents               23
 #define NACL_sys_mprotect               24
+#define NACL_sys_truncate               26
+#define NACL_sys_ftruncate              27
 #define NACL_sys_exit                   30
 #define NACL_sys_getpid                 31
 #define NACL_sys_sched_yield            32
@@ -329,5 +331,7 @@ typedef int (*TYPE_nacl_select) (int nfds, fd_set * readfds, fd_set * writefds, 
 typedef int (*TYPE_nacl_epoll_create) (int size);
 typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event *event);
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
+typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
+typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
 
 #endif
