@@ -531,6 +531,8 @@ int (*__nacl_irt_execv) (char const *path, char *const *argv);
 int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
 
+int (*__nacl_irt_sigaction) (int sig, const struct sigaction *act, struct sigaction *oact);
+
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
 static int nacl_irt_mkdir (const char *pathname, mode_t mode)
@@ -863,6 +865,11 @@ static int nacl_irt_ftruncate (int fd, off_t length)
     return 0;
 }
 
+static int nacl_irt_sigaction (int sig, const struct sigaction *act, struct sigaction *oact)
+{
+   return NACL_SYSCALL (sigaction) (sig, act, oact);
+}
+
 void
 init_irt_table (void)
 {
@@ -1163,6 +1170,7 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sigaction = nacl_irt_sigaction;
 }
 
 size_t nacl_interface_query(const char *interface_ident,

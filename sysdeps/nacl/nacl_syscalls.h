@@ -169,6 +169,8 @@
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
 
+#define NACL_sys_sigaction		160
+
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -333,5 +335,7 @@ typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
 typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
 typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
+
+typedef int (*TYPE_nacl_sigaction) (int sig, const struct sigaction *act, struct sigaction *ocat);
 
 #endif
