@@ -867,7 +867,10 @@ static int nacl_irt_ftruncate (int fd, off_t length)
 
 static int nacl_irt_sigaction (int sig, const struct sigaction *act, struct sigaction *oact)
 {
-   return NACL_SYSCALL (sigaction) (sig, act, oact);
+    int rv = NACL_SYSCALL (sigaction) (sig, act, oact);
+    if (rv < 0)
+	return -rv;
+    return 0;
 }
 
 void

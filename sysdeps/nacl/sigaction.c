@@ -22,7 +22,7 @@ int __libc_sigaction(
 
   result = __nacl_irt_sigaction(sig, act, oact);
   if (result != 0) {
-    errno = result;
+    __set_errno (result);
     return -1;
   }
 
