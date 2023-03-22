@@ -1,7 +1,11 @@
 #include <errno.h>
 #include <signal.h>
+#include <unistd.h>
+#include <stddef.h>
 
-int __libc_kill(pid_t pid, int sig) {
+#include <irt_syscalls.h>
+
+int __kill(pid_t pid, int sig) {
   int result;
   
   if (sig < 0 || sig >= NSIG) {
@@ -18,8 +22,5 @@ int __libc_kill(pid_t pid, int sig) {
   return 0;
 }
 
-libc_hidden_def (__libc_kill)
-
-weak_alias (__libc_kill, __kill)
-libc_hidden_weak (__kill)
-weak_alias (__libc_kill, kill)
+weak_alias (__kill, kill)
+weak_alias (__kill, __libc_kill)
