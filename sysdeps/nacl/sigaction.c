@@ -30,9 +30,7 @@ int __libc_sigaction(
 }
 
 libc_hidden_def (__libc_sigaction)
-// stub_warning (sigaction)
 
 weak_alias (__libc_sigaction, __sigaction)
 libc_hidden_weak (__sigaction)
 weak_alias (__libc_sigaction, sigaction)
-// #include <stub-tag.h>

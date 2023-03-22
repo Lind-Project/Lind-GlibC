@@ -192,6 +192,7 @@ extern int (*__nacl_irt_access) (const char *file, int mode);
 extern int (*__nacl_irt_truncate) (const char *path, off_t length);
 extern int (*__nacl_irt_ftruncate) (int fd, off_t length);
 extern int (*__nacl_irt_sigaction) (int sig, const struct sigaction *act, struct sigaction *ocat);
+extern int (*__nacl_irt_kill) (pid_t pid, int sig);
 
 #undef socklen_t
 

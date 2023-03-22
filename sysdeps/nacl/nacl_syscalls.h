@@ -170,6 +170,7 @@
 #define NACL_sys_pwrite                 127
 
 #define NACL_sys_sigaction		160
+#define NACL_sys_kill			161
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -337,5 +338,6 @@ typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
 typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
 
 typedef int (*TYPE_nacl_sigaction) (int sig, const struct sigaction *act, struct sigaction *ocat);
+typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
 
 #endif

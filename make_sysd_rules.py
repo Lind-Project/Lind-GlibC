@@ -184,7 +184,8 @@ override_list = [
     "sysdeps/nacl/rename.c",
     "sysdeps/nacl/truncate.c",
     "sysdeps/nacl/ftruncate.c",
-    "sysdeps/nacl/sigaction.c"
+    "sysdeps/nacl/sigaction.c",
+    "sysdeps/nacl/kill.c"
     ]
 
 def get_override_map():
