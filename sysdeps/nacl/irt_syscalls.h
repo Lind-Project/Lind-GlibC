@@ -14,6 +14,7 @@
 #include <sys/statfs.h>
 
 #include <nacl_stat.h>
+#include <nacl_sigaction.h>
 
 struct dirent;
 struct nacl_abi_stat;
@@ -191,7 +192,7 @@ extern int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
 extern int (*__nacl_irt_access) (const char *file, int mode);
 extern int (*__nacl_irt_truncate) (const char *path, off_t length);
 extern int (*__nacl_irt_ftruncate) (int fd, off_t length);
-extern int (*__nacl_irt_sigaction) (int sig, const struct sigaction *act, struct sigaction *ocat);
+extern int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
 extern int (*__nacl_irt_kill) (pid_t pid, int sig);
 
 #undef socklen_t

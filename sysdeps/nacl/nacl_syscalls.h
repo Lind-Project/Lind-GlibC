@@ -16,6 +16,7 @@
 
 
 #include <nacl_stat.h>
+#include <nacl_sigaction.h>
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -337,7 +338,7 @@ typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int m
 typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
 typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
 
-typedef int (*TYPE_nacl_sigaction) (int sig, const struct sigaction *act, struct sigaction *ocat);
+typedef int (*TYPE_nacl_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
 typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
 
 #endif

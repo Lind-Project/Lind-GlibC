@@ -3,6 +3,7 @@
 #include <time.h>
 #include <errno.h>
 #include <nacl_stat.h>
+#include <nacl_sigaction.h>
 #include <nacl_syscalls.h>
 #undef stat
 #define stat nacl_abi_stat
@@ -531,7 +532,7 @@ int (*__nacl_irt_execv) (char const *path, char *const *argv);
 int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
 
-int (*__nacl_irt_sigaction) (int sig, const struct sigaction *act, struct sigaction *oact);
+int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact);
 int (*__nacl_irt_kill) (int pid, int sig);
 
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
@@ -866,9 +867,9 @@ static int nacl_irt_ftruncate (int fd, off_t length)
     return 0;
 }
 
-static int nacl_irt_sigaction (int sig, const struct sigaction *act, struct sigaction *oact)
+static int nacl_irt_sigaction (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact)
 {
-    int rv = NACL_SYSCALL (sigaction) (sig, act, oact);
+    int rv = NACL_SYSCALL (sigaction) (sig, nacl_act, nacl_oact);
     if (rv < 0)
 	return -rv;
     return 0;
