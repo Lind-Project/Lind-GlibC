@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include <irt_syscalls.h>
 #include <nacl_sigaction.h>
@@ -11,7 +12,7 @@ void __sigaction_to_nacl_abi_sigaction(
     struct nacl_abi_sigaction *nacl_act
 ) {
   if (nacl_act != NULL && act != NULL) {
-    nacl_act->__sa_handler = act->sa_handler;
+    nacl_act->__sa_handler = (uint32_t)(act->sa_handler);
     nacl_act->sa_flags = act->sa_flags;
 
     for (int i = 0; i < 16; ++i) {
@@ -25,7 +26,7 @@ void __nacl_abi_sigaction_to_sigaction(
     struct sigaction *act
 ) {
   if (nacl_act != NULL && act != NULL) {
-    act->sa_handler = nacl_act->__sa_handler;
+    act->sa_handler = (__sighandler_t)(nacl_act->__sa_handler);
     act->sa_flags = nacl_act->sa_flags;
 
     for (int i = 0; i < 16; ++i) {

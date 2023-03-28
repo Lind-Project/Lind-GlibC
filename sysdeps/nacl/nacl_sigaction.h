@@ -9,9 +9,9 @@ struct nacl_sigset {
 };
 
 struct nacl_abi_sigaction {
-	__sighandler_t __sa_handler;
+	uint32_t __sa_handler;
 	struct nacl_sigset sa_mask;
-	int sa_flags;
+	int32_t sa_flags;
 };
 
 void __sigaction_to_nacl_abi_sigaction(struct sigaction *act, struct nacl_abi_sigaction *nacl_act);
