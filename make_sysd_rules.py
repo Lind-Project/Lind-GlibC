@@ -185,7 +185,8 @@ override_list = [
     "sysdeps/nacl/truncate.c",
     "sysdeps/nacl/ftruncate.c",
     "sysdeps/nacl/sigaction.c",
-    "sysdeps/nacl/kill.c"
+    "sysdeps/nacl/kill.c",
+    "sysdeps/nacl/sigprocmask.c"
     ]
 
 def get_override_map():

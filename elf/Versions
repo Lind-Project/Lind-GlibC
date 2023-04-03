@@ -183,6 +183,7 @@ ld {
     __nacl_irt_ftruncate;
     __nacl_irt_sigaction;
     __nacl_irt_kill;
+    __nacl_irt_sigprocmask;
     
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;

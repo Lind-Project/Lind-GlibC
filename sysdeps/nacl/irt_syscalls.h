@@ -185,7 +185,6 @@ extern int (*__nacl_irt_pipe) (int pipedes[static 2]);
 extern int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 extern int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 extern int (*__nacl_irt_execv) (char const *path, char *const *argv);
-extern int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 extern int (*__nacl_irt_flock) (int fd, int operation);
 extern int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
 extern int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
@@ -194,6 +193,7 @@ extern int (*__nacl_irt_truncate) (const char *path, off_t length);
 extern int (*__nacl_irt_ftruncate) (int fd, off_t length);
 extern int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
 extern int (*__nacl_irt_kill) (pid_t pid, int sig);
+extern int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
 
 #undef socklen_t
 
