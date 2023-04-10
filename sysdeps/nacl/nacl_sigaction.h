@@ -3,7 +3,6 @@
 
 #include <signal.h>
 #include <stdint.h>
-#include <nacl_sigprocmask.h>
 
 struct nacl_sigset {
 	unsigned long int val[16];
