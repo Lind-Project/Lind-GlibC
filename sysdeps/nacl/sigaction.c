@@ -5,8 +5,7 @@
 #include <stdint.h>
 
 #include <irt_syscalls.h>
-#include <nacl_sigaction.h>
-#include <nacl_sigprocmask.h>
+#include <nacl_signal.h>
 
 void __sigaction_to_nacl_abi_sigaction(
     const struct sigaction *act,

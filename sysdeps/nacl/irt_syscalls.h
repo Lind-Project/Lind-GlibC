@@ -14,7 +14,7 @@
 #include <sys/statfs.h>
 
 #include <nacl_stat.h>
-#include <nacl_sigaction.h>
+#include <nacl_signal.h>
 
 struct dirent;
 struct nacl_abi_stat;

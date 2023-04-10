@@ -16,7 +16,7 @@
 
 
 #include <nacl_stat.h>
-#include <nacl_sigaction.h>
+#include <nacl_signal.h>
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
