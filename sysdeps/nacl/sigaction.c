@@ -7,6 +7,30 @@
 #include <irt_syscalls.h>
 #include <nacl_signal.h>
 
+void __sigset_t_to_uint(const sigset_t *set, uint64_t *nacl_set) {
+  if (set && nacl_set) {
+    *nacl_set = 0;
+
+    for (int i = 1; i < 32; ++i) {
+      if (sigismember(set, i)) {
+        *nacl_set |= 1 << (i-1);
+      }
+    }
+  }
+}
+
+void __uint_to_sigset_t(const uint64_t *nacl_set, sigset_t *set) {
+  if (nacl_set && set) {
+    sigemptyset(set);
+
+    for (int i = 1; i < 32; ++i) {
+      if (*nacl_set & (1 << (i-1))) {
+        sigaddset(set, i);
+      }
+    }
+  }
+}
+
 void __sigaction_to_nacl_abi_sigaction(
     const struct sigaction *act,
     struct nacl_abi_sigaction *nacl_act
