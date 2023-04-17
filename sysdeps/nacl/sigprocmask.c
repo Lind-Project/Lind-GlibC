@@ -27,12 +27,12 @@ int __sigprocmask (int how, const sigset_t *set, sigset_t *oldset)
     oldset ? &nacl_oldset : NULL
   );
 
-  __uint_to_sigset_t(&nacl_oldset, oldset);
-
   if (result != 0) {
     __set_errno (result);
     return -1;
   }
+
+  __uint_to_sigset_t(&nacl_oldset, oldset);
 
   return 0;
 }
