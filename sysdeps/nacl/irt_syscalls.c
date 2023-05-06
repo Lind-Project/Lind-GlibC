@@ -534,6 +534,7 @@ int (*__nacl_irt_flock) (int fd, int operation);
 int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact);
 int (*__nacl_irt_kill) (int pid, int sig);
 int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+unsigned int (*__nacl_irt_alarm) (unsigned int seconds);
 
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
@@ -886,6 +887,11 @@ static int nacl_irt_sigprocmask (int how, const uint64_t *nacl_set, uint64_t *na
     return 0;
 }
 
+static unsigned int nacl_irt_alarm(unsigned int seconds)
+{
+    return NACL_SYSCALL (alarm) (seconds);
+}
+
 void
 init_irt_table (void)
 {
@@ -1188,6 +1194,7 @@ init_irt_table (void)
   __nacl_irt_sigaction = nacl_irt_sigaction;
   __nacl_irt_kill = nacl_irt_kill;
   __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
+  __nacl_irt_alarm = nacl_irt_alarm;
 }
 
 size_t nacl_interface_query(const char *interface_ident,

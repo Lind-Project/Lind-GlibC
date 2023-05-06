@@ -194,6 +194,7 @@ extern int (*__nacl_irt_ftruncate) (int fd, off_t length);
 extern int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
 extern int (*__nacl_irt_kill) (pid_t pid, int sig);
 extern int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+extern unsigned int (*__nacl_irt_alarm) (unsigned int seconds);
 
 #undef socklen_t
 
