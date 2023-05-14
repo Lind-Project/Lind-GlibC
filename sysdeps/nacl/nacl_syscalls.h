@@ -25,6 +25,7 @@
 #include <sys/poll.h>
 #include <sys/select.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 
 /* intentionally not using zero */
 
@@ -172,7 +173,9 @@
 #define NACL_sys_sigaction		160
 #define NACL_sys_kill			161
 #define NACL_sys_sigprocmask		162
+
 #define NACL_sys_alarm			163
+#define NACL_sys_lindsetitimer		164
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -342,5 +345,6 @@ typedef int (*TYPE_nacl_sigaction) (int sig, const struct nacl_abi_sigaction *na
 typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
 typedef int (*TYPE_nacl_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
 typedef unsigned int (*TYPE_nacl_alarm) (unsigned int seconds);
+typedef int (*TYPE_nacl_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 #endif
