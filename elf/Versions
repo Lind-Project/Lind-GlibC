@@ -184,7 +184,6 @@ ld {
     __nacl_irt_sigaction;
     __nacl_irt_kill;
     __nacl_irt_sigprocmask;
-    __nacl_irt_alarm;
     __nacl_irt_lindsetitimer;
     
     # Those are in the dynamic linker, but used by libc.so.
