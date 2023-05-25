@@ -35,5 +35,5 @@ alarm (seconds)
 }
 libc_hidden_def (alarm)
 
-// stub_warning (alarm)
+stub_warning (alarm)
 #include <stub-tag.h>
