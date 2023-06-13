@@ -5,33 +5,51 @@
 #include <stdint.h>
 
 #include <irt_syscalls.h>
-#include <nacl_sigaction.h>
+#include <nacl_signal.h>
 
-void __sigaction_to_nacl_abi_sigaction(
-    struct sigaction *act,
-    struct nacl_abi_sigaction *nacl_act
-) {
-  if (nacl_act != NULL && act != NULL) {
-    nacl_act->__sa_handler = (uint32_t)(act->sa_handler);
-    nacl_act->sa_flags = act->sa_flags;
+void __sigset_t_to_uint(const sigset_t *set, uint64_t *nacl_set) {
+  if (set && nacl_set) {
+    *nacl_set = 0;
 
-    for (int i = 0; i < 16; ++i) {
-      nacl_act->sa_mask.val[i] = act->sa_mask.__val[i];
+    for (int i = 1; i < 32; ++i) {
+      if (sigismember(set, i)) {
+        *nacl_set |= 1 << (i-1);
+      }
     }
   }
 }
 
+void __uint_to_sigset_t(const uint64_t *nacl_set, sigset_t *set) {
+  if (nacl_set && set) {
+    sigemptyset(set);
+
+    for (int i = 1; i < 32; ++i) {
+      if (*nacl_set & (1 << (i-1))) {
+        sigaddset(set, i);
+      }
+    }
+  }
+}
+
+void __sigaction_to_nacl_abi_sigaction(
+    const struct sigaction *act,
+    struct nacl_abi_sigaction *nacl_act
+) {
+  if (nacl_act && act) {
+    nacl_act->__sa_handler = (uint32_t)(act->sa_handler);
+    nacl_act->sa_flags = act->sa_flags;
+    __sigset_t_to_uint(&act->sa_mask, &nacl_act->sa_mask);
+  }
+}
+
 void __nacl_abi_sigaction_to_sigaction(
-    struct nacl_abi_sigaction *nacl_act,
+    const struct nacl_abi_sigaction *nacl_act,
     struct sigaction *act
 ) {
-  if (nacl_act != NULL && act != NULL) {
+  if (nacl_act && act) {
     act->sa_handler = (__sighandler_t)(nacl_act->__sa_handler);
     act->sa_flags = nacl_act->sa_flags;
-
-    for (int i = 0; i < 16; ++i) {
-      act->sa_mask.__val[i] = nacl_act->sa_mask.val[i];
-    }
+    __uint_to_sigset_t(&nacl_act->sa_mask, &act->sa_mask);
   }
 }
 
