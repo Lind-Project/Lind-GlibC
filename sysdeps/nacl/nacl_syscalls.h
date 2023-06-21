@@ -123,6 +123,8 @@
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
+#define NACL_sys_reg_restore            107
+#define NACL_sys_reg_restore_2          108
 
 #define NACL_sys_lind_api               113
 
