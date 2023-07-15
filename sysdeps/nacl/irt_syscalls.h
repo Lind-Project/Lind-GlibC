@@ -45,7 +45,6 @@ extern int (*__nacl_irt_chdir) (const char* pathname);
 extern int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
 extern int (*__nacl_irt_fchmod) (int fd, mode_t mode);
 extern int (*__nacl_irt_fchdir) (int fd);
-extern int (*__nacl_irt_mknod) (const char* pathname, mode_t mode, dev_t dev);
 
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
