@@ -188,7 +188,7 @@ ld {
     __nacl_irt_fchmod;
     __nacl_irt_truncate;
     __nacl_irt_ftruncate;
-    __nacl_irt_mknod;   
+    
     __nacl_irt_fchdir; 
 
     # Those are in the dynamic linker, but used by libc.so.
