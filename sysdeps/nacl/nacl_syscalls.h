@@ -144,7 +144,6 @@
 
 #define NACL_sys_fcntl_get              128
 #define NACL_sys_fcntl_set              129
-
 #define NACL_sys_chdir                  130
 #define NACL_sys_mkdir                  131
 #define NACL_sys_rmdir                  132
@@ -159,21 +158,19 @@
 #define NACL_sys_connect                141
 #define NACL_sys_bind                   142
 #define NACL_sys_listen                 143
-
 #define NACL_sys_getsockname            144
 #define NACL_sys_getpeername            145
 #define NACL_sys_getifaddrs             146
+
+#define NACL_sys_sigaction		          147
+#define NACL_sys_kill			              148
+#define NACL_sys_sigprocmask		        149
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
 #define NACL_sys_epoll_wait             159
 
-#define NACL_sys_pread                  126
-#define NACL_sys_pwrite                 127
-
-#define NACL_sys_sigaction		160
-#define NACL_sys_kill			161
-#define NACL_sys_sigprocmask		162
+#define NACL_sys_fchdir			            161
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -217,6 +214,8 @@ typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_fchmod) (int fd, mode_t mode);
+typedef int (*TYPE_nacl_fchdir) (int fd);
+
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 

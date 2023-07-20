@@ -389,6 +389,7 @@ int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
 int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
 int (*__nacl_irt_fchmod) (int fd, mode_t mode);
+int (*__nacl_irt_fchdir) (int fd);
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -566,6 +567,11 @@ static int nacl_irt_chmod (const char *pathname, mode_t mode)
 static int nacl_irt_fchmod (int fd, mode_t mode)
 {
     return NACL_SYSCALL (fchmod) (fd, mode);
+}
+
+static int nacl_irt_fchdir (int fd)
+{
+	return NACL_SYSCALL (fchdir) (fd);
 }
 
 static int nacl_irt_getuid(void) {
@@ -1121,6 +1127,7 @@ init_irt_table (void)
   __nacl_irt_chdir = nacl_irt_chdir;
   __nacl_irt_chmod = nacl_irt_chmod;
   __nacl_irt_fchmod = nacl_irt_fchmod;
+  __nacl_irt_fchdir = nacl_irt_fchdir;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;
