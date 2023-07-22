@@ -1608,8 +1608,30 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      const struct itimerval *new_value,
 			      struct itimerval *old_value)
 {
-  log_unimplemented("setitimer unimplemented");
-  *err = 0; // Lind fake setitimer
+  int result;
+  
+  if (which != ITIMER_REAL && which != ITIMER_VIRTUAL && which != ITIMER_PROF) {
+    *err = EINVAL;
+    return -1;
+  }
+  
+  if (
+    new_value->it_interval.tv_usec < 0 ||
+    new_value->it_interval.tv_usec > 999999 ||
+    new_value->it_value.tv_usec < 0 ||
+    new_value->it_value.tv_usec > 999999
+  ) {
+    *err = EINVAL;
+    return -1;
+  }
+  
+  result = __nacl_irt_lindsetitimer(which, new_value, old_value);
+  
+  if (result != 0) {
+    *err = result;
+    return -1;
+  }
+  
   return 0;
 }
 

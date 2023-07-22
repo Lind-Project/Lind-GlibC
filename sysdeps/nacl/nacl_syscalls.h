@@ -25,6 +25,7 @@
 #include <sys/poll.h>
 #include <sys/select.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 
 /* intentionally not using zero */
 
@@ -165,6 +166,7 @@
 #define NACL_sys_sigaction		          147
 #define NACL_sys_kill			              148
 #define NACL_sys_sigprocmask		        149
+#define NACL_sys_lindsetitimer		      150
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
@@ -341,5 +343,9 @@ typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
 typedef int (*TYPE_nacl_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
 typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
 typedef int (*TYPE_nacl_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+<<<<<<< HEAD
+=======
+typedef int (*TYPE_nacl_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
+>>>>>>> sigalrm
 
 #endif
