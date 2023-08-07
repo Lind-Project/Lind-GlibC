@@ -750,8 +750,6 @@ static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 {
     int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
-    if (rv < 0)
-        return -rv;
     return rv;
 }
 
