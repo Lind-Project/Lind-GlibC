@@ -756,7 +756,7 @@ INTERNAL_SYSCALL_open_3 (int *err, const char *pathname, int flags, mode_t mode)
   int newfd;
   newfd = __nacl_irt_open (pathname, flags, mode);
   if (newfd < 0) {
-    *err = newfd;
+    *err = -newfd;
     return -1;
   } else { return newfd; }
 }
