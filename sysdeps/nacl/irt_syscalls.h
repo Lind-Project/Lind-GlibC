@@ -108,8 +108,8 @@ extern int (*__nacl_irt_socketpair) (int domain, int type, int protocol,
 extern int (*__nacl_irt_shutdown) (int sockfd, int how);
 
 
-extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
-                               int *newfd);
+extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
+
 extern int (*__nacl_irt_close) (int fd);
 extern int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
 extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count,
@@ -166,7 +166,7 @@ extern int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
 extern int (*__nacl_irt_tls_init) (void *tdb);
 extern void *(*__nacl_irt_tls_get) (void);
 
-extern int (*__nacl_irt_open_resource) (const char* file, int *fd);
+extern int (*__nacl_irt_open_resource) (const char* file);
 
 extern int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 extern int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
