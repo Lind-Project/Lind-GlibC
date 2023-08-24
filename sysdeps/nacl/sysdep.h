@@ -754,8 +754,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_open_3 (int *err, const char *pathname, int flags, mode_t mode)
 {
   int newfd;
-  *err = __nacl_irt_open (pathname, flags, mode, &newfd);
-  return newfd;
+  newfd = __nacl_irt_open (pathname, flags, mode);
+  if (newfd < 0) {
+    *err = newfd;
+    return -1;
+  } else { return newfd; }
 }
 
 __extern_always_inline int
