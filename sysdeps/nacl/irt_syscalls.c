@@ -23,11 +23,11 @@ static void nacl_irt_exit (int status) {
 }
 
 static int nacl_irt_link (const char *from, const char *to) {
-  return -NACL_SYSCALL (link) (from, to);
+  return NACL_SYSCALL (link) (from, to);
 }
 
 static int nacl_irt_unlink (const char *name) {
-  return -NACL_SYSCALL (unlink) (name);
+  return NACL_SYSCALL (unlink) (name);
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
@@ -57,12 +57,8 @@ static int nacl_irt_sysconf (int name, int *value) {
   return -NACL_SYSCALL (sysconf) (name, value);
 }
 
-static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode, int *newfd) {
-  int rv = NACL_SYSCALL (open) (pathname, oflag, cmode);
-  if (rv < 0)
-    return -rv;
-  *newfd = rv;
-  return 0;
+static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode) {
+  return NACL_SYSCALL (open) (pathname, oflag, cmode);
 }
 
 static int nacl_irt_close (int fd) {
@@ -343,19 +339,19 @@ static void *nacl_irt_tls_get (void) {
   return NACL_SYSCALL (tls_get) ();
 }
 
-static int nacl_irt_open_as_resource (const char *pathname, int *newfd) {
-  return __nacl_irt_open (pathname, O_RDONLY, 0, newfd);
+static int nacl_irt_open_as_resource (const char *pathname) {
+  return __nacl_irt_open (pathname, O_RDONLY, 0);
 }
 
 /* Load files from DL_DST_LIB using IRT's open_resource. Other paths
    will be processed using regular open syscall.
 
    Note: nacl_mount may change this logic if needed.  */
-static int (*___nacl_irt_open_resource) (const char* file, int *fd);
-static int nacl_irt_open_resource (const char *pathname, int *newfd) {
+static int (*___nacl_irt_open_resource) (const char* file);
+static int nacl_irt_open_resource (const char *pathname) {
   if (memcmp (DL_DST_LIB "/", pathname, sizeof (DL_DST_LIB)))
-    return __nacl_irt_open (pathname, O_RDONLY, 0, newfd);
-  return ___nacl_irt_open_resource (pathname + sizeof (DL_DST_LIB) - 1, newfd);
+    return __nacl_irt_open (pathname, O_RDONLY, 0);
+  return ___nacl_irt_open_resource (pathname + sizeof (DL_DST_LIB) - 1);
 }
 
 static int nacl_irt_clock_getres(clockid_t clk_id,
@@ -407,8 +403,7 @@ int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
 int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
-int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
-                        int *newfd);
+int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 int (*__nacl_irt_close) (int fd);
 int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
 int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
@@ -508,7 +503,7 @@ int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
 
-int (*__nacl_irt_open_resource) (const char* file, int *fd);
+int (*__nacl_irt_open_resource) (const char* file);
 
 int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
@@ -743,10 +738,7 @@ static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
 
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 {
-    int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
-    if (rv < 0)
-        return -rv;
-    return rv;
+    return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
 static int nacl_irt_epoll_create_lind (int size, int *fd)
