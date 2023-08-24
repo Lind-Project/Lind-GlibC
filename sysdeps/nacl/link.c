@@ -5,8 +5,7 @@
 
 
 /* Make a link to FROM called TO.  */
-int
-__link (const char * from, const char * to) {
+int __link (const char * from, const char * to) {
 
   if (from == NULL || to == NULL)
     {
@@ -14,13 +13,14 @@ __link (const char * from, const char * to) {
       return -1;
     }
   /* since everything is okay, forward to lind server. */
-  int return_code = __nacl_irt_link(from, to);
 
-  if (return_code < 0) {
-    __set_errno ( -1 * return_code);
+  int result = __nacl_irt_link(from, to);
+
+  if (result < 0) {
+    __set_errno ( -result);
     return -1;
   } else {
-    return return_code;
+    return result;
   }
 
 }

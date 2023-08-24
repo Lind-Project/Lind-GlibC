@@ -23,11 +23,11 @@ static void nacl_irt_exit (int status) {
 }
 
 static int nacl_irt_link (const char *from, const char *to) {
-  return -NACL_SYSCALL (link) (from, to);
+  return NACL_SYSCALL (link) (from, to);
 }
 
 static int nacl_irt_unlink (const char *name) {
-  return -NACL_SYSCALL (unlink) (name);
+  return NACL_SYSCALL (unlink) (name);
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
@@ -743,10 +743,7 @@ static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
 
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 {
-    int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
-    if (rv < 0)
-        return -rv;
-    return rv;
+    return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
 static int nacl_irt_epoll_create_lind (int size, int *fd)
