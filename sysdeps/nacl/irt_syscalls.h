@@ -81,8 +81,7 @@ extern int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
 extern int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len,
                                int flags);
 extern int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len,
-            int flags, const struct sockaddr *dest_addr, socklen_t addrlen,
-            int *count);
+            int flags, const struct sockaddr *dest_addr, socklen_t addrlen);
 extern int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 extern int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);

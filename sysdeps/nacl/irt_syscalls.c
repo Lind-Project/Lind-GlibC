@@ -428,8 +428,7 @@ int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                            socklen_t addrlen);
 int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags);
 int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len, int flags,
-                          const struct sockaddr *dest_addr, socklen_t addrlen,
-                          int *count);
+                          const struct sockaddr *dest_addr, socklen_t addrlen);
 int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
@@ -622,15 +621,9 @@ static int nacl_irt_recv(int sockfd, void *buf, size_t len, int flags)
 }
 
 static int nacl_irt_sendto(int sockfd, const void *buf, size_t len, int flags,
-                          const struct sockaddr *dest_addr, socklen_t addrlen,
-                          int *count)
+                          const struct sockaddr *dest_addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (sendto) (sockfd, buf, len, flags, dest_addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    if(count)
-        *count = rv;
-    return 0;
+    return NACL_SYSCALL (sendto) (sockfd, buf, len, flags, dest_addr, addrlen);
 }
 
 static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,

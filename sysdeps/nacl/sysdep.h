@@ -1881,9 +1881,11 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
                            int flags, const struct sockaddr *dest_addr,
 						   socklen_t addrlen)
 {
-  int ret;
-  *err = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen, &ret);
-  return ret;
+  int ret = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
