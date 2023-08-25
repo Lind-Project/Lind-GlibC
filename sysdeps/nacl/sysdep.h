@@ -1889,8 +1889,11 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
 __extern_always_inline int
 INTERNAL_SYSCALL_recv_4 (int *err, int sockfd, void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_recv (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_recv (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 
