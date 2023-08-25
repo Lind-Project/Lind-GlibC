@@ -71,7 +71,7 @@ extern int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
 extern int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
             const struct timespec *timeout, const sigset_t *sigmask,
             size_t sigset_size, int *count);
-extern int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
+extern int (*__nacl_irt_socket) (int domain, int type, int protocol);
 extern int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 extern int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr,
                                socklen_t addrlen);
@@ -79,12 +79,10 @@ extern int (*__nacl_irt_listen) (int sockfd, int backlog);
 extern int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                                   socklen_t addrlen);
 extern int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len,
-                               int flags, int *count);
+                               int flags);
 extern int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len,
-            int flags, const struct sockaddr *dest_addr, socklen_t addrlen,
-            int *count);
-extern int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags,
-                               int *count);
+            int flags, const struct sockaddr *dest_addr, socklen_t addrlen);
+extern int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 extern int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 extern int (*__nacl_irt_select) (int nfds, fd_set *readfds,
