@@ -1868,8 +1868,11 @@ INTERNAL_SYSCALL_shutdown_2 (int *err, int sockfd, int how)
 __extern_always_inline int
 INTERNAL_SYSCALL_send_4 (int *err, int sockfd, const void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_send (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_send (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 

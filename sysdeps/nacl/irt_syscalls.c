@@ -426,8 +426,7 @@ int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrl
 int (*__nacl_irt_listen) (int sockfd, int backlog);
 int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                            socklen_t addrlen);
-int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags,
-                        int *count);
+int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags);
 int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len, int flags,
                           const struct sockaddr *dest_addr, socklen_t addrlen,
                           int *count);
@@ -612,15 +611,9 @@ static int nacl_irt_connect (int sockfd, const struct sockaddr *addr, socklen_t 
     return NACL_SYSCALL (connect) (sockfd, addr, addrlen);
 }
 
-static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags,
-                        int *count)
+static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags)
 {
-    int rv = NACL_SYSCALL (send) (sockfd, len, flags, buf);
-    if (rv < 0)
-        return -rv;
-    if(count)
-        *count = rv;
-    return 0;
+    return NACL_SYSCALL (send) (sockfd, len, flags, buf);
 }
 
 static int nacl_irt_recv(int sockfd, void *buf, size_t len, int flags, int *count)

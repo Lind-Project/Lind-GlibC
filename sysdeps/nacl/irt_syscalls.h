@@ -79,7 +79,7 @@ extern int (*__nacl_irt_listen) (int sockfd, int backlog);
 extern int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                                   socklen_t addrlen);
 extern int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len,
-                               int flags, int *count);
+                               int flags);
 extern int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len,
             int flags, const struct sockaddr *dest_addr, socklen_t addrlen,
             int *count);
