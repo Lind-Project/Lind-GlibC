@@ -604,18 +604,12 @@ static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t add
 
 static int nacl_irt_listen (int sockfd, int backlog)
 {
-    int rv = NACL_SYSCALL (listen) (sockfd, backlog);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (listen) (sockfd, backlog);
 }
 
 static int nacl_irt_connect (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (connect) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (connect) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags,
