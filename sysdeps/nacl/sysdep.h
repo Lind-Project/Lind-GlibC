@@ -1790,8 +1790,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_bind_3 (int *err, int sockfd, struct sockaddr* addr,
                          socklen_t addr_len)
 {
-  *err = __nacl_irt_bind (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_bind (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
@@ -1829,16 +1832,22 @@ INTERNAL_SYSCALL_setsockopt_5 (int *err, int sockfd, int level, int optname,
 __extern_always_inline int
 INTERNAL_SYSCALL_listen_2 (int *err, int sockfd, int backlog)
 {
-  *err = __nacl_irt_listen (sockfd, backlog);
-  return 0;
+  int rv = __nacl_irt_listen (sockfd, backlog);
+  if( rv < 0 ){
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_connect_3 (int *err, int sockfd, struct sockaddr* addr,
                             socklen_t addr_len)
 {
-  *err = __nacl_irt_connect (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_connect (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
