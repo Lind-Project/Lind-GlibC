@@ -1767,8 +1767,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_socket_3 (int *err, int domain, int type, int protocol)
 {
   int sd;
-  *err = __nacl_irt_socket (domain, type, protocol, &sd);
-  return sd;
+  sd = __nacl_irt_socket (domain, type, protocol);
+  if(sd < 0) {
+    *err = -sd;
+    return -1;
+  } else { return sd; }
 }
 
 __extern_always_inline int
