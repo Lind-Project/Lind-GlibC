@@ -71,7 +71,7 @@ extern int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
 extern int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
             const struct timespec *timeout, const sigset_t *sigmask,
             size_t sigset_size, int *count);
-extern int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
+extern int (*__nacl_irt_socket) (int domain, int type, int protocol);
 extern int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 extern int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr,
                                socklen_t addrlen);
