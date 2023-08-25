@@ -420,7 +420,7 @@ int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
 int (*__nacl_irt_access) (const char *file, int mode);
 int (*__nacl_irt_truncate) (const char *path, off_t length);
 int (*__nacl_irt_ftruncate) (int fd, off_t length);
-int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
+int (*__nacl_irt_socket) (int domain, int type, int protocol);
 int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int (*__nacl_irt_listen) (int sockfd, int backlog);
@@ -587,13 +587,9 @@ static int nacl_irt_select_lind (int nfds, fd_set *readfds,
     return NACL_SYSCALL (select) (nfds, readfds, writefds, exceptfds, timeout);
 }
 
-static int nacl_irt_socket_lind (int domain, int type, int protocol, int *sd)
+static int nacl_irt_socket_lind (int domain, int type, int protocol)
 {
-    int rv = NACL_SYSCALL (socket) (domain, type, protocol);
-    if (rv < 0)
-        return -rv;
-    *sd=rv;
-    return 0;
+    int NACL_SYSCALL (socket) (domain, type, protocol);
 }
 
 static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrlen)
