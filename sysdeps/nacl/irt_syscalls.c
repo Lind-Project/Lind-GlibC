@@ -131,7 +131,7 @@ static int nacl_irt_dup3 (int oldfd, int newfd, int flags) {
 }
 
 static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (fstat) (fd, st);
+  return NACL_SYSCALL (fstat) (fd, st);
 }
 
 static int nacl_irt_fstatfs (int fd, struct statfs *buf) {
@@ -143,7 +143,7 @@ static int nacl_irt_statfs (const char* path, struct statfs *buf) {
 }
 
 static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (stat) (pathname, st);
+  return NACL_SYSCALL (stat) (pathname, st);
 }
 
 static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
