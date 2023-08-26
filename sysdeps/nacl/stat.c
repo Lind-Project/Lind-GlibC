@@ -1,5 +1,4 @@
 #include <errno.h>
-#include <sys/stat.h>
 #include <stddef.h>
 #include <irt_syscalls.h>
 
