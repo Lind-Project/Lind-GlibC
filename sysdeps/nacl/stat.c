@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <irt_syscalls.h>
 
-int __stat (const char *file, struct statfs *buf)
+int __stat (const char *pathname, struct nacl_abi_stat *)
 {
   int result;
   result = __nacl_irt_stat(file, buf);
