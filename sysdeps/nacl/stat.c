@@ -3,10 +3,10 @@
 #include <stddef.h>
 #include <irt_syscalls.h>
 
-int __stat (const char *pathname, struct nacl_abi_stat *)
+int __stat (const char *pathname, struct nacl_abi_stat *st)
 {
   int result;
-  result = __nacl_irt_stat(file, buf);
+  result = __nacl_irt_stat(pathname, st);
   if (result < 0) {
     __set_errno(-result);
     return -1;
