@@ -31,7 +31,7 @@ static int nacl_irt_unlink (const char *name) {
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
-  return -NACL_SYSCALL (rename) (oldpath, newpath);
+  return NACL_SYSCALL (rename) (oldpath, newpath);
 }
 
 static int nacl_irt_gettod (struct timeval *tv) {
