@@ -220,7 +220,7 @@ __extern_always_inline int
 INTERNAL_SYSCALL_close_1 (int *err, unsigned int fd)
 {
   int rv = __nacl_irt_close(fd);
-  if(rv > 0) {
+  if(rv < 0) {
     *err = rv;
     return -1;
   }
