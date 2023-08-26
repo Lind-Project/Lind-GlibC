@@ -62,7 +62,7 @@ static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode) {
 }
 
 static int nacl_irt_close (int fd) {
-  return -NACL_SYSCALL (close) (fd);
+  return NACL_SYSCALL (close) (fd);
 }
 
 
@@ -529,18 +529,12 @@ size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t 
 
 static int nacl_irt_mkdir (const char *pathname, mode_t mode)
 {
-    int rv = NACL_SYSCALL (mkdir) (pathname, mode);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (mkdir) (pathname, mode);
 }
 
 static int nacl_irt_rmdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (rmdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (rmdir) (pathname);
 }
 
 static int nacl_irt_chdir (const char *pathname)

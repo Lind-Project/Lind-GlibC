@@ -219,7 +219,11 @@ INTERNAL_SYSCALL_clone_4(int *err, int (*fn)(void *), void *child_stack,
 __extern_always_inline int
 INTERNAL_SYSCALL_close_1 (int *err, unsigned int fd)
 {
-  *err = __nacl_irt_close(fd);
+  int rv = __nacl_irt_close(fd);
+  if(rv > 0) {
+    *err = rv;
+    return -1;
+  }
   return 0;
 }
 
@@ -966,7 +970,13 @@ INTERNAL_SYSCALL_mincore_3 (int *err, void *addr, size_t length,
 __extern_always_inline int
 INTERNAL_SYSCALL_mkdir_2 (int *err, const char *pathname, mode_t mode)
 {
-  *err = __nacl_irt_mkdir (pathname, mode);
+  int rv = __nacl_irt_mkdir (pathname, mode);
+  
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+
   return 0;
 }
 
@@ -1393,7 +1403,11 @@ INTERNAL_SYSCALL_renameat_4 (int *err, int olddfd, const char *oldname,
 __extern_always_inline int
 INTERNAL_SYSCALL_rmdir_1 (int *err, const char *pathname)
 {
-  *err = __nacl_irt_rmdir (pathname);
+  int rv = __nacl_irt_rmdir (pathname);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
   return 0;
 }
 
