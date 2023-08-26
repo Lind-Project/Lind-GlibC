@@ -9,7 +9,6 @@ int __close (int fd)
 {
   int result = __nacl_irt_close (fd);
   if (result < 0) {
-    // Safeposix returned positive if error occured
     __set_errno(-result);
     return -1;
   }
