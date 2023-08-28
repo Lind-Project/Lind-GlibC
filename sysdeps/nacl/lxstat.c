@@ -10,9 +10,9 @@ int __lxstat (int vers, const char *path, struct stat *buf)
     }
   struct nacl_abi_stat st;
   int result = __nacl_irt_lstat (path, &st);
-  if (result != 0)
+  if (result < 0)
     {
-      errno = result;
+      __set_errno(-result);
       return -1;
     }
   else

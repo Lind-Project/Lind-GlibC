@@ -1405,7 +1405,7 @@ INTERNAL_SYSCALL_rmdir_1 (int *err, const char *pathname)
 {
   int rv = __nacl_irt_rmdir (pathname);
   if(rv < 0) {
-    *err = -rv;
+    *err = rv;
     return -1;
   }
   return 0;
