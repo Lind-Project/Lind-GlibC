@@ -31,7 +31,7 @@ static int nacl_irt_unlink (const char *name) {
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
-  return -NACL_SYSCALL (rename) (oldpath, newpath);
+  return NACL_SYSCALL (rename) (oldpath, newpath);
 }
 
 static int nacl_irt_gettod (struct timeval *tv) {
@@ -135,11 +135,11 @@ static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
 }
 
 static int nacl_irt_fstatfs (int fd, struct statfs *buf) {
-  return -NACL_SYSCALL (fstatfs) (fd, buf);
+  return NACL_SYSCALL (fstatfs) (fd, buf);
 }
 
 static int nacl_irt_statfs (const char* path, struct statfs *buf) {
-  return -NACL_SYSCALL (statfs) (path, buf);
+  return NACL_SYSCALL (statfs) (path, buf);
 }
 
 static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
@@ -151,7 +151,7 @@ static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
 }
 
 static int nacl_irt_access (const char *file, int mode) {
-  return -NACL_SYSCALL (access) (file, mode);
+  return NACL_SYSCALL (access) (file, mode);
 }
 
 static int nacl_irt_getdents (int fd, struct dirent *buf, size_t count,
@@ -529,18 +529,12 @@ size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t 
 
 static int nacl_irt_mkdir (const char *pathname, mode_t mode)
 {
-    int rv = NACL_SYSCALL (mkdir) (pathname, mode);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (mkdir) (pathname, mode);
 }
 
 static int nacl_irt_rmdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (rmdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (rmdir) (pathname);
 }
 
 static int nacl_irt_chdir (const char *pathname)
@@ -816,17 +810,11 @@ static int nacl_irt_flock (int fd, int operation)
 
 static int nacl_irt_truncate (const char *path, off_t length)
 {
-    int rv = NACL_SYSCALL (truncate) (path, length);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (truncate) (path, length);
 }
 static int nacl_irt_ftruncate (int fd, off_t length)
 {
-    int rv = NACL_SYSCALL (ftruncate) (fd, length);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (ftruncate) (fd, length);
 }
 
 void

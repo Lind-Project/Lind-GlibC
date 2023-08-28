@@ -29,10 +29,10 @@ __statfs (const char *file, struct statfs *buf)
   int result;
   result = __nacl_irt_statfs(file, buf);
   if (result < 0) {
-    errno = -result;
-    result = -1;
+    __set_errno(-result);
+    return -1;
   }
-  return result;
+  return 0;
 
 }
 libc_hidden_def (__statfs)

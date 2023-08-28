@@ -21,7 +21,7 @@ __access (const char* file, int type)
     __set_errno (-return_code);
     return -1;
   }
-  return return_code;
+  return 0;
 }
 
 weak_alias (__access, access)
