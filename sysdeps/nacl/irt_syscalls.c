@@ -62,7 +62,7 @@ static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode) {
 }
 
 static int nacl_irt_close (int fd) {
-  return -NACL_SYSCALL (close) (fd);
+  return NACL_SYSCALL (close) (fd);
 }
 
 
@@ -131,7 +131,7 @@ static int nacl_irt_dup3 (int oldfd, int newfd, int flags) {
 }
 
 static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (fstat) (fd, st);
+  return NACL_SYSCALL (fstat) (fd, st);
 }
 
 static int nacl_irt_fstatfs (int fd, struct statfs *buf) {
@@ -143,11 +143,11 @@ static int nacl_irt_statfs (const char* path, struct statfs *buf) {
 }
 
 static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (stat) (pathname, st);
+  return NACL_SYSCALL (stat) (pathname, st);
 }
 
 static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (lstat) (pathname, st);
+  return NACL_SYSCALL (lstat) (pathname, st);
 }
 
 static int nacl_irt_access (const char *file, int mode) {
