@@ -9,7 +9,7 @@ ssize_t __ftruncate (int fd, off_t length)
 {
   int result = __nacl_irt_ftruncate (fd, length);
   if (result != 0) {
-    errno = result;
+    __set_errno(-result);
     return -1;
   }
   return 0;
