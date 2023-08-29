@@ -433,7 +433,7 @@ int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 
-int (*__nacl_irt_epoll_create) (int size, int *fd);
+int (*__nacl_irt_epoll_create) (int size);
 int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
                              struct epoll_event *event);
