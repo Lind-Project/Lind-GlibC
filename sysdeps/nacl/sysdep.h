@@ -966,7 +966,12 @@ INTERNAL_SYSCALL_mincore_3 (int *err, void *addr, size_t length,
 __extern_always_inline int
 INTERNAL_SYSCALL_mkdir_2 (int *err, const char *pathname, mode_t mode)
 {
-  *err = __nacl_irt_mkdir (pathname, mode);
+  int ret;
+  ret = __nacl_irt_mkdir (pathname, mode);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1393,7 +1398,12 @@ INTERNAL_SYSCALL_renameat_4 (int *err, int olddfd, const char *oldname,
 __extern_always_inline int
 INTERNAL_SYSCALL_rmdir_1 (int *err, const char *pathname)
 {
-  *err = __nacl_irt_rmdir (pathname);
+  int ret;
+  ret = __nacl_irt_rmdir (pathname);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1789,8 +1799,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_socket_3 (int *err, int domain, int type, int protocol)
 {
   int sd;
-  *err = __nacl_irt_socket (domain, type, protocol, &sd);
-  return sd;
+  sd = __nacl_irt_socket (domain, type, protocol);
+  if(sd < 0) {
+    *err = -sd;
+    return -1;
+  } else { return sd; }
 }
 
 __extern_always_inline int
@@ -1809,8 +1822,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_bind_3 (int *err, int sockfd, struct sockaddr* addr,
                          socklen_t addr_len)
 {
-  *err = __nacl_irt_bind (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_bind (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
@@ -1848,16 +1864,22 @@ INTERNAL_SYSCALL_setsockopt_5 (int *err, int sockfd, int level, int optname,
 __extern_always_inline int
 INTERNAL_SYSCALL_listen_2 (int *err, int sockfd, int backlog)
 {
-  *err = __nacl_irt_listen (sockfd, backlog);
-  return 0;
+  int rv = __nacl_irt_listen (sockfd, backlog);
+  if( rv < 0 ){
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_connect_3 (int *err, int sockfd, struct sockaddr* addr,
                             socklen_t addr_len)
 {
-  *err = __nacl_irt_connect (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_connect (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
@@ -1878,8 +1900,11 @@ INTERNAL_SYSCALL_shutdown_2 (int *err, int sockfd, int how)
 __extern_always_inline int
 INTERNAL_SYSCALL_send_4 (int *err, int sockfd, const void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_send (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_send (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 
@@ -1888,16 +1913,21 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
                            int flags, const struct sockaddr *dest_addr,
 						   socklen_t addrlen)
 {
-  int ret;
-  *err = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen, &ret);
-  return ret;
+  int ret = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_recv_4 (int *err, int sockfd, void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_recv (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_recv (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 
