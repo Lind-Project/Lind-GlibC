@@ -36,12 +36,12 @@ int __fxstat (int vers, int fd, struct stat *buf)
   }
   struct nacl_abi_stat nacl_buf;
   int result = __nacl_irt_fstat (fd, &nacl_buf);
-  if (result != 0) {
-    errno = result;
+  if (result < 0) {
+    __set_errno(-result);
     return -1;
   }
   __nacl_abi_stat_to_stat (&nacl_buf, buf);
-  return -result;
+  return 0;
 }
 hidden_def(__fxstat)
 #ifdef SHARED
