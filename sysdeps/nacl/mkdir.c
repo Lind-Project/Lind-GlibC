@@ -8,7 +8,7 @@ int __mkdir(const char* pathname, mode_t mode) {
       __set_errno (-ret);
       return -1;
   }
-  return ret;    
+  return 0;    
 }
 
 weak_alias (__mkdir, mkdir)
