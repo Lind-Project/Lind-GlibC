@@ -703,28 +703,20 @@ static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
     return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
-static int nacl_irt_epoll_create_lind (int size, int *fd)
+static int nacl_irt_epoll_create_lind (int size)
 {
-    int rv = NACL_SYSCALL (epoll_create)(size);
-    if (rv < 0)
-        return -rv;
-    *fd = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_create)(size);
 }
 
 static int nacl_irt_epoll_ctl_lind (int epfd, int op, int fd, struct epoll_event *event)
 {
-    return -NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
+    return NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
 }
 
 static int nacl_irt_epoll_wait_lind (int epfd, struct epoll_event *events,
-                                 int maxevents, int timeout, int *count)
+                                 int maxevents, int timeout)
 {
-    int rv = NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
 }
 
 static int nacl_irt_getcwd (char* buf, size_t size)

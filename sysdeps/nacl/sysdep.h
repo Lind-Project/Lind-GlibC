@@ -249,8 +249,11 @@ INTERNAL_SYSCALL_delete_module_4 (int *err, const char *name_user,
 __extern_always_inline int
 INTERNAL_SYSCALL_epoll_create_1 (int *err, int size)
 {
-  int fd;
-  *err = __nacl_irt_epoll_create (size, &fd);
+  int fd = __nacl_irt_epoll_create (size);
+  if(fd < 0) {
+    *err = -fd;
+    return -1;
+  }
   return fd;
 }
 
@@ -266,7 +269,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_ctl_4 (int *err, int epfd, int op, int fd,
 			      struct epoll_event *event)
 {
-  *err = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  int ret = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -294,9 +301,12 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_wait_4 (int *err, int epfd, struct epoll_event *events,
 			       int maxevents, int timeout)
 {
-  int count;
-  *err = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout, &count);
-  return count;
+  int ret = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
+  return ret;
 }
 
 __extern_always_inline int
