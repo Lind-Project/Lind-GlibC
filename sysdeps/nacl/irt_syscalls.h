@@ -57,7 +57,7 @@ extern int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
 extern int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
-extern int (*__nacl_irt_epoll_create) (int size, int *fd);
+extern int (*__nacl_irt_epoll_create) (int size);
 extern int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 extern int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
                                     struct epoll_event *event);

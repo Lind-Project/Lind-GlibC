@@ -703,7 +703,7 @@ static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
     return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
-static int nacl_irt_epoll_create_lind (int size, int *fd)
+static int nacl_irt_epoll_create_lind (int size)
 {
     return NACL_SYSCALL (epoll_create)(size);
 }

@@ -246,7 +246,7 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_create_1 (int *err, int size)
 {
   int fd;
-  fd = __nacl_irt_epoll_create (size, &fd);
+  fd = __nacl_irt_epoll_create (size);
   if(fd < 0) {
     *err = -fd;
     return -1;
