@@ -654,10 +654,7 @@ static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
         optlen = &bufsize;
     if(optval == NULL)
         optval = &buf;
-    int rv = NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
 }
 
 static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
@@ -666,10 +663,7 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
     if (optlen > 0 && !optval)
         return EFAULT;
     int buf=0; //dummy, in case optval is no provided
-    int rv = NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
 }
 
 static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[static 2])
@@ -689,10 +683,7 @@ static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
 static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
