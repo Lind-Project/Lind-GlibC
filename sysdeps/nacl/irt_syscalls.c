@@ -683,10 +683,7 @@ static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[
 static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,

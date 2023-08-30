@@ -1822,7 +1822,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getpeername_3 (int *err, int sockfd, struct sockaddr* addr,
                                 socklen_t* addr_len)
 {
-  *err = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  int rv = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
   return 0;
 }
 
