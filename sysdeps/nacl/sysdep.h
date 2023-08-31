@@ -1958,7 +1958,7 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
   if(ret < 0) {
     *err = -ret;
     return -1;
-  } else { return 0; }
+  } else { return ret; }
 }
 
 __extern_always_inline int
