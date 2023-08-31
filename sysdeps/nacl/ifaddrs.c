@@ -84,7 +84,7 @@ getifaddrs (struct ifaddrs **ifap)
 
 	if (result < 0) {
 		free(buf);
-		errno = result;
+		__set_errno(-result);
 		return -1;
 	}
 
