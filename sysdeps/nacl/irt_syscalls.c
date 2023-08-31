@@ -435,7 +435,7 @@ int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 
-int (*__nacl_irt_epoll_create) (int size, int *fd);
+int (*__nacl_irt_epoll_create) (int size);
 int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
                              struct epoll_event *event);
@@ -443,7 +443,7 @@ int (*__nacl_irt_epoll_pwait) (int epfd, struct epoll_event *events,
     int maxevents, int timeout, const sigset_t *sigmask, size_t sigset_size,
     int *count);
 int (*__nacl_irt_epoll_wait) (int epfd, struct epoll_event *events,
-                                int maxevents, int timeout, int *count);
+                                int maxevents, int timeout);
 int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
                           int timeout);
 int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
@@ -645,10 +645,7 @@ static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
 
 static int nacl_irt_shutdown (int sockfd, int how)
 {
-    int rv = NACL_SYSCALL (shutdown) (sockfd,how);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (shutdown) (sockfd,how);
 }
 
 static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
@@ -660,10 +657,7 @@ static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
         optlen = &bufsize;
     if(optval == NULL)
         optval = &buf;
-    int rv = NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
 }
 
 static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
@@ -672,36 +666,24 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
     if (optlen > 0 && !optval)
         return EFAULT;
     int buf=0; //dummy, in case optval is no provided
-    int rv = NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
 }
 
 static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[static 2])
 {
-    int rv = NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
-    if ( rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
 }
 
 static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
@@ -709,28 +691,20 @@ static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
     return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
-static int nacl_irt_epoll_create_lind (int size, int *fd)
+static int nacl_irt_epoll_create_lind (int size)
 {
-    int rv = NACL_SYSCALL (epoll_create)(size);
-    if (rv < 0)
-        return -rv;
-    *fd = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_create)(size);
 }
 
 static int nacl_irt_epoll_ctl_lind (int epfd, int op, int fd, struct epoll_event *event)
 {
-    return -NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
+    return NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
 }
 
 static int nacl_irt_epoll_wait_lind (int epfd, struct epoll_event *events,
-                                 int maxevents, int timeout, int *count)
+                                 int maxevents, int timeout)
 {
-    int rv = NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
 }
 
 static int nacl_irt_getcwd (char* buf, size_t size)
