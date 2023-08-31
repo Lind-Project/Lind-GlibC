@@ -246,7 +246,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_create_1 (int *err, int size)
 {
   int fd;
-  *err = __nacl_irt_epoll_create (size, &fd);
+  fd = __nacl_irt_epoll_create (size);
+  if(fd < 0) {
+    *err = -fd;
+    return -1;
+  }
   return fd;
 }
 
@@ -262,7 +266,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_ctl_4 (int *err, int epfd, int op, int fd,
 			      struct epoll_event *event)
 {
-  *err = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  int ret = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -290,9 +298,12 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_wait_4 (int *err, int epfd, struct epoll_event *events,
 			       int maxevents, int timeout)
 {
-  int count;
-  *err = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout, &count);
-  return count;
+  int ret = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
+  return ret;
 }
 
 __extern_always_inline int
@@ -1811,7 +1822,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getpeername_3 (int *err, int sockfd, struct sockaddr* addr,
                                 socklen_t* addr_len)
 {
-  *err = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  int rv = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
   return 0;
 }
 
@@ -1819,7 +1834,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getsockname_3 (int *err, int sockfd, struct sockaddr* addr,
                                 socklen_t* addr_len)
 {
-  *err = __nacl_irt_getsockname (sockfd, addr, addr_len);
+  int ret = __nacl_irt_getsockname (sockfd, addr, addr_len);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1827,7 +1846,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getsockopt_5 (int *err, int sockfd, int level, int optname,
                                void *optval, socklen_t *optlen)
 {
-  *err = __nacl_irt_getsockopt (sockfd, level, optname, optval, optlen);
+  int ret = __nacl_irt_getsockopt (sockfd, level, optname, optval, optlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1835,7 +1858,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_setsockopt_5 (int *err, int sockfd, int level, int optname,
                                const void *optval, socklen_t optlen)
 {
-  *err = __nacl_irt_setsockopt (sockfd, level, optname, optval, optlen);
+  int ret = __nacl_irt_setsockopt (sockfd, level, optname, optval, optlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1864,14 +1891,22 @@ __extern_always_inline int
 INTERNAL_SYSCALL_socketpair_4 (int *err, int domain, int type, int protocol,
                              int sv[2])
 {
-  *err = __nacl_irt_socketpair (domain, type, protocol, sv);
+  int ret = __nacl_irt_socketpair (domain, type, protocol, sv);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_shutdown_2 (int *err, int sockfd, int how)
 {
-  *err = __nacl_irt_shutdown (sockfd, how);
+  int ret = __nacl_irt_shutdown (sockfd, how);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1895,7 +1930,7 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
   if(ret < 0) {
     *err = -ret;
     return -1;
-  } else { return 0; }
+  } else { return ret; }
 }
 
 __extern_always_inline int
