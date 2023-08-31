@@ -2334,9 +2334,12 @@ INTERNAL_SYSCALL_wait4_4 (int *err, pid_t pid, int *status, int options,
 __extern_always_inline ssize_t
 INTERNAL_SYSCALL_write_3 (int *err, int fd, const void *buf, size_t count)
 {
-  size_t nwrote;
-  *err = __nacl_irt_write (fd, buf, count, &nwrote);
-  return nwrote;
+  int ret = __nacl_irt_write (fd, buf, count);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
+  return ret;
 }
 
 __extern_always_inline ssize_t
