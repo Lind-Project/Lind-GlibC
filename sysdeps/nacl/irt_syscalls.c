@@ -639,10 +639,7 @@ static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
 
 static int nacl_irt_shutdown (int sockfd, int how)
 {
-    int rv = NACL_SYSCALL (shutdown) (sockfd,how);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (shutdown) (sockfd,how);
 }
 
 static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
@@ -668,10 +665,7 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
 
 static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[static 2])
 {
-    int rv = NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
-    if ( rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
 }
 
 static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,

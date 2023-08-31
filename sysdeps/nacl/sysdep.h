@@ -1891,14 +1891,22 @@ __extern_always_inline int
 INTERNAL_SYSCALL_socketpair_4 (int *err, int domain, int type, int protocol,
                              int sv[2])
 {
-  *err = __nacl_irt_socketpair (domain, type, protocol, sv);
+  int ret = __nacl_irt_socketpair (domain, type, protocol, sv);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_shutdown_2 (int *err, int sockfd, int how)
 {
-  *err = __nacl_irt_shutdown (sockfd, how);
+  int ret = __nacl_irt_shutdown (sockfd, how);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1922,7 +1930,7 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
   if(ret < 0) {
     *err = -ret;
     return -1;
-  } else { return 0; }
+  } else { return ret; }
 }
 
 __extern_always_inline int
