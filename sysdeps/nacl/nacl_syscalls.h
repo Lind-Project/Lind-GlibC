@@ -115,9 +115,15 @@
 #define NACL_sys_second_tls_set         85
 #define NACL_sys_second_tls_get         86
 #define NACL_sys_srpc_get_fd            90
-#define NACL_sys_sem_create             100
-#define NACL_sys_sem_wait               101
-#define NACL_sys_sem_post               102
+
+#define NACL_sys_sem_create             91
+#define NACL_sys_sem_wait               92
+#define NACL_sys_sem_trywait            93
+#define NACL_sys_sem_timedwait          94
+#define NACL_sys_sem_post               95
+#define NACL_sys_sem_destroy            96
+#define NACL_sys_sem_getvalue           97
+
 #define NACL_sys_sem_get_value          103
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
@@ -266,9 +272,14 @@ typedef int (*TYPE_nacl_cond_destroy) (int cv);
 typedef int (*TYPE_nacl_cond_timed_wait_abs) (int condvar,
                                               int mutex,
                                               const struct timespec *abstime);
-typedef int (*TYPE_nacl_sem_create) (int32_t value);
-typedef int (*TYPE_nacl_sem_wait) (int sem);
+
+typedef int (*TYPE_nacl_sem_init) (unsigned int sem, int pshared, int value);
+typedef int (*TYPE_nacl_sem_wait) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_trywait) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
 typedef int (*TYPE_nacl_sem_post) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_destroy) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_getvalue) (unsigned int sem, int *sval);
 
 typedef int (*TYPE_nacl_getdents) (int desc, void *dirp, size_t count);
 typedef int (*TYPE_nacl_gettimeofday) (struct timeval *tv, void *tz);

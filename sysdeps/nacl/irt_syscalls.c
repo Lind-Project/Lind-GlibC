@@ -331,8 +331,32 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
   return 0;
 }
 
+static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
+  return -NACL_SYSCALL (sem_init) (sem, pshared, value);
+}
+
+static int nacl_irt_sem_wait (unsigned int sem) {
+  return -NACL_SYSCALL (sem_wait) (sem);
+}
+
+static int nacl_irt_sem_trywait (unsigned int sem) {
+  return -NACL_SYSCALL (sem_trywait) (sem);
+}
+
+static int nacl_irt_sem_timedwait (unsigned int sem, const struct timespec *abs_timeout) {
+  return -NACL_SYSCALL (sem_timedwait) (sem), abs_timeout;
+}
+
 static int nacl_irt_sem_post (unsigned int sem) {
   return -NACL_SYSCALL (sem_post) (sem);
+}
+
+static int nacl_irt_sem_destroy (unsigned int sem) {
+  return -NACL_SYSCALL (sem_destroy) (sem);
+}
+
+static int nacl_irt_sem_getvalue (unsigned int sem, int *sval) {
+  return -NACL_SYSCALL (sem_getvalue) (sem, sval);
 }
 
 static int nacl_irt_tls_init (void *tdb) {
@@ -501,7 +525,14 @@ int (*__nacl_irt_cond_broadcast) (int cond_handle);
 int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
+
+int (*__nacl_irt_sem_init) (unsigned int sem);
+int (*__nacl_irt_sem_wait) (unsigned int sem);
+int (*__nacl_irt_sem_trywait) (unsigned int sem);
+int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
 int (*__nacl_irt_sem_post) (unsigned int sem);
+int (*__nacl_irt_sem_destroy) (unsigned int sem);
+int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
 
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
