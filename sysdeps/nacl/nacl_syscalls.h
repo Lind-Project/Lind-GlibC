@@ -266,8 +266,6 @@ typedef int (*TYPE_nacl_cond_destroy) (int cv);
 typedef int (*TYPE_nacl_cond_timed_wait_abs) (int condvar,
                                               int mutex,
                                               const struct timespec *abstime);
-typedef int (*TYPE_nacl_sem_post) (int cv);
-
 typedef int (*TYPE_nacl_sem_create) (int32_t value);
 typedef int (*TYPE_nacl_sem_wait) (int sem);
 typedef int (*TYPE_nacl_sem_post) (unsigned int sem);

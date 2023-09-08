@@ -32,7 +32,14 @@ int
 __new_sem_post (sem_t *sem)
 {
   unsigned int semptr = (unsigned int) sem;
-  return __nacl_irt_sem_post(semptr);
+  int result = __nacl_irt_sem_post(semptr);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
+
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_post, sem_post, GLIBC_2_1);
 
