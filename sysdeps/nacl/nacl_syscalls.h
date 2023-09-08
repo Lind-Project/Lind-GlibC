@@ -124,7 +124,6 @@
 #define NACL_sys_sem_destroy            96
 #define NACL_sys_sem_getvalue           97
 
-#define NACL_sys_sem_get_value          103
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
