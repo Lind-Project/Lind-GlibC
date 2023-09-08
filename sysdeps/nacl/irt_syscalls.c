@@ -344,7 +344,7 @@ static int nacl_irt_sem_trywait (unsigned int sem) {
 }
 
 static int nacl_irt_sem_timedwait (unsigned int sem, const struct timespec *abs_timeout) {
-  return -NACL_SYSCALL (sem_timedwait) (sem), abs_timeout;
+  return -NACL_SYSCALL (sem_timedwait) (sem, abs_timeout);
 }
 
 static int nacl_irt_sem_post (unsigned int sem) {
