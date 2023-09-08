@@ -116,7 +116,7 @@
 #define NACL_sys_second_tls_get         86
 #define NACL_sys_srpc_get_fd            90
 
-#define NACL_sys_sem_create             91
+#define NACL_sys_sem_init               91
 #define NACL_sys_sem_wait               92
 #define NACL_sys_sem_trywait            93
 #define NACL_sys_sem_timedwait          94
