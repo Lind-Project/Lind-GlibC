@@ -158,6 +158,7 @@ extern int (*__nacl_irt_cond_broadcast) (int cond_handle);
 extern int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 extern int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                               const struct timespec *abstime);
+extern int (*__nacl_irt_sem_post) (unsigned int sem);
 
 extern int (*__nacl_irt_tls_init) (void *tdb);
 extern void *(*__nacl_irt_tls_get) (void);

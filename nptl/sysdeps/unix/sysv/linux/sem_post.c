@@ -31,8 +31,8 @@
 int
 __new_sem_post (sem_t *sem)
 {
-  
-  return 0;
+  unsigned int semptr = (unsigned int) sem;
+  return __nacl_irt_sem_post(semptr);
 }
 versioned_symbol (libpthread, __new_sem_post, sem_post, GLIBC_2_1);
 

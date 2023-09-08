@@ -331,6 +331,10 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
   return 0;
 }
 
+static int nacl_irt_sem_post (unsigned int sem) {
+  return -NACL_SYSCALL (sem_post) (sem);
+}
+
 static int nacl_irt_tls_init (void *tdb) {
   return -NACL_SYSCALL (tls_init) (tdb);
 }
@@ -497,6 +501,7 @@ int (*__nacl_irt_cond_broadcast) (int cond_handle);
 int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
+int (*__nacl_irt_sem_post) (unsigned int sem);
 
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
@@ -1092,6 +1097,7 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sem_post = nacl_irt_sem_post;
 }
 
 size_t nacl_interface_query(const char *interface_ident,
