@@ -526,7 +526,7 @@ int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
 
-int (*__nacl_irt_sem_init) (unsigned int sem);
+int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
 int (*__nacl_irt_sem_wait) (unsigned int sem);
 int (*__nacl_irt_sem_trywait) (unsigned int sem);
 int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
