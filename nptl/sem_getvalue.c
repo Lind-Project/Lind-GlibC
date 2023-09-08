@@ -28,7 +28,7 @@ __new_sem_getvalue (sem, sval)
      int *sval;
 {
   unsigned int semptr = (unsigned int) sem;
-  int result = __nacl_irt_sem_gevalue(semptr, sval);
+  int result = __nacl_irt_sem_getvalue(semptr, sval);
   
   if (result < 0) {
       __set_errno (-result);
