@@ -26,10 +26,15 @@ int
 __new_sem_destroy (sem)
      sem_t *sem;
 {
-  /* XXX Check for valid parameter.  */
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_destroy(semptr);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
 
-  /* Nothing to do.  */
-  return 0;
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_destroy, sem_destroy, GLIBC_2_1);
 #if SHLIB_COMPAT(libpthread, GLIBC_2_0, GLIBC_2_1)
