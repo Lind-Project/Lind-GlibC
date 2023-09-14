@@ -13,6 +13,7 @@
 # include <ldsodefs.h>
 #endif
 #include "trusted-dirs.h"
+#include <stdio.h>
 
 static void nacl_irt_exit (int status) {
   NACL_SYSCALL (exit) (status);
