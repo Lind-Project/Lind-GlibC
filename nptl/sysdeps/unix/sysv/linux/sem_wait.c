@@ -26,6 +26,7 @@
 
 #include <pthreadP.h>
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
 
 
 void

@@ -25,6 +25,7 @@
 #include <semaphore.h>
 
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
 
 
 int

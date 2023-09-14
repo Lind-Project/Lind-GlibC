@@ -20,6 +20,7 @@
 #include <semaphore.h>
 #include <shlib-compat.h>
 #include "semaphoreP.h"
+#include <irt_syscalls.h>
 
 
 int
