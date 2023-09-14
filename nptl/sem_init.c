@@ -23,6 +23,7 @@
 #include <shlib-compat.h>
 #include "semaphoreP.h"
 #include <kernel-features.h>
+#include <irt_syscalls.h>
 
 
 int
