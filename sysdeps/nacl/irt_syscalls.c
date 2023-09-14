@@ -333,6 +333,8 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
 }
 
 static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
+  size_t nwrote;
+  __nacl_irt_write(1, "init\n", 5, &nwrote);
   return NACL_SYSCALL (sem_init) (sem, pshared, value);
 }
 
