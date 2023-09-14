@@ -33,7 +33,7 @@ __new_sem_init (sem, pshared, value)
      unsigned int value;
 {
   unsigned int semptr = (unsigned int) sem;
-  __nacl_irt_getpid();
+  int resutl = __nacl_irt_getpid();
   // int result = __nacl_irt_sem_init(semptr, pshared, value);
   
   if (result < 0) {
