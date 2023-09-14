@@ -29,6 +29,7 @@
 /* Get the definition for sem_t.  */
 #include <bits/semaphore.h>
 
+#include <irt_syscalls.h>
 
 __BEGIN_DECLS
 
