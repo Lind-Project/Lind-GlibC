@@ -13,7 +13,6 @@
 # include <ldsodefs.h>
 #endif
 #include "trusted-dirs.h"
-#include <stdio.h>
 
 static void nacl_irt_exit (int status) {
   NACL_SYSCALL (exit) (status);
@@ -333,8 +332,6 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
 }
 
 static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
-  size_t nwrote;
-  __nacl_irt_write(1, "init\n", 5, &nwrote);
   return NACL_SYSCALL (sem_init) (sem, pshared, value);
 }
 
@@ -1131,7 +1128,14 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sem_init = nacl_irt_sem_init;
+  __nacl_irt_sem_wait = nacl_irt_sem_wait;
+  __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;
+  __nacl_irt_sem_trywait = nacl_irt_sem_trywait;
   __nacl_irt_sem_post = nacl_irt_sem_post;
+  __nacl_irt_sem_destroy = nacl_irt_sem_destroy;
+  __nacl_irt_sem_getvalue = nacl_irt_sem_getvalue;
+
 }
 
 size_t nacl_interface_query(const char *interface_ident,
