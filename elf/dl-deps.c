@@ -63,10 +63,10 @@ openaux (void *a)
   struct openaux_args *args = (struct openaux_args *) a;
 
   args->aux = _dl_map_object (args->map, args->name, 0,
-			      (args->map->l_type == lt_executable
-			       ? lt_library : args->map->l_type),
-			      args->trace_mode, args->open_mode,
-			      args->map->l_ns);
+            (args->map->l_type == lt_executable
+            ? lt_library : args->map->l_type),
+            args->trace_mode, args->open_mode,
+            args->map->l_ns);
 }
 
 static ptrdiff_t
