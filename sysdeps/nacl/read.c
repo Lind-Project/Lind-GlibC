@@ -8,13 +8,12 @@
 
 ssize_t __libc_read (int fd, void *buf, size_t size)
 {
-  size_t nread;
-  int result = __nacl_irt_read (fd, buf, size, &nread);
-  if (result != 0) {
-    errno = result;
+  int result = __nacl_irt_read (fd, buf, size);
+  if (result < 0) {
+    __set_errno(-result);
     return -1;
   }
-  return nread;
+  return result;
 }
 libc_hidden_def (__libc_read)
 weak_alias (__libc_read, __read)
