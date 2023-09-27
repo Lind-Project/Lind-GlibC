@@ -25,23 +25,21 @@
 #include <semaphore.h>
 
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
 
 
 int
 __new_sem_trywait (sem_t *sem)
 {
-  int *futex = (int *) sem;
-  int val;
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_trywait(semptr);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
 
-  if (*futex > 0)
-    {
-      val = atomic_decrement_if_positive (futex);
-      if (val > 0)
-	return 0;
-    }
-
-  __set_errno (EAGAIN);
-  return -1;
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_trywait, sem_trywait, GLIBC_2_1);
 #if SHLIB_COMPAT (libpthread, GLIBC_2_0, GLIBC_2_1)

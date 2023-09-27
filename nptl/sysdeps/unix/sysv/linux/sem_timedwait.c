@@ -26,6 +26,7 @@
 
 #include <pthreadP.h>
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
 
 
 extern void __sem_wait_cleanup (void *arg) attribute_hidden;
@@ -34,86 +35,13 @@ extern void __sem_wait_cleanup (void *arg) attribute_hidden;
 int
 sem_timedwait (sem_t *sem, const struct timespec *abstime)
 {
-  struct new_sem *isem = (struct new_sem *) sem;
-  int err;
-
-  if (atomic_decrement_if_positive (&isem->value) > 0)
-    return 0;
-
-  if (abstime->tv_nsec < 0 || abstime->tv_nsec >= 1000000000)
-    {
-      __set_errno (EINVAL);
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_timedwait(semptr, abstime);
+  
+  if (result < 0) {
+      __set_errno (-result);
       return -1;
-    }
+  }
 
-  atomic_increment (&isem->nwaiters);
-
-  pthread_cleanup_push (__sem_wait_cleanup, isem);
-
-  while (1)
-    {
-#ifndef lll_futex_timed_wait_abs
-      struct timeval tv;
-      struct timespec rt;
-      int sec, nsec;
-
-      /* Get the current time.  */
-      __gettimeofday (&tv, NULL);
-
-      /* Compute relative timeout.  */
-      sec = abstime->tv_sec - tv.tv_sec;
-      nsec = abstime->tv_nsec - tv.tv_usec * 1000;
-      if (nsec < 0)
-	{
-	  nsec += 1000000000;
-	  --sec;
-	}
-
-      /* Already timed out?  */
-      err = -ETIMEDOUT;
-      if (sec < 0)
-	{
-	  __set_errno (ETIMEDOUT);
-	  err = -1;
-	  break;
-	}
-
-      /* Do wait.  */
-      rt.tv_sec = sec;
-      rt.tv_nsec = nsec;
-#endif
-
-      /* Enable asynchronous cancellation.  Required by the standard.  */
-      int oldtype = __pthread_enable_asynccancel ();
-
-#ifndef lll_futex_timed_wait_abs
-      err = lll_futex_timed_wait (&isem->value, 0, &rt,
-				  isem->private ^ FUTEX_PRIVATE_FLAG);
-#else
-      err = lll_futex_timed_wait_abs (&isem->value, 0, abstime,
-				      isem->private ^ FUTEX_PRIVATE_FLAG);
-#endif
-
-      /* Disable asynchronous cancellation.  */
-      __pthread_disable_asynccancel (oldtype);
-
-      if (err != 0 && err != -EWOULDBLOCK)
-	{
-	  __set_errno (-err);
-	  err = -1;
-	  break;
-	}
-
-      if (atomic_decrement_if_positive (&isem->value) > 0)
-	{
-	  err = 0;
-	  break;
-	}
-    }
-
-  pthread_cleanup_pop (0);
-
-  atomic_decrement (&isem->nwaiters);
-
-  return err;
+  return result; 
 }

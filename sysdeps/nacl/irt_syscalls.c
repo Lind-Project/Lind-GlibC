@@ -310,6 +310,34 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
   return 0;
 }
 
+static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
+  return NACL_SYSCALL (sem_init) (sem, pshared, value);
+}
+
+static int nacl_irt_sem_wait (unsigned int sem) {
+  return NACL_SYSCALL (sem_wait) (sem);
+}
+
+static int nacl_irt_sem_trywait (unsigned int sem) {
+  return NACL_SYSCALL (sem_trywait) (sem);
+}
+
+static int nacl_irt_sem_timedwait (unsigned int sem, const struct timespec *abs_timeout) {
+  return NACL_SYSCALL (sem_timedwait) (sem, abs_timeout);
+}
+
+static int nacl_irt_sem_post (unsigned int sem) {
+  return NACL_SYSCALL (sem_post) (sem);
+}
+
+static int nacl_irt_sem_destroy (unsigned int sem) {
+  return NACL_SYSCALL (sem_destroy) (sem);
+}
+
+static int nacl_irt_sem_getvalue (unsigned int sem, int *sval) {
+  return NACL_SYSCALL (sem_getvalue) (sem, sval);
+}
+
 static int nacl_irt_tls_init (void *tdb) {
   return -NACL_SYSCALL (tls_init) (tdb);
 }
@@ -476,6 +504,14 @@ int (*__nacl_irt_cond_broadcast) (int cond_handle);
 int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
+
+int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
+int (*__nacl_irt_sem_wait) (unsigned int sem);
+int (*__nacl_irt_sem_trywait) (unsigned int sem);
+int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+int (*__nacl_irt_sem_post) (unsigned int sem);
+int (*__nacl_irt_sem_destroy) (unsigned int sem);
+int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
 
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
@@ -1071,6 +1107,14 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sem_init = nacl_irt_sem_init;
+  __nacl_irt_sem_wait = nacl_irt_sem_wait;
+  __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;
+  __nacl_irt_sem_trywait = nacl_irt_sem_trywait;
+  __nacl_irt_sem_post = nacl_irt_sem_post;
+  __nacl_irt_sem_destroy = nacl_irt_sem_destroy;
+  __nacl_irt_sem_getvalue = nacl_irt_sem_getvalue;
+
 }
 
 size_t nacl_interface_query(const char *interface_ident,

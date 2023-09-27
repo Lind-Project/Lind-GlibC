@@ -26,6 +26,7 @@
 
 #include <pthreadP.h>
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
 
 
 void
@@ -41,46 +42,15 @@ __sem_wait_cleanup (void *arg)
 int
 __new_sem_wait (sem_t *sem)
 {
-  struct new_sem *isem = (struct new_sem *) sem;
-  int err;
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_wait(semptr);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
 
-  if (atomic_decrement_if_positive (&isem->value) > 0)
-    return 0;
-
-  atomic_increment (&isem->nwaiters);
-
-  pthread_cleanup_push (__sem_wait_cleanup, isem);
-
-  while (1)
-    {
-      /* Enable asynchronous cancellation.  Required by the standard.  */
-      int oldtype = __pthread_enable_asynccancel ();
-
-      err = lll_futex_wait (&isem->value, 0,
-			    isem->private ^ FUTEX_PRIVATE_FLAG);
-
-      /* Disable asynchronous cancellation.  */
-      __pthread_disable_asynccancel (oldtype);
-
-      if (err != 0 && err != -EWOULDBLOCK)
-	{
-	  __set_errno (-err);
-	  err = -1;
-	  break;
-	}
-
-      if (atomic_decrement_if_positive (&isem->value) > 0)
-	{
-	  err = 0;
-	  break;
-	}
-    }
-
-  pthread_cleanup_pop (0);
-
-  atomic_decrement (&isem->nwaiters);
-
-  return err;
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_wait, sem_wait, GLIBC_2_1);
 

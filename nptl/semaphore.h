@@ -29,7 +29,6 @@
 /* Get the definition for sem_t.  */
 #include <bits/semaphore.h>
 
-
 __BEGIN_DECLS
 
 /* Initialize semaphore object SEM to VALUE.  If PSHARED then share it
