@@ -9,7 +9,7 @@ int __mprotect (void *addr, size_t len, int prot)
 {
   int result = __nacl_irt_mprotect (addr, len, prot);
   if (result != 0) {
-    errno = result;
+    __set_errno(-result);
     return -1;
   }
   return 0;
