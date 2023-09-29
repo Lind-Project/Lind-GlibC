@@ -79,45 +79,24 @@ static int nacl_irt_ioctl (int fd, unsigned long request, void* arg_ptr) {
   return NACL_SYSCALL (ioctl) (fd, request, arg_ptr);
 }
 
-static int nacl_irt_read (int fd, void *buf, size_t count, size_t *nread) {
-  int rv = NACL_SYSCALL (read) (fd, buf, count);
-  if (rv < 0)
-    return -rv;
-  *nread = rv;
-  return 0;
+static int nacl_irt_read (int fd, void *buf, size_t count) {
+  return NACL_SYSCALL (read) (fd, buf, count);
 }
 
-static int nacl_irt_pread (int fd, void *buf, size_t count, size_t *nread, off_t offset) {
-  int rv = NACL_SYSCALL (pread) (fd, buf, count, offset);
-  if (rv < 0)
-    return -rv;
-  *nread = rv;
-  return 0;
+static int nacl_irt_pread (int fd, void *buf, size_t count, off_t offset) {
+  return NACL_SYSCALL (pread) (fd, buf, count, offset);
 }
 
-static int nacl_irt_write (int fd, const void *buf, size_t count, size_t *nwrote) {
-  int rv = NACL_SYSCALL (write) (fd, buf, count);
-  if (rv < 0)
-    return -rv;
-  *nwrote = rv;
-  return 0;
+static int nacl_irt_write (int fd, const void *buf, size_t count) {
+  return NACL_SYSCALL (write) (fd, buf, count);
 }
 
-static int nacl_irt_pwrite (int fd, const void *buf, size_t count, size_t *nwrote, off_t offset) {
-  int rv = NACL_SYSCALL (pwrite) (fd, buf, count, offset);
-  if (rv < 0)
-    return -rv;
-  *nwrote = rv;
-  return 0;
+static int nacl_irt_pwrite (int fd, const void *buf, size_t count, off_t offset) {
+  return NACL_SYSCALL (pwrite) (fd, buf, count, offset);
 }
 
-static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence,
-                          off_t *new_offset) {
-  int rv = NACL_SYSCALL (lseek) (fd, &offset, whence);
-  if (rv < 0)
-    return -rv;
-  *new_offset = offset;
-  return 0;
+static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence) {
+  return NACL_SYSCALL (lseek) (fd, &offset, whence);
 }
 
 static int nacl_irt_dup (int oldfd) {
@@ -333,6 +312,34 @@ static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
   return 0;
 }
 
+static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
+  return NACL_SYSCALL (sem_init) (sem, pshared, value);
+}
+
+static int nacl_irt_sem_wait (unsigned int sem) {
+  return NACL_SYSCALL (sem_wait) (sem);
+}
+
+static int nacl_irt_sem_trywait (unsigned int sem) {
+  return NACL_SYSCALL (sem_trywait) (sem);
+}
+
+static int nacl_irt_sem_timedwait (unsigned int sem, const struct timespec *abs_timeout) {
+  return NACL_SYSCALL (sem_timedwait) (sem, abs_timeout);
+}
+
+static int nacl_irt_sem_post (unsigned int sem) {
+  return NACL_SYSCALL (sem_post) (sem);
+}
+
+static int nacl_irt_sem_destroy (unsigned int sem) {
+  return NACL_SYSCALL (sem_destroy) (sem);
+}
+
+static int nacl_irt_sem_getvalue (unsigned int sem, int *sval) {
+  return NACL_SYSCALL (sem_getvalue) (sem, sval);
+}
+
 static int nacl_irt_tls_init (void *tdb) {
   return -NACL_SYSCALL (tls_init) (tdb);
 }
@@ -407,11 +414,11 @@ int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
 int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 int (*__nacl_irt_close) (int fd);
-int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
-int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
-int (*__nacl_irt_write) (int fd, const void *buf, size_t count, size_t *nwrote);
-int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, size_t *nwrote, off_t offset);
-int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
+int (*__nacl_irt_read) (int fd, void *buf, size_t count);
+int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
+int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
+int (*__nacl_irt_seek) (int fd, off_t offset, int whence);
 int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
@@ -499,6 +506,14 @@ int (*__nacl_irt_cond_broadcast) (int cond_handle);
 int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
+
+int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
+int (*__nacl_irt_sem_wait) (unsigned int sem);
+int (*__nacl_irt_sem_trywait) (unsigned int sem);
+int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+int (*__nacl_irt_sem_post) (unsigned int sem);
+int (*__nacl_irt_sem_destroy) (unsigned int sem);
+int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
 
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
@@ -1128,6 +1143,14 @@ init_irt_table (void)
   __nacl_irt_kill = nacl_irt_kill;
   __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lindsetitimer = nacl_irt_lindsetitimer;
+  __nacl_irt_sem_init = nacl_irt_sem_init;
+  __nacl_irt_sem_wait = nacl_irt_sem_wait;
+  __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;
+  __nacl_irt_sem_trywait = nacl_irt_sem_trywait;
+  __nacl_irt_sem_post = nacl_irt_sem_post;
+  __nacl_irt_sem_destroy = nacl_irt_sem_destroy;
+  __nacl_irt_sem_getvalue = nacl_irt_sem_getvalue;
+
 }
 
 size_t nacl_interface_query(const char *interface_ident,

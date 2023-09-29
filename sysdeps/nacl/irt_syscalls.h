@@ -109,15 +109,12 @@ extern int (*__nacl_irt_shutdown) (int sockfd, int how);
 extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 
 extern int (*__nacl_irt_close) (int fd);
-extern int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
-extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count,
-                                size_t *nwrote);
-extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
-extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count,
-                                size_t *nwrote, off_t offset);
+extern int (*__nacl_irt_read) (int fd, void *buf, size_t count);
+extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
+extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
 
-extern int (*__nacl_irt_seek) (int fd, nacl_abi_off_t offset, int whence,
-                               nacl_abi_off_t *new_offset);
+extern int (*__nacl_irt_seek) (int fd, nacl_abi_off_t offset, int whence);
 extern int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 extern int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
 extern int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
@@ -160,6 +157,15 @@ extern int (*__nacl_irt_cond_broadcast) (int cond_handle);
 extern int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 extern int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                               const struct timespec *abstime);
+
+extern int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
+extern int (*__nacl_irt_sem_wait) (unsigned int sem);
+extern int (*__nacl_irt_sem_trywait) (unsigned int sem);
+extern int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+extern int (*__nacl_irt_sem_post) (unsigned int sem);
+extern int (*__nacl_irt_sem_destroy) (unsigned int sem);
+extern int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
+
 
 extern int (*__nacl_irt_tls_init) (void *tdb);
 extern void *(*__nacl_irt_tls_get) (void);
