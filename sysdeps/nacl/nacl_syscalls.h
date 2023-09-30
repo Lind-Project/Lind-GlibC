@@ -207,7 +207,7 @@ typedef int (*TYPE_nacl_statfs) (const char *path, struct statfs *buf);
 typedef int (*TYPE_nacl_access) (const char *name, int mode);
 typedef int (*TYPE_nacl_write) (int desc, void const *buf, size_t count);
 typedef int (*TYPE_nacl_open) (char const *pathname, int flags, mode_t mode);
-typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
+typedef int (*TYPE_nacl_lseek) (int desc, off_t offset, int whence);
 typedef int (*TYPE_nacl_stat) (const char *file, struct nacl_abi_stat *st);
 typedef int (*TYPE_nacl_lstat) (const char *file, struct nacl_abi_stat *st);
 
