@@ -12,7 +12,7 @@ loff_t __llseek (int fd, loff_t offset, int whence)
       __set_errno(-result);
       return -1;
     }
-  return offset;
+  return result;
 }
 weak_alias (__llseek, llseek)
 
