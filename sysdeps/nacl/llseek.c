@@ -5,10 +5,10 @@
 
 loff_t __llseek (int fd, loff_t offset, int whence)
 {
-  int result = __nacl_irt_seek (fd, offset, whence);
-  if (result < 0)
+  int result = __nacl_irt_seek (fd, offset, whence, &offset);
+  if (result != 0)
     {
-      __set_errno(-result);
+      errno = result;
       return -1;
     }
   return offset;
