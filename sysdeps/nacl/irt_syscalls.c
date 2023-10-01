@@ -95,8 +95,12 @@ static int nacl_irt_pwrite (int fd, const void *buf, size_t count, off_t offset)
   return NACL_SYSCALL (pwrite) (fd, buf, count, offset);
 }
 
-static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence) {
-  return NACL_SYSCALL (lseek) (fd, &offset, whence);
+static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence, off_t *new_offset) {
+  int rv = NACL_SYSCALL (lseek) (fd, &offset, whence);
+  if (rv < 0)
+    return -rv;
+  *new_offset = offset;
+  return 0;
 }
 
 static int nacl_irt_dup (int oldfd) {
@@ -418,7 +422,7 @@ int (*__nacl_irt_read) (int fd, void *buf, size_t count);
 int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
 int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
 int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
-int (*__nacl_irt_seek) (int fd, off_t offset, int whence);
+int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
 int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
