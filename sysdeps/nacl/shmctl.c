@@ -1,5 +1,6 @@
 #include <sys/shm.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include <nacl_stat.h>
 #include <irt_syscalls.h>
@@ -32,6 +33,8 @@ int __shmctl (int shmid, int cmd, struct shmid_ds *buf) {
     struct nacl_abi_shmid_ds nacl_buf;
 
     if (cmd == IPC_STAT)  {
+      printf("%p:\n", buf);
+      fflush(stdout);
       if (buf == NULL) {
         __set_errno (14);
         return -1;
