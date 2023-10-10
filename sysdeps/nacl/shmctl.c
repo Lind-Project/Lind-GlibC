@@ -1,6 +1,5 @@
 #include <sys/shm.h>
 #include <errno.h>
-#include <stdio.h>
 
 #include <nacl_stat.h>
 #include <irt_syscalls.h>
