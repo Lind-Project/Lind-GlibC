@@ -33,10 +33,8 @@ int __shmctl (int shmid, int cmd, struct shmid_ds *buf) {
     struct nacl_abi_shmid_ds nacl_buf;
 
     if (cmd == IPC_STAT)  {
-      printf("%p:\n", buf);
-      fflush(stdout);
       if (buf == NULL) {
-        __set_errno (14);
+        __set_errno (EFAULT);
         return -1;
       }
       result = __nacl_irt_shmctl(shmid, cmd, &nacl_buf);
