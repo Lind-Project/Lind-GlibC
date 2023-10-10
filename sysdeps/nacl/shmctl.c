@@ -32,7 +32,7 @@ int __shmctl (int shmid, int cmd, struct shmid_ds *buf) {
     struct nacl_abi_shmid_ds nacl_buf;
 
     if (cmd == IPC_STAT)  {
-      if (buf == NULL) {
+      if (&nacl_buf == NULL) {
         __set_errno (14);
         return -1;
       }
