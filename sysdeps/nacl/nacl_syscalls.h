@@ -129,10 +129,6 @@
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
-#define NACL_sys_reg_restore            107
-#define NACL_sys_reg_restore_2          108
-
-#define NACL_sys_lind_api               113
 
 #define NACL_sys_pipe                   114
 #define NACL_sys_pipe2                  115
@@ -178,6 +174,8 @@
 #define NACL_sys_epoll_wait             159
 
 #define NACL_sys_fchdir			            161
+
+// 250-255 reserved for signal register restore
 
 #define NACL_MAX_SYSCALLS               256
 
