@@ -181,7 +181,7 @@ static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
 }
 
 static int nacl_irt_shmdt (void *shmaddr) {
-  return -NACL_SYSCALL (shmdt) (shmaddr);
+  return NACL_SYSCALL (shmdt) (shmaddr);
 }
 
 static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
@@ -199,11 +199,11 @@ static int nacl_irt_mmap (void **addr, size_t len,
 }
 
 static int nacl_irt_munmap (void *addr, size_t len) {
-  return -NACL_SYSCALL (munmap) (addr, len);
+  return NACL_SYSCALL (munmap) (addr, len);
 }
 
 static int nacl_irt_mprotect (void *addr, size_t len, int prot) {
-  return -NACL_SYSCALL (mprotect) (addr, len, prot);
+  return NACL_SYSCALL (mprotect) (addr, len, prot);
 }
 
 static int nacl_irt_dyncode_create(void *dest, const void *src, size_t size) {
