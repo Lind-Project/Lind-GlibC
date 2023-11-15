@@ -455,9 +455,12 @@ INTERNAL_SYSCALL_fsetxattr_5 (int *err, int filedes, const char *name,
 __extern_always_inline int
 INTERNAL_SYSCALL_fsync_1 (int *err, int fd)
 {
-  log_unimplemented("fsync unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fsync (fd);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __errordecl (__futex_emulation_unknown_operation,
