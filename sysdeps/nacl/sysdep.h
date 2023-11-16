@@ -405,9 +405,12 @@ INTERNAL_SYSCALL_fcntl64_3 (int *err, int fd, int cmd,
 __extern_always_inline int
 INTERNAL_SYSCALL_fdatasync_1 (int *err, int fd)
 {
-  log_unimplemented("fdatasync unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fdatasync (fd);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
