@@ -193,6 +193,8 @@ ld {
     __nacl_irt_sigprocmask;
     __nacl_irt_lindsetitimer;
     __nacl_irt_fchdir; 
+    __nacl_irt_fsync;
+    __nacl_irt_fdatasync;    
 
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;

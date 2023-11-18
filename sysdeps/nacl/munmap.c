@@ -9,7 +9,7 @@ int __munmap (void *start, size_t length)
 {
   int result = __nacl_irt_munmap (start, length);
   if (result != 0) {
-    errno = result;
+    __set_errno(-result);
     return -1;
   }
   return 0;

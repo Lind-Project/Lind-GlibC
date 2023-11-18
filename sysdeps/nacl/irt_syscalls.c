@@ -183,7 +183,7 @@ static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
 }
 
 static int nacl_irt_shmdt (void *shmaddr) {
-  return -NACL_SYSCALL (shmdt) (shmaddr);
+  return NACL_SYSCALL (shmdt) (shmaddr);
 }
 
 static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
@@ -201,11 +201,11 @@ static int nacl_irt_mmap (void **addr, size_t len,
 }
 
 static int nacl_irt_munmap (void *addr, size_t len) {
-  return -NACL_SYSCALL (munmap) (addr, len);
+  return NACL_SYSCALL (munmap) (addr, len);
 }
 
 static int nacl_irt_mprotect (void *addr, size_t len, int prot) {
-  return -NACL_SYSCALL (mprotect) (addr, len, prot);
+  return NACL_SYSCALL (mprotect) (addr, len, prot);
 }
 
 static int nacl_irt_dyncode_create(void *dest, const void *src, size_t size) {
@@ -398,6 +398,8 @@ int (*__nacl_irt_chdir) (const char* pathname);
 int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
 int (*__nacl_irt_fchmod) (int fd, mode_t mode);
 int (*__nacl_irt_fchdir) (int fd);
+int (*__nacl_irt_fsync) (int fd);
+int (*__nacl_irt_fdatasync) (int fd);
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -580,6 +582,16 @@ static int nacl_irt_fchmod (int fd, mode_t mode)
 static int nacl_irt_fchdir (int fd)
 {
 	return NACL_SYSCALL (fchdir) (fd);
+}
+
+static int nacl_irt_fsync (int fd)
+{
+	return NACL_SYSCALL (fsync) (fd);
+}
+
+static int nacl_irt_fdatasync (int fd)
+{
+	return NACL_SYSCALL (fdatasync) (fd);
 }
 
 static int nacl_irt_getuid(void) {
@@ -1079,6 +1091,8 @@ init_irt_table (void)
   __nacl_irt_chmod = nacl_irt_chmod;
   __nacl_irt_fchmod = nacl_irt_fchmod;
   __nacl_irt_fchdir = nacl_irt_fchdir;
+  __nacl_irt_fsync = nacl_irt_fsync;
+  __nacl_irt_fdatasync = nacl_irt_fdatasync;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;
