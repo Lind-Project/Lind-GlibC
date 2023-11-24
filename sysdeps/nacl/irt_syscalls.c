@@ -398,6 +398,7 @@ int (*__nacl_irt_fchmod) (int fd, mode_t mode);
 int (*__nacl_irt_fchdir) (int fd);
 int (*__nacl_irt_fsync) (int fd);
 int (*__nacl_irt_fdatasync) (int fd);
+int (*__nacl_irt_sync_file_range) (int fd, long long offset, long long nbytes, unsigned int flags); 
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -586,6 +587,11 @@ static int nacl_irt_fsync (int fd)
 static int nacl_irt_fdatasync (int fd)
 {
 	return NACL_SYSCALL (fdatasync) (fd);
+}
+
+static int nacl_irt_sync_file_range (int fd, long long offset, long long nbytes, unsigned int flags)
+{
+	return NACL_SYSCALL (sync_file_range) (fd, offset, nbytes, flags);
 }
 
 static int nacl_irt_getuid(void) {
@@ -1060,6 +1066,7 @@ init_irt_table (void)
   __nacl_irt_fchdir = nacl_irt_fchdir;
   __nacl_irt_fsync = nacl_irt_fsync;
   __nacl_irt_fdatasync = nacl_irt_fdatasync;
+  __nacl_irt_sync_file_range = __nacl_irt_sync_file_range;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;

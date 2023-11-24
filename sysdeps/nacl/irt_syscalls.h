@@ -47,6 +47,7 @@ extern int (*__nacl_irt_fchmod) (int fd, mode_t mode);
 extern int (*__nacl_irt_fchdir) (int fd);
 extern int (*__nacl_irt_fsync) (int fd);
 extern int (*__nacl_irt_fdatasync) (int fd);
+extern int (*__nacl_irt_sync_file_range) (int fd, long long offset, long long nbytes, unsigned int flags);
 
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
