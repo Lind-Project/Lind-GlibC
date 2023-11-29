@@ -84,7 +84,7 @@ override_list = [
  #  "posix/getpid.c",
     "posix/glob.c",
     "posix/pread.c",
-    # "posix/pread64.c",
+    "posix/pread64.c",
     "posix/pwrite.c",
     "posix/vfork.c",
  #  "posix/wait.c",
