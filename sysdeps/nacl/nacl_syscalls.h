@@ -174,6 +174,9 @@
 #define NACL_sys_pread                  126
 #define NACL_sys_pwrite                 127
 
+/* TODO (aw): check num */
+#define NACL_sys_pread64                200
+
 #define NACL_sys_fchdir			161
 #define NACL_sys_fsync			162
 #define NACL_sys_fdatasync		163
@@ -329,6 +332,7 @@ typedef int (*TYPE_nacl_sigprocmask) (int how, const sigset_t *set, sigset_t *os
 typedef int (*TYPE_nacl_getcwd) (char* buf, size_t size);
 typedef int (*TYPE_nacl_gethostname) (char *name, size_t len);
 typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset);
+typedef int (*TYPE_nacl_pread64) (int desc, void *buf, size_t count, off_t offset);
 typedef int (*TYPE_nacl_pwrite) (int desc, const void *buf, size_t count, off_t offset);
 typedef int (*TYPE_nacl_socket) (int domain, int type, int protocol);
 typedef int (*TYPE_nacl_flock) (int fd, int operation);

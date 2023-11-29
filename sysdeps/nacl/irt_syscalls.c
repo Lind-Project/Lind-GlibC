@@ -86,7 +86,7 @@ static int nacl_irt_pread (int fd, void *buf, size_t count, off_t offset) {
 }
 
 static int nacl_irt_pread64 (int fd, void *buf, size_t count, off_t offset) {
-  return NACL_SYSCALL (pread) (fd, buf, count, offset);
+  return NACL_SYSCALL (pread64) (fd, buf, count, offset);
 }
 
 static int nacl_irt_write (int fd, const void *buf, size_t count) {
