@@ -85,6 +85,10 @@ static int nacl_irt_pread (int fd, void *buf, size_t count, off_t offset) {
   return NACL_SYSCALL (pread) (fd, buf, count, offset);
 }
 
+static int nacl_irt_pread64 (int fd, void *buf, size_t count, off_t offset) {
+  return NACL_SYSCALL (pread) (fd, buf, count, offset);
+}
+
 static int nacl_irt_write (int fd, const void *buf, size_t count) {
   return NACL_SYSCALL (write) (fd, buf, count);
 }
@@ -420,6 +424,7 @@ int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 int (*__nacl_irt_close) (int fd);
 int (*__nacl_irt_read) (int fd, void *buf, size_t count);
 int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+int (*__nacl_irt_pread64) (int fd, void *buf, size_t count, off_t offset);
 int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
 int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
 int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
@@ -1103,6 +1108,7 @@ init_irt_table (void)
   __nacl_irt_pipe2 = nacl_irt_pipe2;
   __nacl_irt_read = nacl_irt_read;
   __nacl_irt_pread = nacl_irt_pread;
+  __nacl_irt_pread64 = nacl_irt_pread64;
   __nacl_irt_write = nacl_irt_write;
   __nacl_irt_pwrite = nacl_irt_pwrite;
   __nacl_irt_waitpid = nacl_irt_waitpid;

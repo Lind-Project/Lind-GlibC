@@ -112,6 +112,7 @@ extern int (*__nacl_irt_close) (int fd);
 extern int (*__nacl_irt_read) (int fd, void *buf, size_t count);
 extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
 extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+extern int (*__nacl_irt_pread64) (int fd, void *buf, size_t count, off_t offset);
 extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
 
 extern int (*__nacl_irt_seek) (int fd, nacl_abi_off_t offset, int whence, nacl_abi_off_t *new_offset);
