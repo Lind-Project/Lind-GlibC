@@ -27,12 +27,10 @@
 
 #ifdef __NR_sync_file_range
 int
-sync_file_range (int fd, __off64_t from, __off64_t to, unsigned int flags)
+sync_file_range (int fd, off_t from, off_t to, unsigned int flags)
 {
   return INLINE_SYSCALL (sync_file_range, 6, fd,
-			 __LONG_LONG_PAIR ((long) (from >> 32), (long) from),
-			 __LONG_LONG_PAIR ((long) (to >> 32), (long) to),
-			 flags);
+			 from,  to, flags);
 }
 #else
 int

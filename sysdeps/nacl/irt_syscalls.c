@@ -1066,7 +1066,7 @@ init_irt_table (void)
   __nacl_irt_fchdir = nacl_irt_fchdir;
   __nacl_irt_fsync = nacl_irt_fsync;
   __nacl_irt_fdatasync = nacl_irt_fdatasync;
-  __nacl_irt_sync_file_range = __nacl_irt_sync_file_range;
+  __nacl_irt_sync_file_range = nacl_irt_sync_file_range;
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;
