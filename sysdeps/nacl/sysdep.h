@@ -2040,7 +2040,6 @@ INTERNAL_SYSCALL_sync_file_range_6 (int *err, int fd,
 				    unsigned int flags)
 
 { 
- __nacl_irt_write(1, "hitted\n", 7);  
  int rv = __nacl_irt_sync_file_range (fd, offset, nbytes, flags);
   if(rv < 0) {
     *err = -rv;
