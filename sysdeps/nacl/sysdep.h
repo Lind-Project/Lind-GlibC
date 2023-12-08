@@ -2038,7 +2038,6 @@ INTERNAL_SYSCALL_sync_file_range_6 (int *err, int fd,
 				    off_t offset,
 				    off_t nbytes,
 				    unsigned int flags)
-
 { 
  int rv = __nacl_irt_sync_file_range (fd, offset, nbytes, flags);
   if(rv < 0) {
