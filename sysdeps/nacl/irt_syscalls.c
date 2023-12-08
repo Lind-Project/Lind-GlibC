@@ -577,22 +577,22 @@ static int nacl_irt_fchmod (int fd, mode_t mode)
 
 static int nacl_irt_fchdir (int fd)
 {
-	return NACL_SYSCALL (fchdir) (fd);
+    return NACL_SYSCALL (fchdir) (fd);
 }
 
 static int nacl_irt_fsync (int fd)
 {
-	return NACL_SYSCALL (fsync) (fd);
+    return NACL_SYSCALL (fsync) (fd);
 }
 
 static int nacl_irt_fdatasync (int fd)
 {
-	return NACL_SYSCALL (fdatasync) (fd);
+    return NACL_SYSCALL (fdatasync) (fd);
 }
 
 static int nacl_irt_sync_file_range (int fd, off_t offset, off_t nbytes, unsigned int flags)
 {
-	return NACL_SYSCALL (sync_file_range) (fd, offset, nbytes, flags);
+    return NACL_SYSCALL (sync_file_range) (fd, offset, nbytes, flags);
 }
 
 static int nacl_irt_getuid(void) {
