@@ -179,6 +179,7 @@
 #define NACL_sys_fdatasync		163
 #define NACL_sys_sync_file_range	164
 
+
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -225,6 +226,7 @@ typedef int (*TYPE_nacl_fchdir) (int fd);
 typedef int (*TYPE_nacl_fsync) (int fd);
 typedef int (*TYPE_nacl_fdatasync) (int fd);
 typedef int (*TYPE_nacl_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags);
+
 
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);

@@ -49,6 +49,7 @@ extern int (*__nacl_irt_fsync) (int fd);
 extern int (*__nacl_irt_fdatasync) (int fd);
 extern int (*__nacl_irt_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags);
 
+
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
 extern int (*__nacl_irt_getgid) (void);

@@ -194,6 +194,7 @@ ld {
     __nacl_irt_fdatasync;    
     __nacl_irt_sync_file_range;    
 
+
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;
