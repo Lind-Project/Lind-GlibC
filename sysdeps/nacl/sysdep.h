@@ -2035,19 +2035,16 @@ INTERNAL_SYSCALL_sync_0 (int *err)
 
 __extern_always_inline int
 INTERNAL_SYSCALL_sync_file_range_6 (int *err, int fd,
-				    __LONG_LONG_PAIR(long offset_high,
-						     long offset_low),
-				    __LONG_LONG_PAIR(long nbytes_high,
-						     long nbytes_low),
+				    off_t offset,
+				    off_t nbytes,
 				    unsigned int flags)
-{
-#if 0
-  __off64_t offset = ((__off64_t)offset_high) << 32 | offset_low;
-  __off64_t nbytes = ((__off64_t)nbytes_high) << 32 | nbytes_low;
-#endif
-  log_unimplemented("sync_file_range unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+{ 
+ int rv = __nacl_irt_sync_file_range (fd, offset, nbytes, flags);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
