@@ -1,8 +1,10 @@
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <time.h>
 #include <errno.h>
 #include <nacl_stat.h>
+#include <nacl_signal.h>
 #include <nacl_syscalls.h>
 #undef stat
 #define stat nacl_abi_stat
@@ -545,8 +547,12 @@ int (*__nacl_irt_pipe) (int pipedes[static 2]);
 int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 int (*__nacl_irt_execv) (char const *path, char *const *argv);
-int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
+
+int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact);
+int (*__nacl_irt_kill) (int pid, int sig);
+int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+int (*__nacl_irt_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
@@ -810,11 +816,6 @@ static int nacl_irt_execv (char const *path, char *const *argv)
     return NACL_SYSCALL (execv) (path, argv);
 }
 
-static int nacl_irt_sigprocmask (int how, const sigset_t *set, sigset_t *oset)
-{
-    return NACL_SYSCALL (sigprocmask) (how, set, oset);
-}
-
 static int nacl_irt_flock (int fd, int operation)
 {
   return NACL_SYSCALL (flock) (fd, operation);
@@ -827,6 +828,38 @@ static int nacl_irt_truncate (const char *path, off_t length)
 static int nacl_irt_ftruncate (int fd, off_t length)
 {
     return NACL_SYSCALL (ftruncate) (fd, length);
+}
+
+static int nacl_irt_sigaction (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact)
+{
+    int rv = NACL_SYSCALL (sigaction) (sig, nacl_act, nacl_oact);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_kill (int pid, int sig)
+{
+    int rv = NACL_SYSCALL (kill) (pid, sig);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_sigprocmask (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset)
+{
+    int rv = NACL_SYSCALL (sigprocmask) (how, nacl_set, nacl_oldset);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_lindsetitimer(int which, const struct itimerval *new_value, struct itimerval *old_value)
+{
+    int rv = NACL_SYSCALL (lindsetitimer) (which, new_value, old_value);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
 void
@@ -1119,7 +1152,6 @@ init_irt_table (void)
   __nacl_irt_wait4 = nacl_irt_wait4;
   __nacl_irt_execv = nacl_irt_execv;
   __nacl_irt_execve = nacl_irt_execve;
-  __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lstat = nacl_irt_lstat;
   __nacl_irt_flock = nacl_irt_flock;
   __nacl_irt_statfs = nacl_irt_statfs;
@@ -1134,6 +1166,10 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sigaction = nacl_irt_sigaction;
+  __nacl_irt_kill = nacl_irt_kill;
+  __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
+  __nacl_irt_lindsetitimer = nacl_irt_lindsetitimer;
   __nacl_irt_sem_init = nacl_irt_sem_init;
   __nacl_irt_sem_wait = nacl_irt_sem_wait;
   __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;

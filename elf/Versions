@@ -188,7 +188,10 @@ ld {
     __nacl_irt_fchmod;
     __nacl_irt_truncate;
     __nacl_irt_ftruncate;
-    
+    __nacl_irt_sigaction;
+    __nacl_irt_kill;
+    __nacl_irt_sigprocmask;
+    __nacl_irt_lindsetitimer;
     __nacl_irt_fchdir; 
     __nacl_irt_fsync;
     __nacl_irt_fdatasync;    
