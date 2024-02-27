@@ -7,13 +7,12 @@
 
 ssize_t __pwrite(int desc, void const *buf, size_t count, off_t offset)
 {
-  size_t nwrite;
-  int result = __nacl_irt_pwrite (desc, buf, count, &nwrite, offset);
-  if (result != 0) {
-    errno = result;
+  int result = __nacl_irt_pwrite (desc, buf, count, offset);
+  if (result < 0) {
+    __set_errno(-result);
     return -1;
   }
-  return nwrite;
+  return result;
 }
 
 weak_alias (__pwrite, pwrite)

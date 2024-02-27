@@ -1,8 +1,10 @@
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <time.h>
 #include <errno.h>
 #include <nacl_stat.h>
+#include <nacl_signal.h>
 #include <nacl_syscalls.h>
 #undef stat
 #define stat nacl_abi_stat
@@ -23,15 +25,15 @@ static void nacl_irt_exit (int status) {
 }
 
 static int nacl_irt_link (const char *from, const char *to) {
-  return -NACL_SYSCALL (link) (from, to);
+  return NACL_SYSCALL (link) (from, to);
 }
 
 static int nacl_irt_unlink (const char *name) {
-  return -NACL_SYSCALL (unlink) (name);
+  return NACL_SYSCALL (unlink) (name);
 }
 
 static int nacl_irt_rename(const char *oldpath, const char *newpath) {
-  return -NACL_SYSCALL (rename) (oldpath, newpath);
+  return NACL_SYSCALL (rename) (oldpath, newpath);
 }
 
 static int nacl_irt_gettod (struct timeval *tv) {
@@ -57,16 +59,12 @@ static int nacl_irt_sysconf (int name, int *value) {
   return -NACL_SYSCALL (sysconf) (name, value);
 }
 
-static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode, int *newfd) {
-  int rv = NACL_SYSCALL (open) (pathname, oflag, cmode);
-  if (rv < 0)
-    return -rv;
-  *newfd = rv;
-  return 0;
+static int nacl_irt_open (const char *pathname, int oflag, mode_t cmode) {
+  return NACL_SYSCALL (open) (pathname, oflag, cmode);
 }
 
 static int nacl_irt_close (int fd) {
-  return -NACL_SYSCALL (close) (fd);
+  return NACL_SYSCALL (close) (fd);
 }
 
 
@@ -81,40 +79,23 @@ static int nacl_irt_ioctl (int fd, unsigned long request, void* arg_ptr) {
   return NACL_SYSCALL (ioctl) (fd, request, arg_ptr);
 }
 
-static int nacl_irt_read (int fd, void *buf, size_t count, size_t *nread) {
-  int rv = NACL_SYSCALL (read) (fd, buf, count);
-  if (rv < 0)
-    return -rv;
-  *nread = rv;
-  return 0;
+static int nacl_irt_read (int fd, void *buf, size_t count) {
+  return NACL_SYSCALL (read) (fd, buf, count);
 }
 
-static int nacl_irt_pread (int fd, void *buf, size_t count, size_t *nread, off_t offset) {
-  int rv = NACL_SYSCALL (pread) (fd, buf, count, offset);
-  if (rv < 0)
-    return -rv;
-  *nread = rv;
-  return 0;
+static int nacl_irt_pread (int fd, void *buf, size_t count, off_t offset) {
+  return NACL_SYSCALL (pread) (fd, buf, count, offset);
 }
 
-static int nacl_irt_write (int fd, const void *buf, size_t count, size_t *nwrote) {
-  int rv = NACL_SYSCALL (write) (fd, buf, count);
-  if (rv < 0)
-    return -rv;
-  *nwrote = rv;
-  return 0;
+static int nacl_irt_write (int fd, const void *buf, size_t count) {
+  return NACL_SYSCALL (write) (fd, buf, count);
 }
 
-static int nacl_irt_pwrite (int fd, const void *buf, size_t count, size_t *nwrote, off_t offset) {
-  int rv = NACL_SYSCALL (pwrite) (fd, buf, count, offset);
-  if (rv < 0)
-    return -rv;
-  *nwrote = rv;
-  return 0;
+static int nacl_irt_pwrite (int fd, const void *buf, size_t count, off_t offset) {
+  return NACL_SYSCALL (pwrite) (fd, buf, count, offset);
 }
 
-static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence,
-                          off_t *new_offset) {
+static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence, off_t *new_offset) {
   int rv = NACL_SYSCALL (lseek) (fd, &offset, whence);
   if (rv < 0)
     return -rv;
@@ -135,27 +116,27 @@ static int nacl_irt_dup3 (int oldfd, int newfd, int flags) {
 }
 
 static int nacl_irt_fstat (int fd, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (fstat) (fd, st);
+  return NACL_SYSCALL (fstat) (fd, st);
 }
 
 static int nacl_irt_fstatfs (int fd, struct statfs *buf) {
-  return -NACL_SYSCALL (fstatfs) (fd, buf);
+  return NACL_SYSCALL (fstatfs) (fd, buf);
 }
 
 static int nacl_irt_statfs (const char* path, struct statfs *buf) {
-  return -NACL_SYSCALL (statfs) (path, buf);
+  return NACL_SYSCALL (statfs) (path, buf);
 }
 
 static int nacl_irt_stat (const char *pathname, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (stat) (pathname, st);
+  return NACL_SYSCALL (stat) (pathname, st);
 }
 
 static int nacl_irt_lstat (const char *pathname, struct nacl_abi_stat *st) {
-  return -NACL_SYSCALL (lstat) (pathname, st);
+  return NACL_SYSCALL (lstat) (pathname, st);
 }
 
 static int nacl_irt_access (const char *file, int mode) {
-  return -NACL_SYSCALL (access) (file, mode);
+  return NACL_SYSCALL (access) (file, mode);
 }
 
 static int nacl_irt_getdents (int fd, struct dirent *buf, size_t count,
@@ -202,7 +183,7 @@ static int nacl_irt_shmat (int shmid, void **shmaddr, int shmflg) {
 }
 
 static int nacl_irt_shmdt (void *shmaddr) {
-  return -NACL_SYSCALL (shmdt) (shmaddr);
+  return NACL_SYSCALL (shmdt) (shmaddr);
 }
 
 static int nacl_irt_shmctl (int shmid, int cmd, struct nacl_abi_shmid_ds *buf) {
@@ -220,11 +201,11 @@ static int nacl_irt_mmap (void **addr, size_t len,
 }
 
 static int nacl_irt_munmap (void *addr, size_t len) {
-  return -NACL_SYSCALL (munmap) (addr, len);
+  return NACL_SYSCALL (munmap) (addr, len);
 }
 
 static int nacl_irt_mprotect (void *addr, size_t len, int prot) {
-  return -NACL_SYSCALL (mprotect) (addr, len, prot);
+  return NACL_SYSCALL (mprotect) (addr, len, prot);
 }
 
 static int nacl_irt_dyncode_create(void *dest, const void *src, size_t size) {
@@ -262,24 +243,32 @@ static int nacl_irt_mutex_create (int *mutex_handle) {
   return 0;
 }
 
-/*
- * Today a mutex handle is just an fd and we destroy it with close.
- * But this might not always be so.
- */
 static int nacl_irt_mutex_destroy (int mutex_handle) {
-  return -NACL_SYSCALL (close) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_destroy) (mutex_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_lock (int mutex_handle) {
-  return -NACL_SYSCALL (mutex_lock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_lock) (mutex_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_unlock(int mutex_handle) {
-  return -NACL_SYSCALL (mutex_unlock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_unlock) (mutex_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_mutex_trylock(int mutex_handle) {
-  return -NACL_SYSCALL (mutex_trylock) (mutex_handle);
+  int rv = NACL_SYSCALL (mutex_trylock) (mutex_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_create (int *cond_handle) {
@@ -290,30 +279,69 @@ static int nacl_irt_cond_create (int *cond_handle) {
   return 0;
 }
 
-/*
- * Today a cond handle is just an fd and we destroy it with close.
- * But this might not always be so.
- */
 static int nacl_irt_cond_destroy (int cond_handle) {
-  return -NACL_SYSCALL (close) (cond_handle);
+  int rv = NACL_SYSCALL (cond_destroy) (cond_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_signal (int cond_handle) {
-  return -NACL_SYSCALL (cond_signal) (cond_handle);
+  int rv = NACL_SYSCALL (cond_signal) (cond_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_broadcast (int cond_handle) {
-  return -NACL_SYSCALL (cond_broadcast) (cond_handle);
+  int rv = NACL_SYSCALL (cond_broadcast) (cond_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_wait (int cond_handle, int mutex_handle) {
-  return -NACL_SYSCALL (cond_wait) (cond_handle, mutex_handle);
+  int rv = NACL_SYSCALL (cond_wait) (cond_handle, mutex_handle);
+  if (rv < 0)
+      return -rv;
+  return 0;
 }
 
 static int nacl_irt_cond_timed_wait_abs (int cond_handle, int mutex_handle,
                                          const struct timespec *abstime) {
-  return -NACL_SYSCALL (cond_timed_wait_abs) (cond_handle, mutex_handle,
-                                              abstime);
+  int rv = NACL_SYSCALL (cond_timed_wait_abs) (cond_handle, mutex_handle,
+                                               abstime);
+  if (rv < 0)
+      return -rv;
+  return 0;
+}
+
+static int nacl_irt_sem_init (unsigned int sem, int pshared, int value) {
+  return NACL_SYSCALL (sem_init) (sem, pshared, value);
+}
+
+static int nacl_irt_sem_wait (unsigned int sem) {
+  return NACL_SYSCALL (sem_wait) (sem);
+}
+
+static int nacl_irt_sem_trywait (unsigned int sem) {
+  return NACL_SYSCALL (sem_trywait) (sem);
+}
+
+static int nacl_irt_sem_timedwait (unsigned int sem, const struct timespec *abs_timeout) {
+  return NACL_SYSCALL (sem_timedwait) (sem, abs_timeout);
+}
+
+static int nacl_irt_sem_post (unsigned int sem) {
+  return NACL_SYSCALL (sem_post) (sem);
+}
+
+static int nacl_irt_sem_destroy (unsigned int sem) {
+  return NACL_SYSCALL (sem_destroy) (sem);
+}
+
+static int nacl_irt_sem_getvalue (unsigned int sem, int *sval) {
+  return NACL_SYSCALL (sem_getvalue) (sem, sval);
 }
 
 static int nacl_irt_tls_init (void *tdb) {
@@ -324,19 +352,19 @@ static void *nacl_irt_tls_get (void) {
   return NACL_SYSCALL (tls_get) ();
 }
 
-static int nacl_irt_open_as_resource (const char *pathname, int *newfd) {
-  return __nacl_irt_open (pathname, O_RDONLY, 0, newfd);
+static int nacl_irt_open_as_resource (const char *pathname) {
+  return __nacl_irt_open (pathname, O_RDONLY, 0);
 }
 
 /* Load files from DL_DST_LIB using IRT's open_resource. Other paths
    will be processed using regular open syscall.
 
    Note: nacl_mount may change this logic if needed.  */
-static int (*___nacl_irt_open_resource) (const char* file, int *fd);
-static int nacl_irt_open_resource (const char *pathname, int *newfd) {
+static int (*___nacl_irt_open_resource) (const char* file);
+static int nacl_irt_open_resource (const char *pathname) {
   if (memcmp (DL_DST_LIB "/", pathname, sizeof (DL_DST_LIB)))
-    return __nacl_irt_open (pathname, O_RDONLY, 0, newfd);
-  return ___nacl_irt_open_resource (pathname + sizeof (DL_DST_LIB) - 1, newfd);
+    return __nacl_irt_open (pathname, O_RDONLY, 0);
+  return ___nacl_irt_open_resource (pathname + sizeof (DL_DST_LIB) - 1);
 }
 
 static int nacl_irt_clock_getres(clockid_t clk_id,
@@ -368,6 +396,12 @@ int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 int (*__nacl_irt_rmdir) (const char* pathname);
 int (*__nacl_irt_chdir) (const char* pathname);
 int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
+int (*__nacl_irt_fchmod) (int fd, mode_t mode);
+int (*__nacl_irt_fchdir) (int fd);
+int (*__nacl_irt_fsync) (int fd);
+int (*__nacl_irt_fdatasync) (int fd);
+int (*__nacl_irt_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags); 
+
 int (*__nacl_irt_getuid) (void);
 int (*__nacl_irt_geteuid) (void);
 int (*__nacl_irt_getgid) (void);
@@ -386,13 +420,12 @@ int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
 int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
-int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
-                        int *newfd);
+int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 int (*__nacl_irt_close) (int fd);
-int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
-int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
-int (*__nacl_irt_write) (int fd, const void *buf, size_t count, size_t *nwrote);
-int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, size_t *nwrote, off_t offset);
+int (*__nacl_irt_read) (int fd, void *buf, size_t count);
+int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
+int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
 int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
 int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
@@ -402,22 +435,22 @@ int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
 int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
                             size_t *nread);
 int (*__nacl_irt_access) (const char *file, int mode);
-int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
+int (*__nacl_irt_truncate) (const char *path, off_t length);
+int (*__nacl_irt_ftruncate) (int fd, off_t length);
+int (*__nacl_irt_socket) (int domain, int type, int protocol);
 int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int (*__nacl_irt_listen) (int sockfd, int backlog);
 int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                            socklen_t addrlen);
-int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags,
-                        int *count);
+int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len, int flags);
 int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len, int flags,
-                          const struct sockaddr *dest_addr, socklen_t addrlen,
-                          int *count);
-int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags, int *count);
+                          const struct sockaddr *dest_addr, socklen_t addrlen);
+int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
                             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 
-int (*__nacl_irt_epoll_create) (int size, int *fd);
+int (*__nacl_irt_epoll_create) (int size);
 int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
                              struct epoll_event *event);
@@ -425,7 +458,7 @@ int (*__nacl_irt_epoll_pwait) (int epfd, struct epoll_event *events,
     int maxevents, int timeout, const sigset_t *sigmask, size_t sigset_size,
     int *count);
 int (*__nacl_irt_epoll_wait) (int epfd, struct epoll_event *events,
-                                int maxevents, int timeout, int *count);
+                                int maxevents, int timeout);
 int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
                           int timeout);
 int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
@@ -482,10 +515,18 @@ int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                        const struct timespec *abstime);
 
+int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
+int (*__nacl_irt_sem_wait) (unsigned int sem);
+int (*__nacl_irt_sem_trywait) (unsigned int sem);
+int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+int (*__nacl_irt_sem_post) (unsigned int sem);
+int (*__nacl_irt_sem_destroy) (unsigned int sem);
+int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
+
 int (*__nacl_irt_tls_init) (void *tdb);
 void *(*__nacl_irt_tls_get) (void);
 
-int (*__nacl_irt_open_resource) (const char* file, int *fd);
+int (*__nacl_irt_open_resource) (const char* file);
 
 int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
@@ -506,25 +547,23 @@ int (*__nacl_irt_pipe) (int pipedes[static 2]);
 int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 int (*__nacl_irt_execv) (char const *path, char *const *argv);
-int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 int (*__nacl_irt_flock) (int fd, int operation);
+
+int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact);
+int (*__nacl_irt_kill) (int pid, int sig);
+int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+int (*__nacl_irt_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 size_t (*saved_nacl_irt_query)(const char *interface_ident, void *table, size_t tablesize);
 
 static int nacl_irt_mkdir (const char *pathname, mode_t mode)
 {
-    int rv = NACL_SYSCALL (mkdir) (pathname, mode);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (mkdir) (pathname, mode);
 }
 
 static int nacl_irt_rmdir (const char *pathname)
 {
-    int rv = NACL_SYSCALL (rmdir) (pathname);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (rmdir) (pathname);
 }
 
 static int nacl_irt_chdir (const char *pathname)
@@ -535,6 +574,31 @@ static int nacl_irt_chdir (const char *pathname)
 static int nacl_irt_chmod (const char *pathname, mode_t mode)
 {
     return NACL_SYSCALL (chmod) (pathname, mode);
+}
+
+static int nacl_irt_fchmod (int fd, mode_t mode)
+{
+    return NACL_SYSCALL (fchmod) (fd, mode);
+}
+
+static int nacl_irt_fchdir (int fd)
+{
+    return NACL_SYSCALL (fchdir) (fd);
+}
+
+static int nacl_irt_fsync (int fd)
+{
+    return NACL_SYSCALL (fsync) (fd);
+}
+
+static int nacl_irt_fdatasync (int fd)
+{
+    return NACL_SYSCALL (fdatasync) (fd);
+}
+
+static int nacl_irt_sync_file_range (int fd, off_t offset, off_t nbytes, unsigned int flags)
+{
+    return NACL_SYSCALL (sync_file_range) (fd, offset, nbytes, flags);
 }
 
 static int nacl_irt_getuid(void) {
@@ -559,13 +623,9 @@ static int nacl_irt_select_lind (int nfds, fd_set *readfds,
     return NACL_SYSCALL (select) (nfds, readfds, writefds, exceptfds, timeout);
 }
 
-static int nacl_irt_socket_lind (int domain, int type, int protocol, int *sd)
+static int nacl_irt_socket_lind (int domain, int type, int protocol)
 {
-    int rv = NACL_SYSCALL (socket) (domain, type, protocol);
-    if (rv < 0)
-        return -rv;
-    *sd=rv;
-    return 0;
+    return NACL_SYSCALL (socket) (domain, type, protocol);
 }
 
 static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrlen)
@@ -575,59 +635,33 @@ static int nacl_irt_accept (int sockfd, struct sockaddr *addr, socklen_t *addrle
 
 static int nacl_irt_bind (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (bind) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (bind) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_listen (int sockfd, int backlog)
 {
-    int rv = NACL_SYSCALL (listen) (sockfd, backlog);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (listen) (sockfd, backlog);
 }
 
 static int nacl_irt_connect (int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (connect) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (connect) (sockfd, addr, addrlen);
 }
 
-static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags,
-                        int *count)
+static int nacl_irt_send(int sockfd, const void *buf, size_t len, int flags)
 {
-    int rv = NACL_SYSCALL (send) (sockfd, len, flags, buf);
-    if (rv < 0)
-        return -rv;
-    if(count)
-        *count = rv;
-    return 0;
+    return NACL_SYSCALL (send) (sockfd, len, flags, buf);
 }
 
-static int nacl_irt_recv(int sockfd, void *buf, size_t len, int flags, int *count)
+static int nacl_irt_recv(int sockfd, void *buf, size_t len, int flags)
 {
-    int rv = NACL_SYSCALL (recv) (sockfd, len, flags, buf);
-    if (rv < 0)
-        return -rv;
-    if(count)
-        *count = rv;
-    return 0;
+    return NACL_SYSCALL (recv) (sockfd, len, flags, buf);
 }
 
 static int nacl_irt_sendto(int sockfd, const void *buf, size_t len, int flags,
-                          const struct sockaddr *dest_addr, socklen_t addrlen,
-                          int *count)
+                          const struct sockaddr *dest_addr, socklen_t addrlen)
 {
-    int rv = NACL_SYSCALL (sendto) (sockfd, buf, len, flags, dest_addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    if(count)
-        *count = rv;
-    return 0;
+    return NACL_SYSCALL (sendto) (sockfd, buf, len, flags, dest_addr, addrlen);
 }
 
 static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
@@ -649,10 +683,7 @@ static int nacl_irt_recvfrom(int sockfd, void *buf, size_t len, int flags,
 
 static int nacl_irt_shutdown (int sockfd, int how)
 {
-    int rv = NACL_SYSCALL (shutdown) (sockfd,how);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (shutdown) (sockfd,how);
 }
 
 static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
@@ -664,10 +695,7 @@ static int nacl_irt_getsockopt_lind (int sockfd, int level, int optname,
         optlen = &bufsize;
     if(optval == NULL)
         optval = &buf;
-    int rv = NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockopt) (sockfd, level, optname, optval, optlen);
 }
 
 static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
@@ -676,68 +704,45 @@ static int nacl_irt_setsockopt_lind (int sockfd, int level, int optname,
     if (optlen > 0 && !optval)
         return EFAULT;
     int buf=0; //dummy, in case optval is no provided
-    int rv = NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (setsockopt) (sockfd, level, optname, optval?optval:&buf, optlen);
 }
 
 static int nacl_irt_socketpair_lind (int domain, int type, int protocol, int sv[static 2])
 {
-    int rv = NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
-    if ( rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (socketpair) (domain, type, protocol, sv);
 }
 
 static int nacl_irt_getpeername (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL(getpeername) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_getsockname (int sockfd, struct sockaddr *addr,
                                socklen_t *addrlen)
 {
-    int rv = NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
-    if (rv < 0)
-        return -rv;
-    return 0;
+    return NACL_SYSCALL (getsockname) (sockfd, addr, addrlen);
 }
 
 static int nacl_irt_poll_lind (struct pollfd *fds, nfds_t nfds, int timeout)
 {
-    int rv = NACL_SYSCALL (poll) (fds, nfds, timeout);
-    if (rv < 0)
-        return -rv;
-    return rv;
+    return NACL_SYSCALL (poll) (fds, nfds, timeout);
 }
 
-static int nacl_irt_epoll_create_lind (int size, int *fd)
+static int nacl_irt_epoll_create_lind (int size)
 {
-    int rv = NACL_SYSCALL (epoll_create)(size);
-    if (rv < 0)
-        return -rv;
-    *fd = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_create)(size);
 }
 
 static int nacl_irt_epoll_ctl_lind (int epfd, int op, int fd, struct epoll_event *event)
 {
-    return -NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
+    return NACL_SYSCALL (epoll_ctl)(epfd, op, fd, event);
 }
 
 static int nacl_irt_epoll_wait_lind (int epfd, struct epoll_event *events,
-                                 int maxevents, int timeout, int *count)
+                                 int maxevents, int timeout)
 {
-    int rv = NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
-    if (rv < 0)
-        return -rv;
-    *count = rv;
-    return 0;
+    return NACL_SYSCALL (epoll_wait) (epfd, events, maxevents, timeout);
 }
 
 static int nacl_irt_getcwd (char* buf, size_t size)
@@ -811,14 +816,50 @@ static int nacl_irt_execv (char const *path, char *const *argv)
     return NACL_SYSCALL (execv) (path, argv);
 }
 
-static int nacl_irt_sigprocmask (int how, const sigset_t *set, sigset_t *oset)
-{
-    return NACL_SYSCALL (sigprocmask) (how, set, oset);
-}
-
 static int nacl_irt_flock (int fd, int operation)
 {
   return NACL_SYSCALL (flock) (fd, operation);
+}
+
+static int nacl_irt_truncate (const char *path, off_t length)
+{
+    return NACL_SYSCALL (truncate) (path, length);
+}
+static int nacl_irt_ftruncate (int fd, off_t length)
+{
+    return NACL_SYSCALL (ftruncate) (fd, length);
+}
+
+static int nacl_irt_sigaction (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact)
+{
+    int rv = NACL_SYSCALL (sigaction) (sig, nacl_act, nacl_oact);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_kill (int pid, int sig)
+{
+    int rv = NACL_SYSCALL (kill) (pid, sig);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_sigprocmask (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset)
+{
+    int rv = NACL_SYSCALL (sigprocmask) (how, nacl_set, nacl_oldset);
+    if (rv < 0)
+	return -rv;
+    return 0;
+}
+
+static int nacl_irt_lindsetitimer(int which, const struct itimerval *new_value, struct itimerval *old_value)
+{
+    int rv = NACL_SYSCALL (lindsetitimer) (which, new_value, old_value);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 
 void
@@ -1055,6 +1096,12 @@ init_irt_table (void)
   __nacl_irt_mkdir = nacl_irt_mkdir;
   __nacl_irt_chdir = nacl_irt_chdir;
   __nacl_irt_chmod = nacl_irt_chmod;
+  __nacl_irt_fchmod = nacl_irt_fchmod;
+  __nacl_irt_fchdir = nacl_irt_fchdir;
+  __nacl_irt_fsync = nacl_irt_fsync;
+  __nacl_irt_fdatasync = nacl_irt_fdatasync;
+  __nacl_irt_sync_file_range = nacl_irt_sync_file_range;
+
   __nacl_irt_rmdir = nacl_irt_rmdir;
   __nacl_irt_getuid = nacl_irt_getuid;
   __nacl_irt_geteuid = nacl_irt_geteuid;
@@ -1105,7 +1152,6 @@ init_irt_table (void)
   __nacl_irt_wait4 = nacl_irt_wait4;
   __nacl_irt_execv = nacl_irt_execv;
   __nacl_irt_execve = nacl_irt_execve;
-  __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
   __nacl_irt_lstat = nacl_irt_lstat;
   __nacl_irt_flock = nacl_irt_flock;
   __nacl_irt_statfs = nacl_irt_statfs;
@@ -1118,6 +1164,20 @@ init_irt_table (void)
   __nacl_irt_shmat = nacl_irt_shmat;
   __nacl_irt_shmdt = nacl_irt_shmdt;
   __nacl_irt_shmctl = nacl_irt_shmctl;
+  __nacl_irt_truncate = nacl_irt_truncate;
+  __nacl_irt_ftruncate = nacl_irt_ftruncate;
+  __nacl_irt_sigaction = nacl_irt_sigaction;
+  __nacl_irt_kill = nacl_irt_kill;
+  __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
+  __nacl_irt_lindsetitimer = nacl_irt_lindsetitimer;
+  __nacl_irt_sem_init = nacl_irt_sem_init;
+  __nacl_irt_sem_wait = nacl_irt_sem_wait;
+  __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;
+  __nacl_irt_sem_trywait = nacl_irt_sem_trywait;
+  __nacl_irt_sem_post = nacl_irt_sem_post;
+  __nacl_irt_sem_destroy = nacl_irt_sem_destroy;
+  __nacl_irt_sem_getvalue = nacl_irt_sem_getvalue;
+
 }
 
 size_t nacl_interface_query(const char *interface_ident,

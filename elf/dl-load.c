@@ -1746,8 +1746,8 @@ open_verify (const char *name, struct filebuf *fbp, struct link_map *loader,
   /* Open the file.  We always open files read-only.  */
 #ifdef __native_client__
   int fd;
-  errval = __nacl_irt_open_resource(name, &fd);
-  if (errval == 0)
+  fd = __nacl_irt_open_resource(name);
+  if (fd > 0)
 #else
   int fd = __open (name, O_RDONLY);
   if (fd != -1)

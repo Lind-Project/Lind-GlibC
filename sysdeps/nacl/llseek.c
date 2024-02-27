@@ -1,4 +1,3 @@
-
 #include <errno.h>
 
 #include <irt_syscalls.h>
@@ -15,4 +14,3 @@ loff_t __llseek (int fd, loff_t offset, int whence)
   return offset;
 }
 weak_alias (__llseek, llseek)
-

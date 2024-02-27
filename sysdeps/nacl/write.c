@@ -7,13 +7,12 @@
 
 ssize_t __write(int desc, void const *buf, size_t count)
 {
-  size_t nwrite;
-  int result = __nacl_irt_write (desc, buf, count, &nwrite);
-  if (result != 0) {
-    errno = result;
+  int result = __nacl_irt_write (desc, buf, count);
+  if (result < 0) {
+    __set_errno(-result);
     return -1;
   }
-  return nwrite;
+  return result;
 }
 libc_hidden_def (__write)
 weak_alias (__write, write)

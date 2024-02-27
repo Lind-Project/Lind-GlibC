@@ -1,45 +1,94 @@
-/* Copyright (C) 1991, 1995, 1996, 1997, 2002 Free Software Foundation, Inc.
-   This file is part of the GNU C Library.
-
-   The GNU C Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   The GNU C Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, write to the Free
-   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-   02111-1307 USA.  */
-
 #include <errno.h>
 #include <signal.h>
+#include <unistd.h>
+#include <stddef.h>
+#include <stdint.h>
 
+#include <irt_syscalls.h>
+#include <nacl_signal.h>
+
+void __sigset_t_to_uint(const sigset_t *set, uint64_t *nacl_set) {
+  if (set && nacl_set) {
+    *nacl_set = 0;
+
+    for (int i = 1; i < 32; ++i) {
+      if (sigismember(set, i)) {
+        *nacl_set |= 1 << (i-1);
+      }
+    }
+  }
+}
+
+void __uint_to_sigset_t(const uint64_t *nacl_set, sigset_t *set) {
+  if (nacl_set && set) {
+    sigemptyset(set);
+
+    for (int i = 1; i < 32; ++i) {
+      if (*nacl_set & (1 << (i-1))) {
+        sigaddset(set, i);
+      }
+    }
+  }
+}
+
+void __sigaction_to_nacl_abi_sigaction(
+    const struct sigaction *act,
+    struct nacl_abi_sigaction *nacl_act
+) {
+  if (nacl_act && act) {
+    nacl_act->__sa_handler = (uint32_t)(act->sa_handler);
+    nacl_act->sa_flags = act->sa_flags;
+    __sigset_t_to_uint(&act->sa_mask, &nacl_act->sa_mask);
+  }
+}
+
+void __nacl_abi_sigaction_to_sigaction(
+    const struct nacl_abi_sigaction *nacl_act,
+    struct sigaction *act
+) {
+  if (nacl_act && act) {
+    act->sa_handler = (__sighandler_t)(nacl_act->__sa_handler);
+    act->sa_flags = nacl_act->sa_flags;
+    __uint_to_sigset_t(&nacl_act->sa_mask, &act->sa_mask);
+  }
+}
 
 /* If ACT is not NULL, change the action for SIG to *ACT.
    If OACT is not NULL, put the old action for SIG in *OACT.  */
-int
-__libc_sigaction (sig, act, oact)
-     int sig;
-     const struct sigaction *act;
-     struct sigaction *oact;
-{
-  if (sig <= 0 || sig >= NSIG)
-    {
-      __set_errno (EINVAL);
-      return -1;
-    }
+int __libc_sigaction(
+    int sig,
+    const struct sigaction *act,
+    struct sigaction *oact
+) {
+  int result;
+  struct nacl_abi_sigaction nacl_act, nacl_oact;
+
+  if (sig <= 0 || sig >= NSIG) {
+    __set_errno (EINVAL);
+    return -1;
+  }
+
+  __sigaction_to_nacl_abi_sigaction(act, &nacl_act);
+  __sigaction_to_nacl_abi_sigaction(oact, &nacl_oact);
+
+  result = __nacl_irt_sigaction(
+    sig,
+    (act == NULL) ? NULL : &nacl_act,
+    (oact == NULL) ? NULL : &nacl_oact
+  );
+
+  __nacl_abi_sigaction_to_sigaction(&nacl_oact, oact);
+
+  if (result != 0) {
+    __set_errno (result);
+    return -1;
+  }
 
   return 0;
 }
+
 libc_hidden_def (__libc_sigaction)
-stub_warning (sigaction)
 
 weak_alias (__libc_sigaction, __sigaction)
 libc_hidden_weak (__sigaction)
 weak_alias (__libc_sigaction, sigaction)
-#include <stub-tag.h>

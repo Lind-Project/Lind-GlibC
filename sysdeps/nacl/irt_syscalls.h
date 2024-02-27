@@ -9,11 +9,13 @@
 #include <sys/epoll.h>
 #include <sys/select.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 
 #include <time.h>
 #include <sys/statfs.h>
 
 #include <nacl_stat.h>
+#include <nacl_signal.h>
 
 struct dirent;
 struct nacl_abi_stat;
@@ -43,6 +45,12 @@ extern int (*__nacl_irt_mkdir) (const char* pathname, mode_t mode);
 extern int (*__nacl_irt_rmdir) (const char* pathname);
 extern int (*__nacl_irt_chdir) (const char* pathname);
 extern int (*__nacl_irt_chmod) (const char* pathname, mode_t mode);
+extern int (*__nacl_irt_fchmod) (int fd, mode_t mode);
+extern int (*__nacl_irt_fchdir) (int fd);
+extern int (*__nacl_irt_fsync) (int fd);
+extern int (*__nacl_irt_fdatasync) (int fd);
+extern int (*__nacl_irt_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags);
+
 
 extern int (*__nacl_irt_getuid) (void);
 extern int (*__nacl_irt_geteuid) (void);
@@ -55,7 +63,7 @@ extern int (*__nacl_irt_fcntl_set) (int fd, int cmd, long set_op);
 
 extern int (*__nacl_irt_ioctl) (int fd, unsigned long request, void* arg_ptr);
 
-extern int (*__nacl_irt_epoll_create) (int size, int *fd);
+extern int (*__nacl_irt_epoll_create) (int size);
 extern int (*__nacl_irt_epoll_create1) (int flags, int *fd);
 extern int (*__nacl_irt_epoll_ctl) (int epfd, int op, int fd,
                                     struct epoll_event *event);
@@ -63,13 +71,13 @@ extern int (*__nacl_irt_epoll_pwait) (int epfd, struct epoll_event *events,
             int maxevents, int timeout, const sigset_t *sigmask,
             size_t sigset_size, int *count);
 extern int (*__nacl_irt_epoll_wait) (int epfd, struct epoll_event *events,
-                                 int maxevents, int timeout, int *count);
+                                 int maxevents, int timeout);
 extern int (*__nacl_irt_poll) (struct pollfd *fds, nfds_t nfds,
                            int timeout);
 extern int (*__nacl_irt_ppoll) (struct pollfd *fds, nfds_t nfds,
             const struct timespec *timeout, const sigset_t *sigmask,
             size_t sigset_size, int *count);
-extern int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
+extern int (*__nacl_irt_socket) (int domain, int type, int protocol);
 extern int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 extern int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr,
                                socklen_t addrlen);
@@ -77,12 +85,10 @@ extern int (*__nacl_irt_listen) (int sockfd, int backlog);
 extern int (*__nacl_irt_connect) (int sockfd, const struct sockaddr *addr,
                                   socklen_t addrlen);
 extern int (*__nacl_irt_send) (int sockfd, const void *buf, size_t len,
-                               int flags, int *count);
+                               int flags);
 extern int (*__nacl_irt_sendto) (int sockfd, const void *buf, size_t len,
-            int flags, const struct sockaddr *dest_addr, socklen_t addrlen,
-            int *count);
-extern int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags,
-                               int *count);
+            int flags, const struct sockaddr *dest_addr, socklen_t addrlen);
+extern int (*__nacl_irt_recv) (int sockfd, void *buf, size_t len, int flags);
 extern int (*__nacl_irt_recvfrom) (int sockfd, void *buf, size_t len, int flags,
             struct sockaddr *dest_addr, socklen_t* addrlen, int *count);
 extern int (*__nacl_irt_select) (int nfds, fd_set *readfds,
@@ -104,18 +110,15 @@ extern int (*__nacl_irt_socketpair) (int domain, int type, int protocol,
 extern int (*__nacl_irt_shutdown) (int sockfd, int how);
 
 
-extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode,
-                               int *newfd);
-extern int (*__nacl_irt_close) (int fd);
-extern int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
-extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count,
-                                size_t *nwrote);
-extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
-extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count,
-                                size_t *nwrote, off_t offset);
+extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 
-extern int (*__nacl_irt_seek) (int fd, nacl_abi_off_t offset, int whence,
-                               nacl_abi_off_t *new_offset);
+extern int (*__nacl_irt_close) (int fd);
+extern int (*__nacl_irt_read) (int fd, void *buf, size_t count);
+extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
+extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
+extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
+
+extern int (*__nacl_irt_seek) (int fd, nacl_abi_off_t offset, int whence, nacl_abi_off_t *new_offset);
 extern int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 extern int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
 extern int (*__nacl_irt_lstat) (const char *pathname, struct nacl_abi_stat *);
@@ -159,10 +162,19 @@ extern int (*__nacl_irt_cond_wait) (int cond_handle, int mutex_handle);
 extern int (*__nacl_irt_cond_timed_wait_abs) (int cond_handle, int mutex_handle,
                                               const struct timespec *abstime);
 
+extern int (*__nacl_irt_sem_init) (unsigned int sem, int pshared, int value);
+extern int (*__nacl_irt_sem_wait) (unsigned int sem);
+extern int (*__nacl_irt_sem_trywait) (unsigned int sem);
+extern int (*__nacl_irt_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+extern int (*__nacl_irt_sem_post) (unsigned int sem);
+extern int (*__nacl_irt_sem_destroy) (unsigned int sem);
+extern int (*__nacl_irt_sem_getvalue) (unsigned int sem, int *sval);
+
+
 extern int (*__nacl_irt_tls_init) (void *tdb);
 extern void *(*__nacl_irt_tls_get) (void);
 
-extern int (*__nacl_irt_open_resource) (const char* file, int *fd);
+extern int (*__nacl_irt_open_resource) (const char* file);
 
 extern int (*__nacl_irt_clock_getres) (clockid_t clk_id, struct timespec *res);
 extern int (*__nacl_irt_clock_gettime) (clockid_t clk_id, struct timespec *tp);
@@ -183,11 +195,16 @@ extern int (*__nacl_irt_pipe) (int pipedes[static 2]);
 extern int (*__nacl_irt_pipe2) (int pipedes[static 2], int flags);
 extern int (*__nacl_irt_execve) (char const *path, char *const *argv, char *const *envp);
 extern int (*__nacl_irt_execv) (char const *path, char *const *argv);
-extern int (*__nacl_irt_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 extern int (*__nacl_irt_flock) (int fd, int operation);
 extern int (*__nacl_irt_fstatfs) (int fd, struct statfs *buf);
 extern int (*__nacl_irt_statfs) (const char *path, struct statfs *buf);
 extern int (*__nacl_irt_access) (const char *file, int mode);
+extern int (*__nacl_irt_truncate) (const char *path, off_t length);
+extern int (*__nacl_irt_ftruncate) (int fd, off_t length);
+extern int (*__nacl_irt_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
+extern int (*__nacl_irt_kill) (pid_t pid, int sig);
+extern int (*__nacl_irt_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+extern int (*__nacl_irt_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 #undef socklen_t
 

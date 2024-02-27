@@ -16,7 +16,7 @@ int __xstat (int version, const char *path, struct stat *buf)
   int result = __nacl_irt_stat (path, &st);
   if (result != 0)
     {
-      errno = result;
+      __set_errno(-result);
       return -1;
     }
   else

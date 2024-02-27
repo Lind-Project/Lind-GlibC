@@ -147,8 +147,8 @@ __extern_always_inline int
 INTERNAL_SYSCALL_chown_3 (int *err, const char *path,
 			  uid_t owner, gid_t group)
 {
-  log_unimplemented("chown unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: chown is faked since we only have one user
+  *err = 0;
   return 0;
 }
 
@@ -246,7 +246,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_create_1 (int *err, int size)
 {
   int fd;
-  *err = __nacl_irt_epoll_create (size, &fd);
+  fd = __nacl_irt_epoll_create (size);
+  if(fd < 0) {
+    *err = -fd;
+    return -1;
+  }
   return fd;
 }
 
@@ -262,7 +266,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_ctl_4 (int *err, int epfd, int op, int fd,
 			      struct epoll_event *event)
 {
-  *err = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  int ret = __nacl_irt_epoll_ctl (epfd, op, fd, event);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -290,9 +298,12 @@ __extern_always_inline int
 INTERNAL_SYSCALL_epoll_wait_4 (int *err, int epfd, struct epoll_event *events,
 			       int maxevents, int timeout)
 {
-  int count;
-  *err = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout, &count);
-  return count;
+  int ret = __nacl_irt_epoll_wait (epfd, events, maxevents, timeout);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
+  return ret;
 }
 
 __extern_always_inline int
@@ -321,17 +332,23 @@ INTERNAL_SYSCALL_faccessat_3 (int *err, int dirfd, const char *pathname,
 __extern_always_inline int
 INTERNAL_SYSCALL_fchdir_1 (int *err, int fd)
 {
-  log_unimplemented("fchdir unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fchdir (fd);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_fchmod_2 (int *err, int fd, mode_t mode)
 {
-  log_unimplemented("fchmod unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fchmod (fd, mode);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
@@ -388,9 +405,12 @@ INTERNAL_SYSCALL_fcntl64_3 (int *err, int fd, int cmd,
 __extern_always_inline int
 INTERNAL_SYSCALL_fdatasync_1 (int *err, int fd)
 {
-  log_unimplemented("fdatasync unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fdatasync (fd);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
@@ -438,9 +458,12 @@ INTERNAL_SYSCALL_fsetxattr_5 (int *err, int filedes, const char *name,
 __extern_always_inline int
 INTERNAL_SYSCALL_fsync_1 (int *err, int fd)
 {
-  log_unimplemented("fsync unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  int rv = __nacl_irt_fsync (fd);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __errordecl (__futex_emulation_unknown_operation,
@@ -748,8 +771,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_open_3 (int *err, const char *pathname, int flags, mode_t mode)
 {
   int newfd;
-  *err = __nacl_irt_open (pathname, flags, mode, &newfd);
-  return newfd;
+  newfd = __nacl_irt_open (pathname, flags, mode);
+  if (newfd < 0) {
+    *err = -newfd;
+    return -1;
+  } else { return newfd; }
 }
 
 __extern_always_inline int
@@ -957,7 +983,12 @@ INTERNAL_SYSCALL_mincore_3 (int *err, void *addr, size_t length,
 __extern_always_inline int
 INTERNAL_SYSCALL_mkdir_2 (int *err, const char *pathname, mode_t mode)
 {
-  *err = __nacl_irt_mkdir (pathname, mode);
+  int ret;
+  ret = __nacl_irt_mkdir (pathname, mode);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -974,9 +1005,9 @@ __extern_always_inline int
 INTERNAL_SYSCALL_mknod_3 (int *err, const char *pathname,
 			  mode_t mode, dev_t dev)
 {
-  log_unimplemented("mknod unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+	  log_unimplemented("mknod unimplemented");
+  	*err = (38 /* ENOSYS */);
+  	return 0;
 }
 
 __extern_always_inline int
@@ -1384,7 +1415,12 @@ INTERNAL_SYSCALL_renameat_4 (int *err, int olddfd, const char *oldname,
 __extern_always_inline int
 INTERNAL_SYSCALL_rmdir_1 (int *err, const char *pathname)
 {
-  *err = __nacl_irt_rmdir (pathname);
+  int ret;
+  ret = __nacl_irt_rmdir (pathname);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1576,8 +1612,8 @@ INTERNAL_SYSCALL_setfsuid_1 (int *err, uid_t uid)
 __extern_always_inline int
 INTERNAL_SYSCALL_setgid_1 (int *err, gid_t gid)
 {
-  log_unimplemented("setgid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
@@ -1602,8 +1638,30 @@ INTERNAL_SYSCALL_setitimer_3 (int *err, int which,
 			      const struct itimerval *new_value,
 			      struct itimerval *old_value)
 {
-  log_unimplemented("setitimer unimplemented");
-  *err = 0; // Lind fake setitimer
+  int result;
+  
+  if (which != ITIMER_REAL && which != ITIMER_VIRTUAL && which != ITIMER_PROF) {
+    *err = EINVAL;
+    return -1;
+  }
+  
+  if (
+    new_value->it_interval.tv_usec < 0 ||
+    new_value->it_interval.tv_usec > 999999 ||
+    new_value->it_value.tv_usec < 0 ||
+    new_value->it_value.tv_usec > 999999
+  ) {
+    *err = EINVAL;
+    return -1;
+  }
+  
+  result = __nacl_irt_lindsetitimer(which, new_value, old_value);
+  
+  if (result != 0) {
+    *err = result;
+    return -1;
+  }
+  
   return 0;
 }
 
@@ -1684,8 +1742,8 @@ INTERNAL_SYSCALL_setsid_0 (int *err)
 __extern_always_inline int
 INTERNAL_SYSCALL_setuid_1 (int *err, uid_t uid)
 {
-  log_unimplemented("setuid unimplemented");
-  *err = (38 /* ENOSYS */);
+  // LIND: setgid/uid are faked
+  *err = 0;
   return 0;
 }
 
@@ -1758,8 +1816,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_socket_3 (int *err, int domain, int type, int protocol)
 {
   int sd;
-  *err = __nacl_irt_socket (domain, type, protocol, &sd);
-  return sd;
+  sd = __nacl_irt_socket (domain, type, protocol);
+  if(sd < 0) {
+    *err = -sd;
+    return -1;
+  } else { return sd; }
 }
 
 __extern_always_inline int
@@ -1778,15 +1839,22 @@ __extern_always_inline int
 INTERNAL_SYSCALL_bind_3 (int *err, int sockfd, struct sockaddr* addr,
                          socklen_t addr_len)
 {
-  *err = __nacl_irt_bind (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_bind (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_getpeername_3 (int *err, int sockfd, struct sockaddr* addr,
                                 socklen_t* addr_len)
 {
-  *err = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  int rv = __nacl_irt_getpeername (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
   return 0;
 }
 
@@ -1794,7 +1862,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getsockname_3 (int *err, int sockfd, struct sockaddr* addr,
                                 socklen_t* addr_len)
 {
-  *err = __nacl_irt_getsockname (sockfd, addr, addr_len);
+  int ret = __nacl_irt_getsockname (sockfd, addr, addr_len);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1802,7 +1874,11 @@ __extern_always_inline int
 INTERNAL_SYSCALL_getsockopt_5 (int *err, int sockfd, int level, int optname,
                                void *optval, socklen_t *optlen)
 {
-  *err = __nacl_irt_getsockopt (sockfd, level, optname, optval, optlen);
+  int ret = __nacl_irt_getsockopt (sockfd, level, optname, optval, optlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
@@ -1810,45 +1886,66 @@ __extern_always_inline int
 INTERNAL_SYSCALL_setsockopt_5 (int *err, int sockfd, int level, int optname,
                                const void *optval, socklen_t optlen)
 {
-  *err = __nacl_irt_setsockopt (sockfd, level, optname, optval, optlen);
+  int ret = __nacl_irt_setsockopt (sockfd, level, optname, optval, optlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_listen_2 (int *err, int sockfd, int backlog)
 {
-  *err = __nacl_irt_listen (sockfd, backlog);
-  return 0;
+  int rv = __nacl_irt_listen (sockfd, backlog);
+  if( rv < 0 ){
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_connect_3 (int *err, int sockfd, struct sockaddr* addr,
                             socklen_t addr_len)
 {
-  *err = __nacl_irt_connect (sockfd, addr, addr_len);
-  return 0;
+  int rv = __nacl_irt_connect (sockfd, addr, addr_len);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  } else { return 0; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_socketpair_4 (int *err, int domain, int type, int protocol,
                              int sv[2])
 {
-  *err = __nacl_irt_socketpair (domain, type, protocol, sv);
+  int ret = __nacl_irt_socketpair (domain, type, protocol, sv);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_shutdown_2 (int *err, int sockfd, int how)
 {
-  *err = __nacl_irt_shutdown (sockfd, how);
+  int ret = __nacl_irt_shutdown (sockfd, how);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return 0;
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_send_4 (int *err, int sockfd, const void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_send (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_send (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 
@@ -1857,16 +1954,21 @@ INTERNAL_SYSCALL_sendto_6 (int *err, int sockfd, const void *buf, size_t len,
                            int flags, const struct sockaddr *dest_addr,
 						   socklen_t addrlen)
 {
-  int ret;
-  *err = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen, &ret);
-  return ret;
+  int ret = __nacl_irt_sendto (sockfd, buf, len, flags, dest_addr, addrlen);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  } else { return ret; }
 }
 
 __extern_always_inline int
 INTERNAL_SYSCALL_recv_4 (int *err, int sockfd, void *buf, size_t len, int flags)
 {
-  int ret;
-  *err = __nacl_irt_recv (sockfd, buf, len, flags, &ret);
+  int ret = __nacl_irt_recv (sockfd, buf, len, flags);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
   return ret;
 }
 
@@ -1955,19 +2057,16 @@ INTERNAL_SYSCALL_sync_0 (int *err)
 
 __extern_always_inline int
 INTERNAL_SYSCALL_sync_file_range_6 (int *err, int fd,
-				    __LONG_LONG_PAIR(long offset_high,
-						     long offset_low),
-				    __LONG_LONG_PAIR(long nbytes_high,
-						     long nbytes_low),
+				    off_t offset,
+				    off_t nbytes,
 				    unsigned int flags)
-{
-#if 0
-  __off64_t offset = ((__off64_t)offset_high) << 32 | offset_low;
-  __off64_t nbytes = ((__off64_t)nbytes_high) << 32 | nbytes_low;
-#endif
-  log_unimplemented("sync_file_range unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+{ 
+ int rv = __nacl_irt_sync_file_range (fd, offset, nbytes, flags);
+  if(rv < 0) {
+    *err = -rv;
+    return -1;
+  }
+  return rv;
 }
 
 __extern_always_inline int
@@ -2102,9 +2201,9 @@ INTERNAL_SYSCALL_tkill_2 (int *err, pid_t tid, int sig)
 __extern_always_inline mode_t
 INTERNAL_SYSCALL_umask_1 (int *err, mode_t mask)
 {
-  log_unimplemented("umask unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
+  // Lind: ignore setting umask, ignore setting umaskreturn full permissions as previous mask
+  *err = 0;
+  return 0777;
 }
 
 __extern_always_inline int
@@ -2260,9 +2359,12 @@ INTERNAL_SYSCALL_wait4_4 (int *err, pid_t pid, int *status, int options,
 __extern_always_inline ssize_t
 INTERNAL_SYSCALL_write_3 (int *err, int fd, const void *buf, size_t count)
 {
-  size_t nwrote;
-  *err = __nacl_irt_write (fd, buf, count, &nwrote);
-  return nwrote;
+  int ret = __nacl_irt_write (fd, buf, count);
+  if(ret < 0) {
+    *err = -ret;
+    return -1;
+  }
+  return ret;
 }
 
 __extern_always_inline ssize_t

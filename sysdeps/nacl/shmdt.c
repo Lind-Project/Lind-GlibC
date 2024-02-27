@@ -13,7 +13,7 @@ int __shmdt (const void *shmaddr) {
 
     result = __nacl_irt_shmdt(shmaddr);
     if (result != 0) {
-      errno = result;
+      __set_errno(-result);
       return -1;
     }
 

@@ -20,6 +20,7 @@
 #include <semaphore.h>
 #include <shlib-compat.h>
 #include "semaphoreP.h"
+#include <irt_syscalls.h>
 
 
 int
@@ -27,13 +28,15 @@ __new_sem_getvalue (sem, sval)
      sem_t *sem;
      int *sval;
 {
-  struct new_sem *isem = (struct new_sem *) sem;
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_getvalue(semptr, sval);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
 
-  /* XXX Check for valid SEM parameter.  */
-
-  *sval = isem->value;
-
-  return 0;
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_getvalue, sem_getvalue, GLIBC_2_1);
 #if SHLIB_COMPAT(libpthread, GLIBC_2_0, GLIBC_2_1)

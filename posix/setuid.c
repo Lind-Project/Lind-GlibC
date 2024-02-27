@@ -28,8 +28,7 @@ int
 __setuid (uid)
      uid_t uid;
 {
-  __set_errno (ENOSYS);
-  return -1;
+   return 0;
 }
 stub_warning (setuid)
 

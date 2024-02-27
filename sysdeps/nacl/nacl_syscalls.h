@@ -16,6 +16,7 @@
 
 
 #include <nacl_stat.h>
+#include <nacl_signal.h>
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -24,6 +25,7 @@
 #include <sys/poll.h>
 #include <sys/select.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 
 /* intentionally not using zero */
 
@@ -58,6 +60,8 @@
 #define NACL_sys_munmap                 22
 #define NACL_sys_getdents               23
 #define NACL_sys_mprotect               24
+#define NACL_sys_truncate               26
+#define NACL_sys_ftruncate              27
 #define NACL_sys_exit                   30
 #define NACL_sys_getpid                 31
 #define NACL_sys_sched_yield            32
@@ -94,6 +98,7 @@
 #define NACL_sys_imc_recvmsg            64
 #define NACL_sys_imc_mem_obj_create     65
 #define NACL_sys_imc_socketpair         66
+#define NACL_sys_mutex_destroy          69
 #define NACL_sys_mutex_create           70
 #define NACL_sys_mutex_lock             71
 #define NACL_sys_mutex_trylock          72
@@ -102,6 +107,7 @@
 #define NACL_sys_cond_wait              75
 #define NACL_sys_cond_signal            76
 #define NACL_sys_cond_broadcast         77
+#define NACL_sys_cond_destroy           78
 #define NACL_sys_cond_timed_wait_abs    79
 #define NACL_sys_thread_create          80
 #define NACL_sys_thread_exit            81
@@ -111,15 +117,18 @@
 #define NACL_sys_second_tls_set         85
 #define NACL_sys_second_tls_get         86
 #define NACL_sys_srpc_get_fd            90
-#define NACL_sys_sem_create             100
-#define NACL_sys_sem_wait               101
-#define NACL_sys_sem_post               102
-#define NACL_sys_sem_get_value          103
+
+#define NACL_sys_sem_init               91
+#define NACL_sys_sem_wait               92
+#define NACL_sys_sem_trywait            93
+#define NACL_sys_sem_timedwait          94
+#define NACL_sys_sem_post               95
+#define NACL_sys_sem_destroy            96
+#define NACL_sys_sem_getvalue           97
+
 #define NACL_sys_dyncode_create         104
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
-
-#define NACL_sys_lind_api               113
 
 #define NACL_sys_pipe                   114
 #define NACL_sys_pipe2                  115
@@ -130,7 +139,6 @@
 #define NACL_sys_waitpid                120
 #define NACL_sys_wait                   121
 #define NACL_sys_wait4                  122
-#define NACL_sys_sigprocmask            123
 #define NACL_sys_lstat                  124
 #define NACL_sys_gethostname            125
 #define NACL_sys_pread                  126
@@ -138,12 +146,12 @@
 
 #define NACL_sys_fcntl_get              128
 #define NACL_sys_fcntl_set              129
-
 #define NACL_sys_chdir                  130
 #define NACL_sys_mkdir                  131
 #define NACL_sys_rmdir                  132
 #define NACL_sys_statfs                 133
 #define NACL_sys_fstatfs                134
+#define NACL_sys_fchmod                 135
 #define NACL_sys_socket                 136
 #define NACL_sys_getsockopt             137
 #define NACL_sys_setsockopt             138
@@ -152,17 +160,29 @@
 #define NACL_sys_connect                141
 #define NACL_sys_bind                   142
 #define NACL_sys_listen                 143
-
 #define NACL_sys_getsockname            144
 #define NACL_sys_getpeername            145
 #define NACL_sys_getifaddrs             146
+
+#define NACL_sys_sigaction		          147
+#define NACL_sys_kill			              148
+#define NACL_sys_sigprocmask		        149
+#define NACL_sys_lindsetitimer		      150
 
 #define NACL_sys_epoll_create           157
 #define NACL_sys_epoll_ctl              158
 #define NACL_sys_epoll_wait             159
 
-#define NACL_sys_pread                  126
-#define NACL_sys_pwrite                 127
+#define NACL_sys_fchdir                 161
+#define NACL_sys_fsync                  162
+#define NACL_sys_fdatasync              163
+
+#define NACL_sys_fchdir                 161
+#define NACL_sys_fsync                  162
+#define NACL_sys_fdatasync              163
+#define NACL_sys_sync_file_range        164
+
+// 250-255 reserved for signal register restore
 
 #define NACL_MAX_SYSCALLS               256
 
@@ -205,6 +225,13 @@ typedef int (*TYPE_nacl_getgid) (void);
 typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
+typedef int (*TYPE_nacl_fchmod) (int fd, mode_t mode);
+typedef int (*TYPE_nacl_fchdir) (int fd);
+typedef int (*TYPE_nacl_fsync) (int fd);
+typedef int (*TYPE_nacl_fdatasync) (int fd);
+typedef int (*TYPE_nacl_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags);
+
+
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
@@ -243,6 +270,7 @@ typedef int (*TYPE_nacl_thread_create) (void *start_user_address,
                                         void *second_thread_ptr);
 typedef int (*TYPE_nacl_thread_nice) (const int nice);
 
+typedef int (*TYPE_nacl_mutex_destroy) (int mutex);
 typedef int (*TYPE_nacl_mutex_create) (void);
 typedef int (*TYPE_nacl_mutex_lock) (int mutex);
 typedef int (*TYPE_nacl_mutex_unlock) (int mutex);
@@ -251,12 +279,18 @@ typedef int (*TYPE_nacl_cond_create) (void);
 typedef int (*TYPE_nacl_cond_wait) (int cv, int mutex);
 typedef int (*TYPE_nacl_cond_signal) (int cv);
 typedef int (*TYPE_nacl_cond_broadcast) (int cv);
+typedef int (*TYPE_nacl_cond_destroy) (int cv);
 typedef int (*TYPE_nacl_cond_timed_wait_abs) (int condvar,
                                               int mutex,
                                               const struct timespec *abstime);
-typedef int (*TYPE_nacl_sem_create) (int32_t value);
-typedef int (*TYPE_nacl_sem_wait) (int sem);
-typedef int (*TYPE_nacl_sem_post) (int sem);
+
+typedef int (*TYPE_nacl_sem_init) (unsigned int sem, int pshared, int value);
+typedef int (*TYPE_nacl_sem_wait) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_trywait) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_timedwait) (unsigned int sem, const struct timespec *abs_timeout);
+typedef int (*TYPE_nacl_sem_post) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_destroy) (unsigned int sem);
+typedef int (*TYPE_nacl_sem_getvalue) (unsigned int sem, int *sval);
 
 typedef int (*TYPE_nacl_getdents) (int desc, void *dirp, size_t count);
 typedef int (*TYPE_nacl_gettimeofday) (struct timeval *tv, void *tz);
@@ -299,7 +333,6 @@ typedef int (*TYPE_nacl_pipe2) (int *pipedes, int flags);
 typedef int (*TYPE_nacl_waitpid) (int pid, int *stat_loc, int options);
 typedef int (*TYPE_nacl_wait) (int *stat_loc);
 typedef int (*TYPE_nacl_wait4) (pid_t pid, int *wstatus, int options, struct rusage *rusage);
-typedef int (*TYPE_nacl_sigprocmask) (int how, const sigset_t *set, sigset_t *oset);
 typedef int (*TYPE_nacl_getcwd) (char* buf, size_t size);
 typedef int (*TYPE_nacl_gethostname) (char *name, size_t len);
 typedef int (*TYPE_nacl_pread) (int desc, void *buf, size_t count, off_t offset);
@@ -323,5 +356,12 @@ typedef int (*TYPE_nacl_select) (int nfds, fd_set * readfds, fd_set * writefds, 
 typedef int (*TYPE_nacl_epoll_create) (int size);
 typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event *event);
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
+typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
+typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
+
+typedef int (*TYPE_nacl_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
+typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
+typedef int (*TYPE_nacl_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+typedef int (*TYPE_nacl_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 #endif

@@ -80,7 +80,7 @@ override_list = [
     "nptl/sysdeps/unix/sysv/linux/sem_timedwait.c",
     "nptl/sysdeps/unix/sysv/linux/sem_trywait.c",
     "nptl/sysdeps/unix/sysv/linux/sem_wait.c",
-    "posix/alarm.c",
+ #  "posix/alarm.c",
  #  "posix/getpid.c",
     "posix/glob.c",
     "posix/pread.c",
@@ -181,7 +181,14 @@ override_list = [
     "sysdeps/nacl/shmat.c",
     "sysdeps/nacl/shmdt.c",
     "sysdeps/nacl/shmctl.c",
-    "sysdeps/nacl/rename.c"
+    "sysdeps/nacl/rename.c",
+    "sysdeps/nacl/truncate.c",
+    "sysdeps/nacl/ftruncate.c",
+    "sysdeps/nacl/sigaction.c",
+    "sysdeps/nacl/kill.c",
+    "sysdeps/nacl/sigprocmask.c",
+    "sysdeps/nacl/alarm.c",
+    "sysdeps/nacl/lindsetitimer.c"
     ]
 
 def get_override_map():

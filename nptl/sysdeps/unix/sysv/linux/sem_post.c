@@ -25,36 +25,21 @@
 #include <semaphore.h>
 
 #include <shlib-compat.h>
+#include <irt_syscalls.h>
+
 
 int
 __new_sem_post (sem_t *sem)
 {
-  struct new_sem *isem = (struct new_sem *) sem;
+  unsigned int semptr = (unsigned int) sem;
+  int result = __nacl_irt_sem_post(semptr);
+  
+  if (result < 0) {
+      __set_errno (-result);
+      return -1;
+  }
 
-  __typeof (isem->value) cur;
-  do
-    {
-      cur = isem->value;
-      if (isem->value == SEM_VALUE_MAX)
-	{
-	  __set_errno (EOVERFLOW);
-	  return -1;
-	}
-    }
-  while (atomic_compare_and_exchange_bool_acq (&isem->value, cur + 1, cur));
-
-  atomic_full_barrier ();
-  if (isem->nwaiters > 0)
-    {
-      int err = lll_futex_wake (&isem->value, 1,
-				isem->private ^ FUTEX_PRIVATE_FLAG);
-      if (__builtin_expect (err, 0) < 0)
-	{
-	  __set_errno (-err);
-	  return -1;
-	}
-    }
-  return 0;
+  return result;
 }
 versioned_symbol (libpthread, __new_sem_post, sem_post, GLIBC_2_1);
 

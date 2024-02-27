@@ -78,6 +78,13 @@ ld {
     __nacl_irt_cond_signal;
     __nacl_irt_cond_timed_wait_abs;
     __nacl_irt_cond_wait;
+    __nacl_irt_sem_init;
+    __nacl_irt_sem_wait;
+    __nacl_irt_sem_trywait;
+    __nacl_irt_sem_timedwait;
+    __nacl_irt_sem_post;
+    __nacl_irt_sem_destroy;
+    __nacl_irt_sem_getvalue;
     __nacl_irt_dup3;
     __nacl_irt_dup2;
     __nacl_irt_dup;
@@ -178,7 +185,19 @@ ld {
     __nacl_irt_shmctl;
     __nacl_irt_rename;
     __nacl_irt_chmod;
-    
+    __nacl_irt_fchmod;
+    __nacl_irt_truncate;
+    __nacl_irt_ftruncate;
+    __nacl_irt_sigaction;
+    __nacl_irt_kill;
+    __nacl_irt_sigprocmask;
+    __nacl_irt_lindsetitimer;
+    __nacl_irt_fchdir; 
+    __nacl_irt_fsync;
+    __nacl_irt_fdatasync;    
+    __nacl_irt_sync_file_range;    
+
+
     # Those are in the dynamic linker, but used by libc.so.
     __libc_enable_secure;
     _dl_argv;
