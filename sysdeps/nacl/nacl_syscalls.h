@@ -226,12 +226,6 @@ typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_fchmod) (int fd, mode_t mode);
-typedef int (*TYPE_nacl_fchdir) (int fd);
-typedef int (*TYPE_nacl_fsync) (int fd);
-typedef int (*TYPE_nacl_fdatasync) (int fd);
-typedef int (*TYPE_nacl_sync_file_range) (int fd, off_t offset, off_t nbytes, unsigned int flags);
-
-
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
