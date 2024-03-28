@@ -109,6 +109,14 @@ extern int (*__nacl_irt_shutdown) (int sockfd, int how);
 extern int (*__nacl_irt_open) (const char *pathname, int oflag, mode_t cmode);
 
 extern int (*__nacl_irt_close) (int fd);
+extern int (*__nacl_irt_read) (int fd, void *buf, size_t count, size_t *nread);
+extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count,
+                                size_t *nwrote);
+extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, size_t *nread, off_t offset);
+extern int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count,
+                                size_t *nwrote, off_t offset);
+
+extern int (*__nacl_irt_close) (int fd);
 extern int (*__nacl_irt_read) (int fd, void *buf, size_t count);
 extern int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
 extern int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
