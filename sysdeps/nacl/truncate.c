@@ -8,8 +8,8 @@
 ssize_t __truncate (const char *path, off_t length)
 {
   int result = __nacl_irt_truncate (path, length);
-  if (result < 0) {
-    __set_errno(-result);
+  if (result != 0) {
+    errno = result;
     return -1;
   }
   return 0;

@@ -404,7 +404,7 @@ int (*__nacl_irt_getdents) (int fd, struct dirent *, size_t count,
 int (*__nacl_irt_access) (const char *file, int mode);
 int (*__nacl_irt_truncate) (const char *path, off_t length);
 int (*__nacl_irt_ftruncate) (int fd, off_t length);
-int (*__nacl_irt_socket) (int domain, int type, int protocol);
+int (*__nacl_irt_socket) (int domain, int type, int protocol, int *sd);
 int (*__nacl_irt_accept) (int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int (*__nacl_irt_bind) (int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int (*__nacl_irt_listen) (int sockfd, int backlog);
@@ -770,40 +770,14 @@ static int nacl_irt_flock (int fd, int operation)
 
 static int nacl_irt_truncate (const char *path, off_t length)
 {
-    return NACL_SYSCALL (truncate) (path, length);
+    int rv = NACL_SYSCALL (truncate) (path, length);
+    if (rv < 0)
+        return -rv;
+    return 0;
 }
 static int nacl_irt_ftruncate (int fd, off_t length)
 {
-    return NACL_SYSCALL (ftruncate) (fd, length);
-}
-
-static int nacl_irt_sigaction (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_oact)
-{
-    int rv = NACL_SYSCALL (sigaction) (sig, nacl_act, nacl_oact);
-    if (rv < 0)
-	return -rv;
-    return 0;
-}
-
-static int nacl_irt_kill (int pid, int sig)
-{
-    int rv = NACL_SYSCALL (kill) (pid, sig);
-    if (rv < 0)
-	return -rv;
-    return 0;
-}
-
-static int nacl_irt_sigprocmask (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset)
-{
-    int rv = NACL_SYSCALL (sigprocmask) (how, nacl_set, nacl_oldset);
-    if (rv < 0)
-	return -rv;
-    return 0;
-}
-
-static int nacl_irt_lindsetitimer(int which, const struct itimerval *new_value, struct itimerval *old_value)
-{
-    int rv = NACL_SYSCALL (lindsetitimer) (which, new_value, old_value);
+    int rv = NACL_SYSCALL (ftruncate) (fd, length);
     if (rv < 0)
         return -rv;
     return 0;
@@ -1108,18 +1082,6 @@ init_irt_table (void)
   __nacl_irt_shmctl = nacl_irt_shmctl;
   __nacl_irt_truncate = nacl_irt_truncate;
   __nacl_irt_ftruncate = nacl_irt_ftruncate;
-  __nacl_irt_sigaction = nacl_irt_sigaction;
-  __nacl_irt_kill = nacl_irt_kill;
-  __nacl_irt_sigprocmask = nacl_irt_sigprocmask;
-  __nacl_irt_lindsetitimer = nacl_irt_lindsetitimer;
-  __nacl_irt_sem_init = nacl_irt_sem_init;
-  __nacl_irt_sem_wait = nacl_irt_sem_wait;
-  __nacl_irt_sem_timedwait = nacl_irt_sem_timedwait;
-  __nacl_irt_sem_trywait = nacl_irt_sem_trywait;
-  __nacl_irt_sem_post = nacl_irt_sem_post;
-  __nacl_irt_sem_destroy = nacl_irt_sem_destroy;
-  __nacl_irt_sem_getvalue = nacl_irt_sem_getvalue;
-
 }
 
 size_t nacl_interface_query(const char *interface_ident,
