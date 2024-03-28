@@ -184,12 +184,6 @@
 
 // 250-255 reserved for signal register restore
 
-#define NACL_sys_fchdir			161
-#define NACL_sys_fsync			162
-#define NACL_sys_fdatasync		163
-#define NACL_sys_sync_file_range	164
-
-
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -364,5 +358,10 @@ typedef int (*TYPE_nacl_epoll_ctl) (int epfd, int op, int fd, struct epoll_event
 typedef int (*TYPE_nacl_epoll_wait) (int epfd, struct epoll_event *events, int maxevents, int timeout);
 typedef int (*TYPE_nacl_truncate) (const char *path, off_t length);
 typedef int (*TYPE_nacl_ftruncate) (int fd, off_t length);
+
+typedef int (*TYPE_nacl_sigaction) (int sig, const struct nacl_abi_sigaction *nacl_act, struct nacl_abi_sigaction *nacl_ocat);
+typedef int (*TYPE_nacl_kill) (pid_t pid, int sig);
+typedef int (*TYPE_nacl_sigprocmask) (int how, const uint64_t *nacl_set, uint64_t *nacl_oldset);
+typedef int (*TYPE_nacl_lindsetitimer) (int which, const struct itimerval *new_value, struct itimerval *old_value);
 
 #endif
