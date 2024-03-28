@@ -184,6 +184,9 @@
 
 // 250-255 reserved for signal register restore
 
+#define NACL_sys_mknod			160
+#define NACL_sys_fchdir			161
+
 #define NACL_MAX_SYSCALLS               256
 
 #define NACL_SYSCALL_ADDR(syscall_number) \
@@ -226,6 +229,9 @@ typedef int (*TYPE_nacl_getegid) (void);
 typedef int (*TYPE_nacl_chdir) (const char* pathname);
 typedef int (*TYPE_nacl_chmod) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_fchmod) (int fd, mode_t mode);
+typedef int (*TYPE_nacl_fchdir) (int fd);
+typedef int (*TYPE_nacl_mknod) (const char* pathname, mode_t mode, dev_t dev);
+
 typedef int (*TYPE_nacl_mkdir) (const char* pathname, mode_t mode);
 typedef int (*TYPE_nacl_rmdir) (const char* pathname);
 
