@@ -2367,14 +2367,14 @@ INTERNAL_SYSCALL_write_3 (int *err, int fd, const void *buf, size_t count)
   return ret;
 }
 
-__extern_always_inline ssize_t
-INTERNAL_SYSCALL_writev_3 (int *err, int fd, const
-			   struct iovec *iov, int iovcnt)
-{
-  log_unimplemented("writev unimplemented");
-  *err = (38 /* ENOSYS */);
-  return 0;
-}
+// __extern_always_inline ssize_t
+// INTERNAL_SYSCALL_writev_3 (int *err, int fd, const
+// 			   struct iovec *iov, int iovcnt)
+// {
+//   log_unimplemented("writev unimplemented");
+//   *err = (38 /* ENOSYS */);
+//   return 0;
+// }
 
 # ifdef __i386__
 #  undef INTERNAL_SYSCALL_chown_3
