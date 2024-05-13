@@ -194,8 +194,9 @@ ld {
     __nacl_irt_lindsetitimer;
     __nacl_irt_fchdir; 
     __nacl_irt_fsync;
-    __nacl_irt_fdatasync;    
-    __nacl_irt_sync_file_range;    
+    __nacl_irt_fdatasync;
+    __nacl_irt_sync_file_range;
+    __nacl_irt_writev;
 
 
     # Those are in the dynamic linker, but used by libc.so.
