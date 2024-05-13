@@ -130,7 +130,6 @@
 #define NACL_sys_dyncode_modify         105
 #define NACL_sys_dyncode_delete         106
 
-#define NACL_sys_writev                 110
 #define NACL_sys_pipe                   114
 #define NACL_sys_pipe2                  115
 #define NACL_sys_fork                   116
@@ -182,6 +181,8 @@
 #define NACL_sys_fsync                  162
 #define NACL_sys_fdatasync              163
 #define NACL_sys_sync_file_range        164
+
+#define NACL_sys_writev                 170
 
 // 250-255 reserved for signal register restore
 

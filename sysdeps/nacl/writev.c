@@ -16,6 +16,3 @@ ssize_t __writev(int desc, const struct iovec *iov, int iovcnt)
 }
 libc_hidden_def (__writev)
 weak_alias (__writev, writev)
-strong_alias (__writev, __libc_writev)
-libc_hidden_def (__libc_writev)
-strong_alias (__writev, __writev_nocancel)
