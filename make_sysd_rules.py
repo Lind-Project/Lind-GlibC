@@ -188,8 +188,7 @@ override_list = [
     "sysdeps/nacl/kill.c",
     "sysdeps/nacl/sigprocmask.c",
     "sysdeps/nacl/alarm.c",
-    "sysdeps/nacl/lindsetitimer.c",
-    "sysdeps/nacl/writev.c"
+    "sysdeps/nacl/lindsetitimer.c"
     ]
 
 def get_override_map():
