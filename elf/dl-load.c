@@ -1053,6 +1053,7 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	  if (__builtin_expect ((ph->p_align & (GLRO(dl_pagesize) - 1)) != 0,
 				0))
 	    {
+			__libc_message(1, "ELF load command alignment not page-aligned: p_align = 0x%lx\n", ph->p_align);
 	      errstring = N_("ELF load command alignment not page-aligned");
 	      goto call_lose;
 	    }
