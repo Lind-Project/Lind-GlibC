@@ -25,6 +25,8 @@
 #include <sys/uio.h>
 #include <errno.h>
 
+#include <../nacl/irt_syscalls.h>
+
 /* Write data pointed by the buffers described by VECTOR, which
    is a vector of COUNT `struct iovec's, to file descriptor FD.
    The data is written in the order specified.
