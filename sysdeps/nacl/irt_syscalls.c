@@ -96,7 +96,7 @@ static int nacl_irt_pwrite (int fd, const void *buf, size_t count, off_t offset)
 }
 
 static int nacl_irt_writev (int fd, const struct iovec *iov, int iovcnt) {
-  return NACL_SYSCALL (write) (fd, iov, iovcnt);
+  return NACL_SYSCALL (writev) (fd, iov, iovcnt);
 }
 
 static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence, off_t *new_offset) {
