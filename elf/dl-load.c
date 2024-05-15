@@ -1053,7 +1053,9 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	  if (__builtin_expect ((ph->p_align & (GLRO(dl_pagesize) - 1)) != 0,
 				0))
 	    {
-			printf("ELF load command alignment not page-aligned: p_align = 0x%lx\n", (unsigned long)ph->p_align);
+			char buffer[50];
+			int len = snprintf(buffer, sizeof(buffer), "Allocated size: %zu\n", size);
+			write(STDOUT_FILENO, buffer, len);
 	      errstring = N_("ELF load command alignment not page-aligned");
 	      goto call_lose;
 	    }
