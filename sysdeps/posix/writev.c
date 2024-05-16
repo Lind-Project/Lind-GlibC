@@ -31,7 +31,10 @@
    is a vector of COUNT `struct iovec's, to file descriptor FD.
    The data is written in the order specified.
    Operates just like `write' (see <unistd.h>) except that the data
-   are taken from VECTOR instead of a contiguous buffer.  */
+   are taken from VECTOR instead of a contiguous buffer. 
+   
+   LIND: This function was replaced to re-direct to the NaCl trampoline
+    */
 ssize_t
 __libc_writev (int fd, const struct iovec *vector, int count)
 {
