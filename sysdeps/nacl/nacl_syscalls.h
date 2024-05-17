@@ -182,6 +182,8 @@
 #define NACL_sys_fdatasync              163
 #define NACL_sys_sync_file_range        164
 
+#define NACL_sys_writev                 170
+
 // 250-255 reserved for signal register restore
 
 #define NACL_MAX_SYSCALLS               256
@@ -214,6 +216,7 @@ typedef int (*TYPE_nacl_fstatfs) (int fd, struct statfs *buf);
 typedef int (*TYPE_nacl_statfs) (const char *path, struct statfs *buf);
 typedef int (*TYPE_nacl_access) (const char *name, int mode);
 typedef int (*TYPE_nacl_write) (int desc, void const *buf, size_t count);
+typedef int (*TYPE_nacl_writev) (int fd, const struct iovec *iov, int iovcnt);
 typedef int (*TYPE_nacl_open) (char const *pathname, int flags, mode_t mode);
 typedef int (*TYPE_nacl_lseek) (int desc, nacl_abi_off_t *offset, int whence);
 typedef int (*TYPE_nacl_stat) (const char *file, struct nacl_abi_stat *st);

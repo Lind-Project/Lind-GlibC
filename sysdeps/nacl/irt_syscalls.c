@@ -95,6 +95,10 @@ static int nacl_irt_pwrite (int fd, const void *buf, size_t count, off_t offset)
   return NACL_SYSCALL (pwrite) (fd, buf, count, offset);
 }
 
+static int nacl_irt_writev (int fd, const struct iovec *iov, int iovcnt) {
+  return NACL_SYSCALL (writev) (fd, iov, iovcnt);
+}
+
 static int nacl_irt_seek (int fd, nacl_abi_off_t offset, int whence, off_t *new_offset) {
   int rv = NACL_SYSCALL (lseek) (fd, &offset, whence);
   if (rv < 0)
@@ -426,6 +430,7 @@ int (*__nacl_irt_read) (int fd, void *buf, size_t count);
 int (*__nacl_irt_pread) (int fd, void *buf, size_t count, off_t offset);
 int (*__nacl_irt_write) (int fd, const void *buf, size_t count);
 int (*__nacl_irt_pwrite) (int fd, const void *buf, size_t count, off_t offset);
+int (*__nacl_irt_writev) (int fd, const struct iovec *iov, int iovcnt);
 int (*__nacl_irt_seek) (int fd, off_t offset, int whence, off_t *new_offset);
 int (*__nacl_irt_fstat) (int fd, struct nacl_abi_stat *);
 int (*__nacl_irt_stat) (const char *pathname, struct nacl_abi_stat *);
@@ -1147,6 +1152,7 @@ init_irt_table (void)
   __nacl_irt_pread = nacl_irt_pread;
   __nacl_irt_write = nacl_irt_write;
   __nacl_irt_pwrite = nacl_irt_pwrite;
+  __nacl_irt_writev = nacl_irt_writev;
   __nacl_irt_waitpid = nacl_irt_waitpid;
   __nacl_irt_wait = nacl_irt_wait;
   __nacl_irt_wait4 = nacl_irt_wait4;
