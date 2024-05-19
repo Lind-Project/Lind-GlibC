@@ -1050,12 +1050,38 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	case PT_LOAD:
 	  /* A load command tells us to map in part of the file.
 	     We record the load commands and process them all later.  */
-	//   if (__builtin_expect ((ph->p_align & (GLRO(dl_pagesize) - 1)) != 0,
-	// 			0))
-	//     {
-	//       errstring = N_("ELF load command alignment not page-aligned");
-	//       goto call_lose;
-	//     }
+		 unsigned long align = (unsigned long) ph->p_align;
+        char buffer[256];
+        int i = 0;
+
+        if (align == 0)
+        {
+            buffer[i++] = '0';
+        }
+        else
+        {
+            while (align > 0)
+            {
+                buffer[i++] = (align % 10) + '0';
+                align /= 10;
+            }
+            for (int j = 0; j < i / 2; ++j)
+            {
+                char temp = buffer[j];
+                buffer[j] = buffer[i - j - 1];
+                buffer[i - j - 1] = temp;
+            }
+        }
+
+        buffer[i++] = '\n';
+        write(STDOUT_FILENO, buffer, i);
+		
+	  if (__builtin_expect ((ph->p_align & (GLRO(dl_pagesize) - 1)) != 0,
+				0))
+	    {
+	      errstring = N_("ELF load command alignment not page-aligned");
+	      goto call_lose;
+	    }
 	  if (__builtin_expect (((ph->p_vaddr - ph->p_offset)
 				 & (ph->p_align - 1)) != 0, 0))
 	    {
