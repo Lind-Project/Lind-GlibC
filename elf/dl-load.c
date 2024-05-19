@@ -1050,31 +1050,8 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	case PT_LOAD:
 	  /* A load command tells us to map in part of the file.
 	     We record the load commands and process them all later.  */
-		 unsigned long align = (unsigned long) ph->p_align;
-        char buffer[256];
-        int i = 0;
-
-        if (align == 0)
-        {
-            buffer[i++] = '0';
-        }
-        else
-        {
-            while (align > 0)
-            {
-                buffer[i++] = (align % 10) + '0';
-                align /= 10;
-            }
-            for (int j = 0; j < i / 2; ++j)
-            {
-                char temp = buffer[j];
-                buffer[j] = buffer[i - j - 1];
-                buffer[i - j - 1] = temp;
-            }
-        }
-
-        buffer[i++] = '\n';
-        write(STDOUT_FILENO, buffer, i);
+		unsigned long align = (unsigned long) ph->p_align;
+        write(STDOUT_FILENO, &align, sizeof(align));
 		
 	  if (__builtin_expect ((ph->p_align & (GLRO(dl_pagesize) - 1)) != 0,
 				0))
