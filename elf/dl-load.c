@@ -1055,6 +1055,8 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	    {
 			unsigned long align = (unsigned long) ph->p_align;
         	write(STDOUT_FILENO, &align, sizeof(align));
+			unsigned long right = GLRO(dl_pagesize) - 1;
+			write(STDOUT_FILENO, &right, sizeof(right));
 	      errstring = N_("ELF load command alignment not page-aligned");
 	      goto call_lose;
 	    }
