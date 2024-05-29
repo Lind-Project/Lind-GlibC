@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sysdep.h>
+#include <stdio.h>
 
 unsigned long int *__fork_generation_pointer;
 
@@ -11,6 +12,14 @@ unsigned long int *__fork_generation_pointer;
  */
 int __libc_fork(void)
 {
+   /*
+      * The NaCl IRT fork function copies the process memory as a whole to the child, so we need to
+      * flush the stdio buffers before calling it.
+      * Issue #12:https://github.com/Lind-Project/native_client/issues/12
+   */
+   fflush(stdout);
+   fflush(stderr);
+   
    int ret = __nacl_irt_fork();
    if (!ret && __fork_generation_pointer)
       *__fork_generation_pointer += 4;
