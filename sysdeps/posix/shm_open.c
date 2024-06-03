@@ -69,14 +69,14 @@ shm_open (const char *name, int oflag, mode_t mode)
 	  flags = fcntl (fd, F_SETFD, flags);
 	}
 
-      if (flags == -1)
-	{
-	  /* Something went wrong.  We cannot return the descriptor.  */
-	  int save_errno = errno;
-	  close (fd);
-	  fd = -1;
-	  __set_errno (save_errno);
-	}
+  //     if (flags == -1)
+	// {
+	//   /* Something went wrong.  We cannot return the descriptor.  */
+	//   int save_errno = errno;
+	//   close (fd);
+	//   fd = -1;
+	//   __set_errno (save_errno);
+	// }
     }
 
   return fd;
