@@ -58,16 +58,16 @@ shm_open (const char *name, int oflag, mode_t mode)
 	     name, namelen + 1);
 
   fd = open (name, oflag, mode);
-  if (fd != -1)
-    {
-      /* We got a descriptor.  Now set the FD_CLOEXEC bit.  */
-      int flags = fcntl (fd, F_GETFD, 0);
+  // if (fd != -1)
+  //   {
+  //     /* We got a descriptor.  Now set the FD_CLOEXEC bit.  */
+  //     int flags = fcntl (fd, F_GETFD, 0);
 
-      if (__builtin_expect (flags, 0) != -1)
-	{
-	  flags |= FD_CLOEXEC;
-	  flags = fcntl (fd, F_SETFD, flags);
-	}
+  //     if (__builtin_expect (flags, 0) != -1)
+	// {
+	//   flags |= FD_CLOEXEC;
+	//   flags = fcntl (fd, F_SETFD, flags);
+	// }
 
   //     if (flags == -1)
 	// {
@@ -77,7 +77,7 @@ shm_open (const char *name, int oflag, mode_t mode)
 	//   fd = -1;
 	//   __set_errno (save_errno);
 	// }
-    }
+  //   }
 
   return fd;
 }
